@@ -1,9 +1,9 @@
 'use client'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, use } from 'react'
 import { supabase } from '../../../../lib/supabaseClient'
 
 export default function KaryawanDetail({ params }){
-  const { id } = params
+  const { id } = use(params)
   const [item, setItem] = useState(null)
   const [editing, setEditing] = useState(false)
   const [nama, setNama] = useState('')

@@ -1,9 +1,9 @@
 'use client'
-import { useEffect, useState } from 'react'
-import { supabase } from '../../../../lib/supabaseClient'
+import { useEffect, useState, use } from 'react'
+import { supabase } from '../../../lib/supabaseClient'
 
 export default function ProdukDetail({ params }){
-  const { id } = params
+  const { id } = use(params)
   const [produk, setProduk] = useState(null)
   const [loading, setLoading] = useState(true)
   const [editing, setEditing] = useState(false)
