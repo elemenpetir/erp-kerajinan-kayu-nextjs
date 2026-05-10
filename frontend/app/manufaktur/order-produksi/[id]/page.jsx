@@ -80,7 +80,7 @@ export default function OrderProduksiDetail({ params }) {
           <tbody>
             {(order.components || []).map((item, index) => (
               <tr key={index}>
-                <td>{item.nama_bahan}</td>
+                <td>{item.nama}</td>
                 <td>{item.jumlah}</td>
                 <td>{item.harga}</td>
                 <td>{item.harga * (item.jumlah || 0)}</td>

@@ -35,6 +35,7 @@ export default function OrderProduksiList() {
         <table className="table-slate">
           <thead>
             <tr>
+                <th>Kode</th>
               <th>Produk</th>
               <th>Jumlah</th>
               <th>Status</th>
@@ -45,6 +46,7 @@ export default function OrderProduksiList() {
           <tbody>
             {items.map((order) => (
               <tr key={order.id}>
+                <td>ORP-{String(order.kode).padStart(4, '0')}</td>
                 <td>{order.produk?.nama || "-"}</td>
                 <td>{order.jumlah_produk}</td>
                 <td>{order.status}</td>

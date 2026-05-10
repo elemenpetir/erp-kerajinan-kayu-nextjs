@@ -35,6 +35,7 @@ export default function QuotationList() {
       <table className="table-slate">
         <thead>
           <tr>
+            <th>Kode</th>
             <th>Customer</th>
             <th>Payment Terms</th>
             <th>Total</th>
@@ -45,6 +46,7 @@ export default function QuotationList() {
         <tbody>
           {items.map((q) => (
             <tr key={q.id}>
+              <td>QUO-{String(q.kode).padStart(4, '0')}</td>
               <td>{q.customer_snapshot?.nama || "-"}</td>
               <td>{q.payment_terms || "-"}</td>
               <td>Rp {Number(q.total_biaya || 0).toLocaleString("id-ID")}</td>

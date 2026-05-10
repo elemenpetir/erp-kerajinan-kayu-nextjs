@@ -77,9 +77,10 @@ function OrdersList() {
                 children: "Sales Orders"
             }, void 0, false, {
                 fileName: "[project]/app/sales/orders/page.jsx",
-                lineNumber: 43,
+                lineNumber: 53,
                 columnNumber: 7
             }, this),
+            " ",
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("table", {
                 className: "table-slate",
                 children: [
@@ -87,83 +88,100 @@ function OrdersList() {
                         children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("tr", {
                             children: [
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
+                                    children: "Kode"
+                                }, void 0, false, {
+                                    fileName: "[project]/app/sales/orders/page.jsx",
+                                    lineNumber: 58,
+                                    columnNumber: 13
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
                                     children: "Customer"
                                 }, void 0, false, {
                                     fileName: "[project]/app/sales/orders/page.jsx",
-                                    lineNumber: 47,
+                                    lineNumber: 59,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
                                     children: "Payment Terms"
                                 }, void 0, false, {
                                     fileName: "[project]/app/sales/orders/page.jsx",
-                                    lineNumber: 48,
+                                    lineNumber: 60,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
                                     children: "Total"
                                 }, void 0, false, {
                                     fileName: "[project]/app/sales/orders/page.jsx",
-                                    lineNumber: 49,
+                                    lineNumber: 61,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
                                     children: "Status"
                                 }, void 0, false, {
                                     fileName: "[project]/app/sales/orders/page.jsx",
-                                    lineNumber: 50,
+                                    lineNumber: 62,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
                                     children: "Aksi"
                                 }, void 0, false, {
                                     fileName: "[project]/app/sales/orders/page.jsx",
-                                    lineNumber: 51,
+                                    lineNumber: 63,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/app/sales/orders/page.jsx",
-                            lineNumber: 46,
+                            lineNumber: 57,
                             columnNumber: 11
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/app/sales/orders/page.jsx",
-                        lineNumber: 45,
+                        lineNumber: 56,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("tbody", {
                         children: items.map((o)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("tr", {
                                 children: [
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
-                                        children: o.customer_snapshot?.nama || '-'
-                                    }, void 0, false, {
+                                        children: [
+                                            "SO-",
+                                            String(o.kode).padStart(4, "0")
+                                        ]
+                                    }, void 0, true, {
                                         fileName: "[project]/app/sales/orders/page.jsx",
-                                        lineNumber: 57,
+                                        lineNumber: 69,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
-                                        children: o.payment_terms || '-'
+                                        children: o.customer_snapshot?.nama || "-"
                                     }, void 0, false, {
                                         fileName: "[project]/app/sales/orders/page.jsx",
-                                        lineNumber: 58,
+                                        lineNumber: 70,
+                                        columnNumber: 15
+                                    }, this),
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
+                                        children: o.payment_terms || "-"
+                                    }, void 0, false, {
+                                        fileName: "[project]/app/sales/orders/page.jsx",
+                                        lineNumber: 71,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
                                         children: [
                                             "Rp ",
-                                            Number(o.total_biaya || 0).toLocaleString('id-ID')
+                                            Number(o.total_biaya || 0).toLocaleString("id-ID")
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/app/sales/orders/page.jsx",
-                                        lineNumber: 59,
+                                        lineNumber: 72,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
                                         children: o.status
                                     }, void 0, false, {
                                         fileName: "[project]/app/sales/orders/page.jsx",
-                                        lineNumber: 60,
+                                        lineNumber: 73,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
@@ -175,7 +193,7 @@ function OrdersList() {
                                                     children: "Lihat"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/sales/orders/page.jsx",
-                                                    lineNumber: 63,
+                                                    lineNumber: 76,
                                                     columnNumber: 19
                                                 }, this),
                                                 o.status === "To Invoice" && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -184,41 +202,41 @@ function OrdersList() {
                                                     children: "Buat Invoice"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/sales/orders/page.jsx",
-                                                    lineNumber: 65,
+                                                    lineNumber: 78,
                                                     columnNumber: 21
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/app/sales/orders/page.jsx",
-                                            lineNumber: 62,
+                                            lineNumber: 75,
                                             columnNumber: 17
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/app/sales/orders/page.jsx",
-                                        lineNumber: 61,
+                                        lineNumber: 74,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, o.id, true, {
                                 fileName: "[project]/app/sales/orders/page.jsx",
-                                lineNumber: 56,
+                                lineNumber: 68,
                                 columnNumber: 13
                             }, this))
                     }, void 0, false, {
                         fileName: "[project]/app/sales/orders/page.jsx",
-                        lineNumber: 54,
+                        lineNumber: 66,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/app/sales/orders/page.jsx",
-                lineNumber: 44,
+                lineNumber: 55,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/app/sales/orders/page.jsx",
-        lineNumber: 42,
+        lineNumber: 52,
         columnNumber: 5
     }, this);
 }

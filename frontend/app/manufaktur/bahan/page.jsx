@@ -37,7 +37,7 @@ export default function BahanList() {
     const { data: orderSelesai } = await supabase
       .from("order_produksi")
       .select("components, jumlah_produk")
-      .eq("status", "Selesai");
+      .eq("status", "Dalam Proses");
 
     const stok = {};
 
@@ -94,6 +94,7 @@ export default function BahanList() {
         <table className="table-slate">
           <thead>
             <tr>
+              <th>Kode</th>
               <th>Nama</th>
               <th>Biaya</th>
               <th>Harga</th>
@@ -108,6 +109,7 @@ export default function BahanList() {
               const { label, style } = getStokLabel(b.id, stok);
               return (
                 <tr key={b.id}>
+                  <td>BHN-{String(b.kode).padStart(4, "0")}</td>
                   <td>{b.nama}</td>
                   <td>{b.biaya}</td>
                   <td>{b.harga}</td>

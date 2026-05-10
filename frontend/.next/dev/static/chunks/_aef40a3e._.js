@@ -62,7 +62,7 @@ function BahanList() {
         // Masuk: dari bills Paid
         const { data: billsPaid } = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$supabaseClient$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["supabase"].from("bills").select("items").eq("status", "Paid");
         // Keluar: dari order_produksi Selesai
-        const { data: orderSelesai } = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$supabaseClient$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["supabase"].from("order_produksi").select("components, jumlah_produk").eq("status", "Selesai");
+        const { data: orderSelesai } = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$supabaseClient$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["supabase"].from("order_produksi").select("components, jumlah_produk").eq("status", "Dalam Proses");
         const stok = {};
         // Hitung stok masuk
         (billsPaid || []).forEach((bill)=>{
@@ -147,45 +147,52 @@ function BahanList() {
                         children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("tr", {
                             children: [
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
-                                    children: "Nama"
+                                    children: "Kode"
                                 }, void 0, false, {
                                     fileName: "[project]/app/manufaktur/bahan/page.jsx",
                                     lineNumber: 97,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
-                                    children: "Biaya"
+                                    children: "Nama"
                                 }, void 0, false, {
                                     fileName: "[project]/app/manufaktur/bahan/page.jsx",
                                     lineNumber: 98,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
-                                    children: "Harga"
+                                    children: "Biaya"
                                 }, void 0, false, {
                                     fileName: "[project]/app/manufaktur/bahan/page.jsx",
                                     lineNumber: 99,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
-                                    children: "Referensi"
+                                    children: "Harga"
                                 }, void 0, false, {
                                     fileName: "[project]/app/manufaktur/bahan/page.jsx",
                                     lineNumber: 100,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
-                                    children: "Stok"
+                                    children: "Referensi"
                                 }, void 0, false, {
                                     fileName: "[project]/app/manufaktur/bahan/page.jsx",
                                     lineNumber: 101,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
-                                    children: "Aksi"
+                                    children: "Stok"
                                 }, void 0, false, {
                                     fileName: "[project]/app/manufaktur/bahan/page.jsx",
                                     lineNumber: 102,
+                                    columnNumber: 15
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
+                                    children: "Aksi"
+                                }, void 0, false, {
+                                    fileName: "[project]/app/manufaktur/bahan/page.jsx",
+                                    lineNumber: 103,
                                     columnNumber: 15
                                 }, this)
                             ]
@@ -206,31 +213,41 @@ function BahanList() {
                             return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("tr", {
                                 children: [
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
-                                        children: b.nama
-                                    }, void 0, false, {
-                                        fileName: "[project]/app/manufaktur/bahan/page.jsx",
-                                        lineNumber: 111,
-                                        columnNumber: 19
-                                    }, this),
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
-                                        children: b.biaya
-                                    }, void 0, false, {
+                                        children: [
+                                            "BHN-",
+                                            String(b.kode).padStart(4, "0")
+                                        ]
+                                    }, void 0, true, {
                                         fileName: "[project]/app/manufaktur/bahan/page.jsx",
                                         lineNumber: 112,
                                         columnNumber: 19
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
-                                        children: b.harga
+                                        children: b.nama
                                     }, void 0, false, {
                                         fileName: "[project]/app/manufaktur/bahan/page.jsx",
                                         lineNumber: 113,
                                         columnNumber: 19
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
-                                        children: b.internal_referensi
+                                        children: b.biaya
                                     }, void 0, false, {
                                         fileName: "[project]/app/manufaktur/bahan/page.jsx",
                                         lineNumber: 114,
+                                        columnNumber: 19
+                                    }, this),
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
+                                        children: b.harga
+                                    }, void 0, false, {
+                                        fileName: "[project]/app/manufaktur/bahan/page.jsx",
+                                        lineNumber: 115,
+                                        columnNumber: 19
+                                    }, this),
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
+                                        children: b.internal_referensi
+                                    }, void 0, false, {
+                                        fileName: "[project]/app/manufaktur/bahan/page.jsx",
+                                        lineNumber: 116,
                                         columnNumber: 19
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
@@ -238,7 +255,7 @@ function BahanList() {
                                         children: label
                                     }, void 0, false, {
                                         fileName: "[project]/app/manufaktur/bahan/page.jsx",
-                                        lineNumber: 115,
+                                        lineNumber: 117,
                                         columnNumber: 19
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
@@ -249,29 +266,29 @@ function BahanList() {
                                                 children: "Lihat"
                                             }, void 0, false, {
                                                 fileName: "[project]/app/manufaktur/bahan/page.jsx",
-                                                lineNumber: 118,
+                                                lineNumber: 120,
                                                 columnNumber: 23
                                             }, this)
                                         }, void 0, false, {
                                             fileName: "[project]/app/manufaktur/bahan/page.jsx",
-                                            lineNumber: 117,
+                                            lineNumber: 119,
                                             columnNumber: 21
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/app/manufaktur/bahan/page.jsx",
-                                        lineNumber: 116,
+                                        lineNumber: 118,
                                         columnNumber: 19
                                     }, this)
                                 ]
                             }, b.id, true, {
                                 fileName: "[project]/app/manufaktur/bahan/page.jsx",
-                                lineNumber: 110,
+                                lineNumber: 111,
                                 columnNumber: 17
                             }, this);
                         })
                     }, void 0, false, {
                         fileName: "[project]/app/manufaktur/bahan/page.jsx",
-                        lineNumber: 105,
+                        lineNumber: 106,
                         columnNumber: 11
                     }, this)
                 ]

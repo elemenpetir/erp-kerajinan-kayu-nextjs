@@ -35,6 +35,14 @@ export default function QuotationDetail({ params }) {
   async function handleConfirm() {
     if (!confirm("Konfirmasi quotation ini menjadi Sales Order?")) return;
 
+    const { data: existing } = await supabase
+      .from("sales_order")
+      .select("id")
+      .eq("quotation_id", id)
+      .single();
+    if (existing)
+      return alert("Sales Order untuk quotation ini sudah pernah dibuat!");
+
     const { error: errQ } = await supabase
       .from("quotation")
       .update({ status: "Sales Order" })

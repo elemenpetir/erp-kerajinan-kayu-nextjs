@@ -38,6 +38,7 @@ export default function CustomersList() {
       <table className="table-slate">
         <thead>
           <tr>
+            <th>Kode</th>
             <th>Nama</th>
             <th>Perusahaan</th>
             <th>Telp</th>
@@ -48,16 +49,23 @@ export default function CustomersList() {
         <tbody>
           {items.map((c) => (
             <tr key={c.id}>
+              <td>CUST-{String(c.kode).padStart(4, "0")}</td>
               <td>{c.nama}</td>
               <td>{c.nama_perusahaan}</td>
               <td>{c.telp}</td>
               <td>{c.email}</td>
               <td>
                 <div className="action-buttons">
-                  <a className="btn-table-action" href={`/sales/customers/${c.id}`}>
+                  <a
+                    className="btn-table-action"
+                    href={`/sales/customers/${c.id}`}
+                  >
                     Lihat
                   </a>
-                  <button className="btn-danger" onClick={() => handleDelete(c.id)}>
+                  <button
+                    className="btn-danger"
+                    onClick={() => handleDelete(c.id)}
+                  >
                     Hapus
                   </button>
                 </div>

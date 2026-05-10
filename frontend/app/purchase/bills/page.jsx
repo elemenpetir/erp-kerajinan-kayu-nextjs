@@ -78,6 +78,7 @@ export default function BillsList() {
       <table className="table-slate">
         <thead>
           <tr>
+            <th>Kode</th>
             <th>Referensi Vendor</th>
             <th>Deadline</th>
             <th>Total</th>
@@ -88,6 +89,7 @@ export default function BillsList() {
         <tbody>
           {items.map((b) => (
             <tr key={b.id}>
+              <td>BILL-{String(b.kode).padStart(4, "0")}</td>
               <td>{b.referensi_vendor}</td>
               <td>{b.deadline_order}</td>
               <td>{b.total_biaya}</td>

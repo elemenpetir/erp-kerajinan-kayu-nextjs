@@ -72,17 +72,6 @@ export default function ManufakturList() {
   return (
     <div>
       <h2>Manufaktur — Produk</h2>
-      <div className="action-buttons" style={{ marginBottom: 12 }}>
-        <a className="btn" href="/manufaktur/bahan">
-          Bahan
-        </a>
-        <a className="btn" href="/manufaktur/kategori">
-          Kategori
-        </a>
-        <a className="btn" href="/manufaktur/bom">
-          BOM
-        </a>
-      </div>
       <p>
         <a className="btn" href="/manufaktur/create">
           Buat Produk
@@ -94,6 +83,7 @@ export default function ManufakturList() {
         <table className="table-slate">
           <thead>
             <tr>
+              <th>Kode</th>
               <th>Nama</th>
               <th>Harga Produksi</th>
               <th>Biaya Produksi</th>
@@ -106,6 +96,7 @@ export default function ManufakturList() {
               const { value, style } = getStokStyle(p.id);
               return (
                 <tr key={p.id}>
+                  <td>PRD-{String(p.kode).padStart(4, '0')}</td>
                   <td>{p.nama}</td>
                   <td>{p.harga_produksi}</td>
                   <td>{p.biaya_produksi}</td>

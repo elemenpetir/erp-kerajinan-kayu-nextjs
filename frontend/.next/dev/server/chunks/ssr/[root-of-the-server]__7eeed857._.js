@@ -201,24 +201,31 @@ function DepartemenPage() {
                         children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("tr", {
                             children: [
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
-                                    children: "Nama"
+                                    children: "Kode"
                                 }, void 0, false, {
                                     fileName: "[project]/app/employees/departemen/page.jsx",
                                     lineNumber: 103,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
-                                    children: "Manager"
+                                    children: "Nama"
                                 }, void 0, false, {
                                     fileName: "[project]/app/employees/departemen/page.jsx",
                                     lineNumber: 104,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
-                                    children: "Aksi"
+                                    children: "Manager"
                                 }, void 0, false, {
                                     fileName: "[project]/app/employees/departemen/page.jsx",
                                     lineNumber: 105,
+                                    columnNumber: 13
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
+                                    children: "Aksi"
+                                }, void 0, false, {
+                                    fileName: "[project]/app/employees/departemen/page.jsx",
+                                    lineNumber: 106,
                                     columnNumber: 13
                                 }, this)
                             ]
@@ -239,20 +246,30 @@ function DepartemenPage() {
                                 children: "Belum ada departemen."
                             }, void 0, false, {
                                 fileName: "[project]/app/employees/departemen/page.jsx",
-                                lineNumber: 111,
+                                lineNumber: 112,
                                 columnNumber: 15
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/app/employees/departemen/page.jsx",
-                            lineNumber: 110,
+                            lineNumber: 111,
                             columnNumber: 13
                         }, this) : items.map((d)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("tr", {
                                 children: [
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
+                                        children: [
+                                            "DEPT-",
+                                            String(d.kode).padStart(4, "0")
+                                        ]
+                                    }, void 0, true, {
+                                        fileName: "[project]/app/employees/departemen/page.jsx",
+                                        lineNumber: 117,
+                                        columnNumber: 17
+                                    }, this),
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
                                         children: d.nama_departemen
                                     }, void 0, false, {
                                         fileName: "[project]/app/employees/departemen/page.jsx",
-                                        lineNumber: 116,
+                                        lineNumber: 118,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
@@ -265,7 +282,7 @@ function DepartemenPage() {
                                                     children: "— Kosongkan —"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/employees/departemen/page.jsx",
-                                                    lineNumber: 123,
+                                                    lineNumber: 125,
                                                     columnNumber: 23
                                                 }, this),
                                                 karyawanList.map((k)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -273,18 +290,18 @@ function DepartemenPage() {
                                                         children: k.nama
                                                     }, k.id, false, {
                                                         fileName: "[project]/app/employees/departemen/page.jsx",
-                                                        lineNumber: 125,
+                                                        lineNumber: 127,
                                                         columnNumber: 25
                                                     }, this))
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/app/employees/departemen/page.jsx",
-                                            lineNumber: 119,
+                                            lineNumber: 121,
                                             columnNumber: 21
                                         }, this) : d.manager || "-"
                                     }, void 0, false, {
                                         fileName: "[project]/app/employees/departemen/page.jsx",
-                                        lineNumber: 117,
+                                        lineNumber: 119,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
@@ -299,7 +316,7 @@ function DepartemenPage() {
                                                             children: "Simpan"
                                                         }, void 0, false, {
                                                             fileName: "[project]/app/employees/departemen/page.jsx",
-                                                            lineNumber: 138,
+                                                            lineNumber: 140,
                                                             columnNumber: 25
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -308,7 +325,7 @@ function DepartemenPage() {
                                                             children: "Batal"
                                                         }, void 0, false, {
                                                             fileName: "[project]/app/employees/departemen/page.jsx",
-                                                            lineNumber: 144,
+                                                            lineNumber: 146,
                                                             columnNumber: 25
                                                         }, this)
                                                     ]
@@ -318,7 +335,7 @@ function DepartemenPage() {
                                                     children: "Edit Manager"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/employees/departemen/page.jsx",
-                                                    lineNumber: 152,
+                                                    lineNumber: 154,
                                                     columnNumber: 23
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -326,29 +343,29 @@ function DepartemenPage() {
                                                     children: "Hapus"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/employees/departemen/page.jsx",
-                                                    lineNumber: 159,
+                                                    lineNumber: 161,
                                                     columnNumber: 21
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/app/employees/departemen/page.jsx",
-                                            lineNumber: 135,
+                                            lineNumber: 137,
                                             columnNumber: 19
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/app/employees/departemen/page.jsx",
-                                        lineNumber: 134,
+                                        lineNumber: 136,
                                         columnNumber: 17
                                     }, this)
                                 ]
                             }, d.id, true, {
                                 fileName: "[project]/app/employees/departemen/page.jsx",
-                                lineNumber: 115,
+                                lineNumber: 116,
                                 columnNumber: 15
                             }, this))
                     }, void 0, false, {
                         fileName: "[project]/app/employees/departemen/page.jsx",
-                        lineNumber: 108,
+                        lineNumber: 109,
                         columnNumber: 9
                     }, this)
                 ]
