@@ -44,16 +44,20 @@ export default function ProdukDetail({ params }){
   if (!produk) return <p>Produk tidak ditemukan</p>
 
   return (
-    <div>
+    <div className="detail-card">
       <h2>Produk: {produk.nama}</h2>
       {!editing ? (
         <div>
           <p>Harga Produksi: {produk.harga_produksi}</p>
           <p>Biaya Produksi: {produk.biaya_produksi}</p>
-          <p>
-            <button className="btn" onClick={()=>setEditing(true)}>Edit</button>
-            <button style={{marginLeft:8}} onClick={handleDelete}>Hapus</button>
-          </p>
+          <div className="detail-actions">
+            <button className="btn-outline" onClick={() => setEditing(true)}>
+              Edit
+            </button>
+            <button className="btn-danger" onClick={handleDelete}>
+              Hapus
+            </button>
+          </div>
         </div>
       ) : (
         <form onSubmit={handleUpdate}>
@@ -69,9 +73,9 @@ export default function ProdukDetail({ params }){
             <label>Biaya Produksi</label><br/>
             <input value={biaya} onChange={e=>setBiaya(e.target.value)} />
           </div>
-          <div style={{marginTop:12}}>
+          <div className="detail-actions">
             <button className="btn" type="submit">Simpan</button>
-            <button style={{marginLeft:8}} type="button" onClick={()=>setEditing(false)}>Batal</button>
+            <button className="btn-outline" type="button" onClick={()=>setEditing(false)}>Batal</button>
           </div>
         </form>
       )}

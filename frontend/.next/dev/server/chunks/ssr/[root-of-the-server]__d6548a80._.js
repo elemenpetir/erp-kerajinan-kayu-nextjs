@@ -111,6 +111,7 @@ function KaryawanDetail({ params }) {
         columnNumber: 21
     }, this);
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+        className: "detail-card",
         children: [
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
                 children: item.nama
@@ -151,28 +152,26 @@ function KaryawanDetail({ params }) {
                         lineNumber: 43,
                         columnNumber: 11
                     }, this),
-                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        className: "detail-actions",
                         children: [
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                                className: "btn",
+                                className: "btn-outline",
                                 onClick: ()=>setEditing(true),
                                 children: "Edit"
                             }, void 0, false, {
                                 fileName: "[project]/app/employees/karyawan/[id]/page.jsx",
-                                lineNumber: 44,
-                                columnNumber: 14
+                                lineNumber: 45,
+                                columnNumber: 13
                             }, this),
-                            " ",
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                                style: {
-                                    marginLeft: 8
-                                },
+                                className: "btn-danger",
                                 onClick: handleDelete,
                                 children: "Hapus"
                             }, void 0, false, {
                                 fileName: "[project]/app/employees/karyawan/[id]/page.jsx",
-                                lineNumber: 44,
-                                columnNumber: 83
+                                lineNumber: 48,
+                                columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
@@ -194,12 +193,12 @@ function KaryawanDetail({ params }) {
                                 children: "Nama"
                             }, void 0, false, {
                                 fileName: "[project]/app/employees/karyawan/[id]/page.jsx",
-                                lineNumber: 48,
+                                lineNumber: 55,
                                 columnNumber: 16
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("br", {}, void 0, false, {
                                 fileName: "[project]/app/employees/karyawan/[id]/page.jsx",
-                                lineNumber: 48,
+                                lineNumber: 55,
                                 columnNumber: 35
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -207,13 +206,13 @@ function KaryawanDetail({ params }) {
                                 onChange: (e)=>setNama(e.target.value)
                             }, void 0, false, {
                                 fileName: "[project]/app/employees/karyawan/[id]/page.jsx",
-                                lineNumber: 48,
+                                lineNumber: 55,
                                 columnNumber: 40
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/employees/karyawan/[id]/page.jsx",
-                        lineNumber: 48,
+                        lineNumber: 55,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -222,12 +221,12 @@ function KaryawanDetail({ params }) {
                                 children: "Posisi"
                             }, void 0, false, {
                                 fileName: "[project]/app/employees/karyawan/[id]/page.jsx",
-                                lineNumber: 49,
+                                lineNumber: 56,
                                 columnNumber: 16
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("br", {}, void 0, false, {
                                 fileName: "[project]/app/employees/karyawan/[id]/page.jsx",
-                                lineNumber: 49,
+                                lineNumber: 56,
                                 columnNumber: 37
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -235,13 +234,13 @@ function KaryawanDetail({ params }) {
                                 onChange: (e)=>setPosisi(e.target.value)
                             }, void 0, false, {
                                 fileName: "[project]/app/employees/karyawan/[id]/page.jsx",
-                                lineNumber: 49,
+                                lineNumber: 56,
                                 columnNumber: 42
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/employees/karyawan/[id]/page.jsx",
-                        lineNumber: 49,
+                        lineNumber: 56,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -250,12 +249,12 @@ function KaryawanDetail({ params }) {
                                 children: "Telp"
                             }, void 0, false, {
                                 fileName: "[project]/app/employees/karyawan/[id]/page.jsx",
-                                lineNumber: 50,
+                                lineNumber: 57,
                                 columnNumber: 16
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("br", {}, void 0, false, {
                                 fileName: "[project]/app/employees/karyawan/[id]/page.jsx",
-                                lineNumber: 50,
+                                lineNumber: 57,
                                 columnNumber: 35
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -263,13 +262,13 @@ function KaryawanDetail({ params }) {
                                 onChange: (e)=>setTelp(e.target.value)
                             }, void 0, false, {
                                 fileName: "[project]/app/employees/karyawan/[id]/page.jsx",
-                                lineNumber: 50,
+                                lineNumber: 57,
                                 columnNumber: 40
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/employees/karyawan/[id]/page.jsx",
-                        lineNumber: 50,
+                        lineNumber: 57,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -278,12 +277,12 @@ function KaryawanDetail({ params }) {
                                 children: "Email"
                             }, void 0, false, {
                                 fileName: "[project]/app/employees/karyawan/[id]/page.jsx",
-                                lineNumber: 51,
+                                lineNumber: 58,
                                 columnNumber: 16
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("br", {}, void 0, false, {
                                 fileName: "[project]/app/employees/karyawan/[id]/page.jsx",
-                                lineNumber: 51,
+                                lineNumber: 58,
                                 columnNumber: 36
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -291,51 +290,47 @@ function KaryawanDetail({ params }) {
                                 onChange: (e)=>setEmail(e.target.value)
                             }, void 0, false, {
                                 fileName: "[project]/app/employees/karyawan/[id]/page.jsx",
-                                lineNumber: 51,
+                                lineNumber: 58,
                                 columnNumber: 41
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/employees/karyawan/[id]/page.jsx",
-                        lineNumber: 51,
+                        lineNumber: 58,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                        style: {
-                            marginTop: 12
-                        },
+                        className: "detail-actions",
                         children: [
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                 className: "btn",
+                                type: "submit",
                                 children: "Simpan"
                             }, void 0, false, {
                                 fileName: "[project]/app/employees/karyawan/[id]/page.jsx",
-                                lineNumber: 52,
-                                columnNumber: 39
+                                lineNumber: 60,
+                                columnNumber: 13
                             }, this),
-                            " ",
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                                style: {
-                                    marginLeft: 8
-                                },
+                                className: "btn-outline",
                                 type: "button",
                                 onClick: ()=>setEditing(false),
                                 children: "Batal"
                             }, void 0, false, {
                                 fileName: "[project]/app/employees/karyawan/[id]/page.jsx",
-                                lineNumber: 52,
-                                columnNumber: 79
+                                lineNumber: 61,
+                                columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/employees/karyawan/[id]/page.jsx",
-                        lineNumber: 52,
+                        lineNumber: 59,
                         columnNumber: 11
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/app/employees/karyawan/[id]/page.jsx",
-                lineNumber: 47,
+                lineNumber: 54,
                 columnNumber: 9
             }, this)
         ]

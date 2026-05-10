@@ -1,21 +1,19 @@
 {
+  "/_not-found/page": "app/_not-found/page.js",
   "/employees/departemen/page": "app/employees/departemen/page.js",
   "/employees/karyawan/[id]/page": "app/employees/karyawan/[id]/page.js",
-  "/employees/karyawan/create/page": "app/employees/karyawan/create/page.js",
   "/employees/karyawan/page": "app/employees/karyawan/page.js",
   "/manufaktur/[id]/page": "app/manufaktur/[id]/page.js",
   "/manufaktur/create/page": "app/manufaktur/create/page.js",
   "/manufaktur/page": "app/manufaktur/page.js",
-  "/page": "app/page.js",
   "/purchase/bills/create/page": "app/purchase/bills/create/page.js",
   "/purchase/bills/page": "app/purchase/bills/page.js",
   "/purchase/vendors/[id]/page": "app/purchase/vendors/[id]/page.js",
   "/purchase/vendors/create/page": "app/purchase/vendors/create/page.js",
   "/purchase/vendors/page": "app/purchase/vendors/page.js",
   "/sales/customers/[id]/page": "app/sales/customers/[id]/page.js",
+  "/sales/customers/create/page": "app/sales/customers/create/page.js",
   "/sales/customers/page": "app/sales/customers/page.js",
-  "/sales/orders/create/page": "app/sales/orders/create/page.js",
   "/sales/orders/page": "app/sales/orders/page.js",
-  "/sales/quotation/create/page": "app/sales/quotation/create/page.js",
   "/sales/quotation/page": "app/sales/quotation/page.js"
 }

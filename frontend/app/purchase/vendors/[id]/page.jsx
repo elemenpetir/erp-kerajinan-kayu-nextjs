@@ -47,15 +47,17 @@ export default function VendorDetail({ params }) {
   if (!item) return <p>Loading...</p>;
 
   return (
-    <div>
+    <div className="detail-card">
       <h2>{item.nama}</h2>
       <p>Perusahaan: {item.nama_perusahaan}</p>
       <p>Alamat: {item.alamat}</p>
       <p>Telp: {item.telp}</p>
       <p>Email: {item.email}</p>
-      <button type="button" onClick={handleDelete} disabled={deleting}>
-        {deleting ? "Menghapus..." : "Hapus Vendor"}
-      </button>
+      <div className="detail-actions">
+        <button className="btn-danger" type="button" onClick={handleDelete} disabled={deleting}>
+          {deleting ? "Menghapus..." : "Hapus Vendor"}
+        </button>
+      </div>
     </div>
   );
 }

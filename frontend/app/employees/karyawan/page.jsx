@@ -16,7 +16,7 @@ export default function KaryawanList(){
     <div>
       <h2>Karyawan</h2>
       <p><a className="btn" href="/employees/karyawan/create">Tambah Karyawan</a></p>
-      <table>
+      <table className="table-slate">
         <thead><tr><th>Nama</th><th>Posisi</th><th>Telp</th><th>Email</th><th>Aksi</th></tr></thead>
         <tbody>
           {items.map(k=> (
@@ -25,7 +25,11 @@ export default function KaryawanList(){
               <td>{k.posisi}</td>
               <td>{k.telp}</td>
               <td>{k.email}</td>
-              <td><a href={`/employees/karyawan/${k.id}`}>Lihat / Edit</a></td>
+              <td>
+                <div className="action-buttons">
+                  <a href={`/employees/karyawan/${k.id}`}>Lihat / Edit</a>
+                </div>
+              </td>
             </tr>
           ))}
         </tbody>

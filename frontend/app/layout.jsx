@@ -1,17 +1,16 @@
 import './globals.css'
-import Header from '../components/Header'
+import AppShell from '../components/AppShell'
 
 export const metadata = {
-  title: 'ERP Portfolio - Next.js + Supabase',
-  description: 'Demo ERP rebuild'
+  title: 'ERP Kerajinan Kayu ERP',
+  description: 'ERP dashboard dengan tema monochrome'
 };
 
 export default function RootLayout({ children }) {
   return (
     <html lang="id">
       <body>
-        <Header />
-        <main className="site-main">{children}</main>
+        <AppShell>{children}</AppShell>
       </body>
     </html>
   )

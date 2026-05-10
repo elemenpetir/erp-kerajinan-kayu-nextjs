@@ -32,7 +32,7 @@ export default function BillsList() {
           Buat Bill
         </a>
       </p>
-      <table>
+      <table className="table-slate">
         <thead>
           <tr>
             <th>Referensi Vendor</th>
@@ -48,7 +48,9 @@ export default function BillsList() {
               <td>{b.deadline_order}</td>
               <td>{b.total_biaya}</td>
               <td>
-                <button onClick={() => handleDelete(b.id)}>Hapus</button>
+                <div className="action-buttons">
+                  <button onClick={() => handleDelete(b.id)}>Hapus</button>
+                </div>
               </td>
             </tr>
           ))}

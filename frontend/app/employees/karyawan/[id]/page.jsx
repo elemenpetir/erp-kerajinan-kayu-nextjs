@@ -34,14 +34,21 @@ export default function KaryawanDetail({ params }){
   if (!item) return <p>Loading...</p>
 
   return (
-    <div>
+    <div className="detail-card">
       <h2>{item.nama}</h2>
       {!editing ? (
         <div>
           <p>Posisi: {item.posisi}</p>
           <p>Telp: {item.telp}</p>
           <p>Email: {item.email}</p>
-          <p><button className="btn" onClick={()=>setEditing(true)}>Edit</button> <button style={{marginLeft:8}} onClick={handleDelete}>Hapus</button></p>
+          <div className="detail-actions">
+            <button className="btn-outline" onClick={() => setEditing(true)}>
+              Edit
+            </button>
+            <button className="btn-danger" onClick={handleDelete}>
+              Hapus
+            </button>
+          </div>
         </div>
       ) : (
         <form onSubmit={handleUpdate}>
@@ -49,7 +56,10 @@ export default function KaryawanDetail({ params }){
           <div><label>Posisi</label><br/><input value={posisi} onChange={e=>setPosisi(e.target.value)} /></div>
           <div><label>Telp</label><br/><input value={telp} onChange={e=>setTelp(e.target.value)} /></div>
           <div><label>Email</label><br/><input value={email} onChange={e=>setEmail(e.target.value)} /></div>
-          <div style={{marginTop:12}}><button className="btn">Simpan</button> <button style={{marginLeft:8}} type="button" onClick={()=>setEditing(false)}>Batal</button></div>
+          <div className="detail-actions">
+            <button className="btn" type="submit">Simpan</button>
+            <button className="btn-outline" type="button" onClick={()=>setEditing(false)}>Batal</button>
+          </div>
         </form>
       )}
     </div>

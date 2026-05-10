@@ -15,11 +15,21 @@ export default function VendorsList(){
     <div>
       <h2>Vendors</h2>
       <p><a className="btn" href="/purchase/vendors/create">Tambah Vendor</a></p>
-      <table>
+      <table className="table-slate">
         <thead><tr><th>Nama</th><th>Perusahaan</th><th>Telp</th><th>Email</th><th>Aksi</th></tr></thead>
         <tbody>
           {items.map(v=> (
-            <tr key={v.id}><td>{v.nama}</td><td>{v.nama_perusahaan}</td><td>{v.telp}</td><td>{v.email}</td><td><a href={`/purchase/vendors/${v.id}`}>Lihat</a></td></tr>
+            <tr key={v.id}>
+              <td>{v.nama}</td>
+              <td>{v.nama_perusahaan}</td>
+              <td>{v.telp}</td>
+              <td>{v.email}</td>
+              <td>
+                <div className="action-buttons">
+                  <a href={`/purchase/vendors/${v.id}`}>Lihat</a>
+                </div>
+              </td>
+            </tr>
           ))}
         </tbody>
       </table>

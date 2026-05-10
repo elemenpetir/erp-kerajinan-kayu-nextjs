@@ -1,23 +1,23 @@
 'use client'
-import { useState } from 'react'
 
-export default function Header(){
-  const [open, setOpen] = useState(false)
+export default function Header({ onMobileToggle }) {
   return (
-    <header className="site-header">
-      <div className="site-brand"><a href="/">ERP Portfolio</a></div>
-      <button className="mobile-toggle" aria-label="Toggle menu" onClick={()=>setOpen(o=>!o)}>
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 7H20" stroke="#111" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/><path d="M4 12H20" stroke="#111" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/><path d="M4 17H20" stroke="#111" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+    <header className="flex items-center justify-between border-b border-slate-200 bg-slate-950 px-4 py-4 text-white sm:px-6">
+      <div className="text-lg font-semibold uppercase tracking-[0.24em] text-slate-100">
+        ERP Kerajinan Kayu
+      </div>
+      <button
+        type="button"
+        onClick={onMobileToggle}
+        className="inline-flex h-11 w-11 items-center justify-center rounded-lg border border-slate-700 bg-slate-900 text-slate-100 transition hover:bg-slate-800 sm:hidden"
+        aria-label="Buka navigasi"
+      >
+        <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M4 6h16" />
+          <path d="M4 12h16" />
+          <path d="M4 18h16" />
+        </svg>
       </button>
-      <nav className={"site-nav " + (open ? 'mobile-open' : '')}>
-        <a href="/manufaktur">Manufaktur</a>
-        <a href="/purchase/vendors">Purchase</a>
-        <a href="/purchase/bills">Bills</a>
-        <a href="/sales/customers">Sales</a>
-        <a href="/sales/quotation">Quotation</a>
-        <a href="/sales/orders">Sales Orders</a>
-        <a href="/employees/departemen">Employees</a>
-      </nav>
     </header>
   )
 }

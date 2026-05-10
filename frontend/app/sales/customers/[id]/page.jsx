@@ -60,7 +60,7 @@ export default function CustomerDetail({ params }) {
   if (!item) return <p>Loading...</p>;
 
   return (
-    <div>
+    <div className="detail-card">
       {!editing ? (
         <div>
           <h2>{item.nama}</h2>
@@ -68,11 +68,13 @@ export default function CustomerDetail({ params }) {
           <p>Alamat: {item.alamat}</p>
           <p>Telp: {item.telp}</p>
           <p>Email: {item.email}</p>
-          <div style={{ marginTop: 12 }}>
-            <button className="btn" onClick={() => setEditing(true)}>
+          <div className="detail-actions">
+            <button className="btn-outline" onClick={() => setEditing(true)}>
               Edit
-            </button>{" "}
-            <button onClick={handleDelete}>Hapus</button>
+            </button>
+            <button className="btn-danger" onClick={handleDelete}>
+              Hapus
+            </button>
           </div>
         </div>
       ) : (
@@ -110,11 +112,11 @@ export default function CustomerDetail({ params }) {
             <br />
             <input value={email} onChange={(e) => setEmail(e.target.value)} />
           </div>
-          <div style={{ marginTop: 12 }}>
+          <div className="detail-actions">
             <button className="btn" type="submit">
               Simpan
-            </button>{" "}
-            <button type="button" onClick={() => setEditing(false)}>
+            </button>
+            <button className="btn-outline" type="button" onClick={() => setEditing(false)}>
               Batal
             </button>
           </div>

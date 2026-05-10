@@ -32,7 +32,7 @@ export default function QuotationList() {
           Buat Quotation
         </a>
       </p>
-      <table>
+      <table className="table-slate">
         <thead>
           <tr>
             <th>Customer</th>
@@ -48,7 +48,9 @@ export default function QuotationList() {
               <td>{q.total_biaya}</td>
               <td>{q.status}</td>
               <td>
-                <button onClick={() => handleDelete(q.id)}>Hapus</button>
+                <div className="action-buttons">
+                  <button onClick={() => handleDelete(q.id)}>Hapus</button>
+                </div>
               </td>
             </tr>
           ))}

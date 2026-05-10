@@ -56,7 +56,7 @@ export default function DepartemenPage() {
           Tambah
         </button>
       </form>
-      <table>
+      <table className="table-slate">
         <thead>
           <tr>
             <th>Nama</th>
@@ -70,7 +70,9 @@ export default function DepartemenPage() {
               <td>{d.nama_departemen}</td>
               <td>{d.manager}</td>
               <td>
-                <button onClick={() => handleDelete(d.id)}>Hapus</button>
+                <div className="action-buttons">
+                  <button onClick={() => handleDelete(d.id)}>Hapus</button>
+                </div>
               </td>
             </tr>
           ))}

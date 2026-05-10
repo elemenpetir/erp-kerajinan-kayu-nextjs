@@ -35,7 +35,7 @@ export default function CustomersList() {
           Tambah Customer
         </a>
       </p>
-      <table>
+      <table className="table-slate">
         <thead>
           <tr>
             <th>Nama</th>
@@ -53,9 +53,14 @@ export default function CustomersList() {
               <td>{c.telp}</td>
               <td>{c.email}</td>
               <td>
-                <a href={`/sales/customers/${c.id}`}>Lihat</a>
-                {" | "}
-                <button onClick={() => handleDelete(c.id)}>Hapus</button>
+                <div className="action-buttons">
+                  <a className="btn-table-action" href={`/sales/customers/${c.id}`}>
+                    Lihat
+                  </a>
+                  <button className="btn-danger" onClick={() => handleDelete(c.id)}>
+                    Hapus
+                  </button>
+                </div>
               </td>
             </tr>
           ))}

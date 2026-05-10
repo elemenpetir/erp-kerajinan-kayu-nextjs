@@ -24,7 +24,7 @@ export default function OrdersList() {
           Buat Sales Order (from Quotation)
         </a>
       </p>
-      <table>
+      <table className="table-slate">
         <thead>
           <tr>
             <th>Customer</th>
