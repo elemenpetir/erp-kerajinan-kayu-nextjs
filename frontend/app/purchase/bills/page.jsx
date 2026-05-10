@@ -1,9 +1,11 @@
 "use client";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { supabase } from "../../../lib/supabaseClient";
 
 export default function BillsList() {
   const [items, setItems] = useState([]);
+  const router = useRouter();
 
   useEffect(() => {
     fetchData();
@@ -24,6 +26,47 @@ export default function BillsList() {
     else fetchData();
   }
 
+  async function handleBayar(b) {
+    if (!confirm("Bayar bill ini? Data akan masuk ke Vendor Bill Accounting."))
+      return;
+
+    const { error: updateError } = await supabase
+      .from("bills")
+      .update({ status: "Paid" })
+      .eq("id", b.id);
+
+    if (updateError) {
+      alert("Gagal update status: " + updateError.message);
+      return;
+    }
+
+    const { error: insertError } = await supabase.from("vendor_bill").insert([
+      {
+        bill_id: b.id,
+        jumlah_pembayaran: b.total_biaya,
+        payment_date: new Date().toISOString().split("T")[0],
+      },
+    ]);
+
+    if (insertError) {
+      alert("Gagal insert vendor bill: " + insertError.message);
+      return;
+    }
+
+    alert("Bill berhasil dibayar!");
+    fetchData();
+  }
+
+  async function handleKonfirmasi(id) {
+    if (!confirm("Konfirmasi bill ini?")) return;
+    const { error } = await supabase
+      .from("bills")
+      .update({ status: "Bill" })
+      .eq("id", id);
+    if (error) alert("Gagal konfirmasi: " + error.message);
+    else fetchData();
+  }
+
   return (
     <div>
       <h2>Purchase - Bills</h2>
@@ -38,6 +81,7 @@ export default function BillsList() {
             <th>Referensi Vendor</th>
             <th>Deadline</th>
             <th>Total</th>
+            <th>Status</th>
             <th>Aksi</th>
           </tr>
         </thead>
@@ -47,9 +91,34 @@ export default function BillsList() {
               <td>{b.referensi_vendor}</td>
               <td>{b.deadline_order}</td>
               <td>{b.total_biaya}</td>
+              <td>{b.status}</td>
               <td>
                 <div className="action-buttons">
-                  <button onClick={() => handleDelete(b.id)}>Hapus</button>
+                  <button
+                    className="btn-table-action"
+                    onClick={() => router.push(`/purchase/bills/${b.id}`)}
+                  >
+                    Lihat
+                  </button>
+                  {b.status === "Bill" && (
+                    <button
+                      className="btn-table-action"
+                      onClick={() => handleBayar(b)}
+                    >
+                      Bayar
+                    </button>
+                  )}
+                  {b.status === "Draft Bill" && (
+                    <button
+                      className="btn-table-action"
+                      onClick={() => handleKonfirmasi(b.id)}
+                    >
+                      Konfirmasi
+                    </button>
+                  )}
+                  {b.status === "Draft Bill" && (
+                    <button onClick={() => handleDelete(b.id)}>Hapus</button>
+                  )}
                 </div>
               </td>
             </tr>

@@ -3,7 +3,6 @@
 @tailwind utilities;
 
 :root {
-  color-scheme: dark;
   font-family:
     Inter,
     ui-sans-serif,
@@ -144,7 +143,7 @@ button {
 
   .table-slate th,
   .table-slate td {
-    @apply border border-slate-300 px-4 py-3 align-top whitespace-nowrap;
+    @apply border border-slate-300 px-4 py-3 align-middle whitespace-nowrap;
   }
 
   .table-slate th {
@@ -171,6 +170,16 @@ button {
     @apply bg-rose-100;
   }
 
+  .table-slate .btn-table-action {
+    border-color: #cbd5e1 !important;
+    color: #0f172a !important;
+    background: white !important;
+  }
+
+  .table-slate .btn-table-action:hover {
+    background: #f1f5f9 !important;
+  }
+
   .table-slate tbody tr:hover {
     @apply bg-slate-200;
   }
@@ -185,6 +194,22 @@ button {
 
   .table-slate td {
     @apply text-slate-900;
+  }
+
+  .form-group {
+    @apply mb-4 flex flex-col gap-1;
+  }
+
+  .form-group label {
+    @apply text-sm font-semibold text-slate-700;
+  }
+
+  .form-input {
+    @apply w-full max-w-sm rounded-lg border border-slate-300 bg-white px-4 py-2 text-slate-950 placeholder:text-slate-400 outline-none transition duration-200;
+  }
+
+  .form-input:focus {
+    @apply border-slate-700 ring-2 ring-slate-200;
   }
 }
 
@@ -201,5 +226,11 @@ button {
   .sidebar-scroll::-webkit-scrollbar-thumb {
     background: #cbd5e1;
     border-radius: 9999px;
+  }
+
+  input[type="date"]::-webkit-calendar-picker-indicator {
+    opacity: 1;
+    cursor: pointer;
+    filter: invert(0);
   }
 }

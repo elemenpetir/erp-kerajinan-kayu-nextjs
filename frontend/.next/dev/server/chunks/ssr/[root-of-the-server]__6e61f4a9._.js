@@ -158,43 +158,50 @@ function VendorsList() {
                                         children: v.nama
                                     }, void 0, false, {
                                         fileName: "[project]/app/purchase/vendors/page.jsx",
-                                        lineNumber: 22,
-                                        columnNumber: 28
+                                        lineNumber: 23,
+                                        columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
                                         children: v.nama_perusahaan
                                     }, void 0, false, {
                                         fileName: "[project]/app/purchase/vendors/page.jsx",
-                                        lineNumber: 22,
-                                        columnNumber: 45
+                                        lineNumber: 24,
+                                        columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
                                         children: v.telp
                                     }, void 0, false, {
                                         fileName: "[project]/app/purchase/vendors/page.jsx",
-                                        lineNumber: 22,
-                                        columnNumber: 73
+                                        lineNumber: 25,
+                                        columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
                                         children: v.email
                                     }, void 0, false, {
                                         fileName: "[project]/app/purchase/vendors/page.jsx",
-                                        lineNumber: 22,
-                                        columnNumber: 90
+                                        lineNumber: 26,
+                                        columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
-                                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("a", {
-                                            href: `/purchase/vendors/${v.id}`,
-                                            children: "Lihat"
+                                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                            className: "action-buttons",
+                                            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("a", {
+                                                href: `/purchase/vendors/${v.id}`,
+                                                children: "Lihat"
+                                            }, void 0, false, {
+                                                fileName: "[project]/app/purchase/vendors/page.jsx",
+                                                lineNumber: 29,
+                                                columnNumber: 19
+                                            }, this)
                                         }, void 0, false, {
                                             fileName: "[project]/app/purchase/vendors/page.jsx",
-                                            lineNumber: 22,
-                                            columnNumber: 112
+                                            lineNumber: 28,
+                                            columnNumber: 17
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/app/purchase/vendors/page.jsx",
-                                        lineNumber: 22,
-                                        columnNumber: 108
+                                        lineNumber: 27,
+                                        columnNumber: 15
                                     }, this)
                                 ]
                             }, v.id, true, {

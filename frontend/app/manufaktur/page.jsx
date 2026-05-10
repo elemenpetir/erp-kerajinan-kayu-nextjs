@@ -21,6 +21,17 @@ export default function ManufakturList(){
   return (
     <div>
       <h2>Manufaktur — Produk</h2>
+      <div className="action-buttons" style={{ marginBottom: 12 }}>
+        <a className="btn" href="/manufaktur/bahan">
+          Bahan
+        </a>
+        <a className="btn" href="/manufaktur/kategori">
+          Kategori
+        </a>
+        <a className="btn" href="/manufaktur/bom">
+          BOM
+        </a>
+      </div>
       <p><a className="btn" href="/manufaktur/create">Buat Produk</a></p>
       {loading ? <p>Loading...</p> : (
         <table className="table-slate">

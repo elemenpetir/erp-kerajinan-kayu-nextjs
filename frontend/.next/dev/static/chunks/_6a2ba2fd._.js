@@ -116,7 +116,7 @@ const navSections = [
             },
             {
                 label: 'Order Produksi',
-                href: '/manufaktur/create'
+                href: '/manufaktur/order-produksi'
             }
         ]
     },
@@ -204,7 +204,7 @@ function Sidebar({ open, onClose }) {
                                 children: "Navigasi"
                             }, void 0, false, {
                                 fileName: "[project]/components/Sidebar.jsx",
-                                lineNumber: 60,
+                                lineNumber: 59,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
@@ -212,13 +212,13 @@ function Sidebar({ open, onClose }) {
                                 children: "ERP Menu"
                             }, void 0, false, {
                                 fileName: "[project]/components/Sidebar.jsx",
-                                lineNumber: 61,
+                                lineNumber: 60,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/Sidebar.jsx",
-                        lineNumber: 59,
+                        lineNumber: 58,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -228,13 +228,13 @@ function Sidebar({ open, onClose }) {
                         children: "Tutup"
                     }, void 0, false, {
                         fileName: "[project]/components/Sidebar.jsx",
-                        lineNumber: 63,
+                        lineNumber: 62,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/Sidebar.jsx",
-                lineNumber: 58,
+                lineNumber: 57,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("nav", {
@@ -251,7 +251,7 @@ function Sidebar({ open, onClose }) {
                                         children: section.title
                                     }, void 0, false, {
                                         fileName: "[project]/components/Sidebar.jsx",
-                                        lineNumber: 76,
+                                        lineNumber: 75,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -259,13 +259,13 @@ function Sidebar({ open, onClose }) {
                                         children: openSections[section.title] ? '−' : '+'
                                     }, void 0, false, {
                                         fileName: "[project]/components/Sidebar.jsx",
-                                        lineNumber: 77,
+                                        lineNumber: 76,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/Sidebar.jsx",
-                                lineNumber: 71,
+                                lineNumber: 70,
                                 columnNumber: 13
                             }, this),
                             openSections[section.title] && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("ul", {
@@ -277,34 +277,34 @@ function Sidebar({ open, onClose }) {
                                             children: item.label
                                         }, void 0, false, {
                                             fileName: "[project]/components/Sidebar.jsx",
-                                            lineNumber: 83,
+                                            lineNumber: 82,
                                             columnNumber: 21
                                         }, this)
                                     }, item.href, false, {
                                         fileName: "[project]/components/Sidebar.jsx",
-                                        lineNumber: 82,
+                                        lineNumber: 81,
                                         columnNumber: 19
                                     }, this))
                             }, void 0, false, {
                                 fileName: "[project]/components/Sidebar.jsx",
-                                lineNumber: 80,
+                                lineNumber: 79,
                                 columnNumber: 15
                             }, this)
                         ]
                     }, section.title, true, {
                         fileName: "[project]/components/Sidebar.jsx",
-                        lineNumber: 70,
+                        lineNumber: 69,
                         columnNumber: 11
                     }, this))
             }, void 0, false, {
                 fileName: "[project]/components/Sidebar.jsx",
-                lineNumber: 68,
+                lineNumber: 67,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/components/Sidebar.jsx",
-        lineNumber: 57,
+        lineNumber: 56,
         columnNumber: 5
     }, this);
 }

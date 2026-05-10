@@ -3,16 +3,15 @@
 import { useState } from 'react'
 
 const navSections = [
-  {
-    title: 'Manufaktur',
-    items: [
-      { label: 'Produk', href: '/manufaktur' },
-      { label: 'Bahan', href: '/manufaktur/bahan' },
-      { label: 'Kategori', href: '/manufaktur/kategori' },
-      { label: 'BoM', href: '/manufaktur/bom' },
-      { label: 'Order Produksi', href: '/manufaktur/create' }
-    ]
-  },
+      { title: 'Manufaktur',
+        items: [
+          { label: 'Produk', href: '/manufaktur' },
+          { label: 'Bahan', href: '/manufaktur/bahan' },
+          { label: 'Kategori', href: '/manufaktur/kategori' },
+          { label: 'BoM', href: '/manufaktur/bom' },
+          { label: 'Order Produksi', href: '/manufaktur/order-produksi' }
+        ]
+      },
   {
     title: 'Purchase',
     items: [

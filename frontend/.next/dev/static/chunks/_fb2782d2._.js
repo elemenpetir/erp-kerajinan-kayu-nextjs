@@ -36,11 +36,15 @@ var _s = __turbopack_context__.k.signature();
 function DepartemenPage() {
     _s();
     const [items, setItems] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])([]);
+    const [karyawanList, setKaryawanList] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])([]);
     const [nama, setNama] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])("");
     const [manager, setManager] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])("");
+    const [editId, setEditId] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(null);
+    const [editManager, setEditManager] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])("");
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
         "DepartemenPage.useEffect": ()=>{
             fetchData();
+            fetchKaryawan();
         }
     }["DepartemenPage.useEffect"], []);
     async function fetchData() {
@@ -48,6 +52,12 @@ function DepartemenPage() {
             ascending: false
         });
         setItems(data || []);
+    }
+    async function fetchKaryawan() {
+        const { data } = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$supabaseClient$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["supabase"].from("karyawan").select("id, nama").order("nama", {
+            ascending: true
+        });
+        setKaryawanList(data || []);
     }
     async function handleCreate(e) {
         e.preventDefault();
@@ -67,13 +77,31 @@ function DepartemenPage() {
         if (error) alert("Gagal hapus: " + error.message);
         else fetchData();
     }
+    function startEdit(d) {
+        setEditId(d.id);
+        setEditManager(d.manager || "");
+    }
+    function cancelEdit() {
+        setEditId(null);
+        setEditManager("");
+    }
+    async function handleSaveManager(id) {
+        const { error } = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$supabaseClient$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["supabase"].from("departemen").update({
+            manager: editManager || null
+        }).eq("id", id);
+        if (error) alert("Gagal update: " + error.message);
+        else {
+            cancelEdit();
+            fetchData();
+        }
+    }
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
         children: [
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
                 children: "Departemen"
             }, void 0, false, {
                 fileName: "[project]/app/employees/departemen/page.jsx",
-                lineNumber: 41,
+                lineNumber: 75,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("form", {
@@ -89,19 +117,36 @@ function DepartemenPage() {
                         required: true
                     }, void 0, false, {
                         fileName: "[project]/app/employees/departemen/page.jsx",
-                        lineNumber: 43,
+                        lineNumber: 77,
                         columnNumber: 9
                     }, this),
-                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
-                        placeholder: "Manager",
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("select", {
                         value: manager,
                         onChange: (e)=>setManager(e.target.value),
                         style: {
                             marginLeft: 8
-                        }
-                    }, void 0, false, {
+                        },
+                        children: [
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
+                                value: "",
+                                children: "— Pilih Manager —"
+                            }, void 0, false, {
+                                fileName: "[project]/app/employees/departemen/page.jsx",
+                                lineNumber: 88,
+                                columnNumber: 11
+                            }, this),
+                            karyawanList.map((k)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
+                                    value: k.nama,
+                                    children: k.nama
+                                }, k.id, false, {
+                                    fileName: "[project]/app/employees/departemen/page.jsx",
+                                    lineNumber: 90,
+                                    columnNumber: 13
+                                }, this))
+                        ]
+                    }, void 0, true, {
                         fileName: "[project]/app/employees/departemen/page.jsx",
-                        lineNumber: 49,
+                        lineNumber: 83,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -112,13 +157,13 @@ function DepartemenPage() {
                         children: "Tambah"
                     }, void 0, false, {
                         fileName: "[project]/app/employees/departemen/page.jsx",
-                        lineNumber: 55,
+                        lineNumber: 95,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/app/employees/departemen/page.jsx",
-                lineNumber: 42,
+                lineNumber: 76,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("table", {
@@ -131,90 +176,167 @@ function DepartemenPage() {
                                     children: "Nama"
                                 }, void 0, false, {
                                     fileName: "[project]/app/employees/departemen/page.jsx",
-                                    lineNumber: 62,
+                                    lineNumber: 103,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
                                     children: "Manager"
                                 }, void 0, false, {
                                     fileName: "[project]/app/employees/departemen/page.jsx",
-                                    lineNumber: 63,
+                                    lineNumber: 104,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
                                     children: "Aksi"
                                 }, void 0, false, {
                                     fileName: "[project]/app/employees/departemen/page.jsx",
-                                    lineNumber: 64,
+                                    lineNumber: 105,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/app/employees/departemen/page.jsx",
-                            lineNumber: 61,
+                            lineNumber: 102,
                             columnNumber: 11
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/app/employees/departemen/page.jsx",
-                        lineNumber: 60,
+                        lineNumber: 101,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("tbody", {
-                        children: items.map((d)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("tr", {
+                        children: items.length === 0 ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("tr", {
+                            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
+                                colSpan: 3,
+                                children: "Belum ada departemen."
+                            }, void 0, false, {
+                                fileName: "[project]/app/employees/departemen/page.jsx",
+                                lineNumber: 111,
+                                columnNumber: 15
+                            }, this)
+                        }, void 0, false, {
+                            fileName: "[project]/app/employees/departemen/page.jsx",
+                            lineNumber: 110,
+                            columnNumber: 13
+                        }, this) : items.map((d)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("tr", {
                                 children: [
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
                                         children: d.nama_departemen
                                     }, void 0, false, {
                                         fileName: "[project]/app/employees/departemen/page.jsx",
-                                        lineNumber: 70,
-                                        columnNumber: 15
+                                        lineNumber: 116,
+                                        columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
-                                        children: d.manager
+                                        children: editId === d.id ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("select", {
+                                            value: editManager,
+                                            onChange: (e)=>setEditManager(e.target.value),
+                                            children: [
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
+                                                    value: "",
+                                                    children: "— Kosongkan —"
+                                                }, void 0, false, {
+                                                    fileName: "[project]/app/employees/departemen/page.jsx",
+                                                    lineNumber: 123,
+                                                    columnNumber: 23
+                                                }, this),
+                                                karyawanList.map((k)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
+                                                        value: k.nama,
+                                                        children: k.nama
+                                                    }, k.id, false, {
+                                                        fileName: "[project]/app/employees/departemen/page.jsx",
+                                                        lineNumber: 125,
+                                                        columnNumber: 25
+                                                    }, this))
+                                            ]
+                                        }, void 0, true, {
+                                            fileName: "[project]/app/employees/departemen/page.jsx",
+                                            lineNumber: 119,
+                                            columnNumber: 21
+                                        }, this) : d.manager || "-"
                                     }, void 0, false, {
                                         fileName: "[project]/app/employees/departemen/page.jsx",
-                                        lineNumber: 71,
-                                        columnNumber: 15
+                                        lineNumber: 117,
+                                        columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
-                                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                                            onClick: ()=>handleDelete(d.id),
-                                            children: "Hapus"
-                                        }, void 0, false, {
+                                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                            className: "action-buttons",
+                                            children: [
+                                                editId === d.id ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Fragment"], {
+                                                    children: [
+                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                                            className: "btn-table-action",
+                                                            onClick: ()=>handleSaveManager(d.id),
+                                                            children: "Simpan"
+                                                        }, void 0, false, {
+                                                            fileName: "[project]/app/employees/departemen/page.jsx",
+                                                            lineNumber: 138,
+                                                            columnNumber: 25
+                                                        }, this),
+                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                                            className: "btn-table-action",
+                                                            onClick: cancelEdit,
+                                                            children: "Batal"
+                                                        }, void 0, false, {
+                                                            fileName: "[project]/app/employees/departemen/page.jsx",
+                                                            lineNumber: 144,
+                                                            columnNumber: 25
+                                                        }, this)
+                                                    ]
+                                                }, void 0, true) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                                    className: "btn-table-action",
+                                                    onClick: ()=>startEdit(d),
+                                                    children: "Edit Manager"
+                                                }, void 0, false, {
+                                                    fileName: "[project]/app/employees/departemen/page.jsx",
+                                                    lineNumber: 152,
+                                                    columnNumber: 23
+                                                }, this),
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                                    onClick: ()=>handleDelete(d.id),
+                                                    children: "Hapus"
+                                                }, void 0, false, {
+                                                    fileName: "[project]/app/employees/departemen/page.jsx",
+                                                    lineNumber: 159,
+                                                    columnNumber: 21
+                                                }, this)
+                                            ]
+                                        }, void 0, true, {
                                             fileName: "[project]/app/employees/departemen/page.jsx",
-                                            lineNumber: 73,
-                                            columnNumber: 17
+                                            lineNumber: 135,
+                                            columnNumber: 19
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/app/employees/departemen/page.jsx",
-                                        lineNumber: 72,
-                                        columnNumber: 15
+                                        lineNumber: 134,
+                                        columnNumber: 17
                                     }, this)
                                 ]
                             }, d.id, true, {
                                 fileName: "[project]/app/employees/departemen/page.jsx",
-                                lineNumber: 69,
-                                columnNumber: 13
+                                lineNumber: 115,
+                                columnNumber: 15
                             }, this))
                     }, void 0, false, {
                         fileName: "[project]/app/employees/departemen/page.jsx",
-                        lineNumber: 67,
+                        lineNumber: 108,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/app/employees/departemen/page.jsx",
-                lineNumber: 59,
+                lineNumber: 100,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/app/employees/departemen/page.jsx",
-        lineNumber: 40,
+        lineNumber: 74,
         columnNumber: 5
     }, this);
 }
-_s(DepartemenPage, "PpbGDbX9gMhumFvmkG1eIceFw40=");
+_s(DepartemenPage, "0sUOjV0+Rq0706ySuPgClhrDSnc=");
 _c = DepartemenPage;
 var _c;
 __turbopack_context__.k.register(_c, "DepartemenPage");

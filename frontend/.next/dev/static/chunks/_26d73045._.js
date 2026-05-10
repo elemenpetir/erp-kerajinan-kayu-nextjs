@@ -60,6 +60,45 @@ function ManufakturList() {
                 lineNumber: 23,
                 columnNumber: 7
             }, this),
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                className: "action-buttons",
+                style: {
+                    marginBottom: 12
+                },
+                children: [
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("a", {
+                        className: "btn",
+                        href: "/manufaktur/bahan",
+                        children: "Bahan"
+                    }, void 0, false, {
+                        fileName: "[project]/app/manufaktur/page.jsx",
+                        lineNumber: 25,
+                        columnNumber: 9
+                    }, this),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("a", {
+                        className: "btn",
+                        href: "/manufaktur/kategori",
+                        children: "Kategori"
+                    }, void 0, false, {
+                        fileName: "[project]/app/manufaktur/page.jsx",
+                        lineNumber: 28,
+                        columnNumber: 9
+                    }, this),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("a", {
+                        className: "btn",
+                        href: "/manufaktur/bom",
+                        children: "BOM"
+                    }, void 0, false, {
+                        fileName: "[project]/app/manufaktur/page.jsx",
+                        lineNumber: 31,
+                        columnNumber: 9
+                    }, this)
+                ]
+            }, void 0, true, {
+                fileName: "[project]/app/manufaktur/page.jsx",
+                lineNumber: 24,
+                columnNumber: 7
+            }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                 children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("a", {
                     className: "btn",
@@ -67,19 +106,19 @@ function ManufakturList() {
                     children: "Buat Produk"
                 }, void 0, false, {
                     fileName: "[project]/app/manufaktur/page.jsx",
-                    lineNumber: 24,
+                    lineNumber: 35,
                     columnNumber: 10
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/app/manufaktur/page.jsx",
-                lineNumber: 24,
+                lineNumber: 35,
                 columnNumber: 7
             }, this),
             loading ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                 children: "Loading..."
             }, void 0, false, {
                 fileName: "[project]/app/manufaktur/page.jsx",
-                lineNumber: 25,
+                lineNumber: 36,
                 columnNumber: 18
             }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("table", {
                 className: "table-slate",
@@ -91,39 +130,39 @@ function ManufakturList() {
                                     children: "Nama"
                                 }, void 0, false, {
                                     fileName: "[project]/app/manufaktur/page.jsx",
-                                    lineNumber: 27,
+                                    lineNumber: 38,
                                     columnNumber: 22
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
                                     children: "Harga Produksi"
                                 }, void 0, false, {
                                     fileName: "[project]/app/manufaktur/page.jsx",
-                                    lineNumber: 27,
+                                    lineNumber: 38,
                                     columnNumber: 35
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
                                     children: "Biaya Produksi"
                                 }, void 0, false, {
                                     fileName: "[project]/app/manufaktur/page.jsx",
-                                    lineNumber: 27,
+                                    lineNumber: 38,
                                     columnNumber: 58
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
                                     children: "Aksi"
                                 }, void 0, false, {
                                     fileName: "[project]/app/manufaktur/page.jsx",
-                                    lineNumber: 27,
+                                    lineNumber: 38,
                                     columnNumber: 81
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/app/manufaktur/page.jsx",
-                            lineNumber: 27,
+                            lineNumber: 38,
                             columnNumber: 18
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/app/manufaktur/page.jsx",
-                        lineNumber: 27,
+                        lineNumber: 38,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("tbody", {
@@ -133,21 +172,21 @@ function ManufakturList() {
                                         children: p.nama
                                     }, void 0, false, {
                                         fileName: "[project]/app/manufaktur/page.jsx",
-                                        lineNumber: 31,
+                                        lineNumber: 42,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
                                         children: p.harga_produksi
                                     }, void 0, false, {
                                         fileName: "[project]/app/manufaktur/page.jsx",
-                                        lineNumber: 32,
+                                        lineNumber: 43,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
                                         children: p.biaya_produksi
                                     }, void 0, false, {
                                         fileName: "[project]/app/manufaktur/page.jsx",
-                                        lineNumber: 33,
+                                        lineNumber: 44,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
@@ -158,34 +197,34 @@ function ManufakturList() {
                                                 children: "Lihat / Edit"
                                             }, void 0, false, {
                                                 fileName: "[project]/app/manufaktur/page.jsx",
-                                                lineNumber: 36,
+                                                lineNumber: 47,
                                                 columnNumber: 21
                                             }, this)
                                         }, void 0, false, {
                                             fileName: "[project]/app/manufaktur/page.jsx",
-                                            lineNumber: 35,
+                                            lineNumber: 46,
                                             columnNumber: 19
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/app/manufaktur/page.jsx",
-                                        lineNumber: 34,
+                                        lineNumber: 45,
                                         columnNumber: 17
                                     }, this)
                                 ]
                             }, p.id, true, {
                                 fileName: "[project]/app/manufaktur/page.jsx",
-                                lineNumber: 30,
+                                lineNumber: 41,
                                 columnNumber: 15
                             }, this))
                     }, void 0, false, {
                         fileName: "[project]/app/manufaktur/page.jsx",
-                        lineNumber: 28,
+                        lineNumber: 39,
                         columnNumber: 11
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/app/manufaktur/page.jsx",
-                lineNumber: 26,
+                lineNumber: 37,
                 columnNumber: 9
             }, this)
         ]
