@@ -5,9 +5,7 @@ import { supabase } from "../../../lib/supabaseClient";
 export default function OrdersList() {
   const [items, setItems] = useState([]);
 
-  useEffect(() => {
-    fetchData();
-  }, []);
+  useEffect(() => { fetchData() }, []);
 
   async function fetchData() {
     const { data } = await supabase
@@ -19,31 +17,22 @@ export default function OrdersList() {
 
   async function handleCreateInvoice(order) {
     if (!confirm("Buat invoice untuk Sales Order ini?")) return;
-
     const today = new Date().toISOString().split("T")[0];
 
     const { error: updateError } = await supabase
       .from("sales_order")
       .update({ status: "Fully Invoice" })
       .eq("id", order.id);
+    if (updateError) { alert("Gagal update status: " + updateError.message); return; }
 
-    if (updateError) {
-      alert("Gagal update status: " + updateError.message);
-      return;
-    }
-
-    const { error: insertError } = await supabase.from("customer_invoice").insert([
-      {
+    const { error: insertError } = await supabase
+      .from("customer_invoice")
+      .insert([{
         sales_order_id: order.id,
         jumlah_pembayaran: order.total_biaya,
         payment_date: today,
-      },
-    ]);
-
-    if (insertError) {
-      alert("Gagal membuat invoice: " + insertError.message);
-      return;
-    }
+      }]);
+    if (insertError) { alert("Gagal membuat invoice: " + insertError.message); return; }
 
     alert("Invoice berhasil dibuat.");
     fetchData();
@@ -52,15 +41,11 @@ export default function OrdersList() {
   return (
     <div>
       <h2>Sales Orders</h2>
-      <p>
-        <a className="btn" href="/sales/orders/create">
-          Buat Sales Order (from Quotation)
-        </a>
-      </p>
       <table className="table-slate">
         <thead>
           <tr>
             <th>Customer</th>
+            <th>Payment Terms</th>
             <th>Total</th>
             <th>Status</th>
             <th>Aksi</th>
@@ -69,13 +54,18 @@ export default function OrdersList() {
         <tbody>
           {items.map((o) => (
             <tr key={o.id}>
-              <td>{o.customer_snapshot?.nama}</td>
-              <td>{o.total_biaya}</td>
+              <td>{o.customer_snapshot?.nama || '-'}</td>
+              <td>{o.payment_terms || '-'}</td>
+              <td>Rp {Number(o.total_biaya || 0).toLocaleString('id-ID')}</td>
               <td>{o.status}</td>
               <td>
                 <div className="action-buttons">
+                  <a href={`/sales/orders/${o.id}`}>Lihat</a>
                   {o.status === "To Invoice" && (
-                    <button className="btn" onClick={() => handleCreateInvoice(o)}>
+                    <button
+                      className="btn-danger"
+                      onClick={() => handleCreateInvoice(o)}
+                    >
                       Buat Invoice
                     </button>
                   )}

@@ -29,7 +29,10 @@
   "/sales/customers/[id]/page": "app/sales/customers/[id]/page.js",
   "/sales/customers/create/page": "app/sales/customers/create/page.js",
   "/sales/customers/page": "app/sales/customers/page.js",
+  "/sales/orders/[id]/page": "app/sales/orders/[id]/page.js",
   "/sales/orders/create/page": "app/sales/orders/create/page.js",
   "/sales/orders/page": "app/sales/orders/page.js",
+  "/sales/quotation/[id]/page": "app/sales/quotation/[id]/page.js",
+  "/sales/quotation/create/page": "app/sales/quotation/create/page.js",
   "/sales/quotation/page": "app/sales/quotation/page.js"
 }

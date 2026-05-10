@@ -36,6 +36,7 @@ export default function QuotationList() {
         <thead>
           <tr>
             <th>Customer</th>
+            <th>Payment Terms</th>
             <th>Total</th>
             <th>Status</th>
             <th>Aksi</th>
@@ -44,12 +45,21 @@ export default function QuotationList() {
         <tbody>
           {items.map((q) => (
             <tr key={q.id}>
-              <td>{q.customer_snapshot?.nama}</td>
-              <td>{q.total_biaya}</td>
+              <td>{q.customer_snapshot?.nama || "-"}</td>
+              <td>{q.payment_terms || "-"}</td>
+              <td>Rp {Number(q.total_biaya || 0).toLocaleString("id-ID")}</td>
               <td>{q.status}</td>
               <td>
                 <div className="action-buttons">
-                  <button onClick={() => handleDelete(q.id)}>Hapus</button>
+                  <a href={`/sales/quotation/${q.id}`}>Lihat</a>
+                  {q.status !== "Sales Order" && (
+                    <button
+                      className="btn-danger"
+                      onClick={() => handleDelete(q.id)}
+                    >
+                      Hapus
+                    </button>
+                  )}
                 </div>
               </td>
             </tr>
