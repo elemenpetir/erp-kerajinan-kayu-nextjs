@@ -160,6 +160,7 @@ node scripts/seed_supabase.js
 - Modul Accounting hanya menampilkan ringkasan data, belum ada implementasi jurnal ganda
 - Belum ada role-based access control (semua user authenticated memiliki akses penuh)
 - Pagination belum diimplementasikan (semua data ditampilkan sekaligus)
+- Stok produk dan bahan bisa bernilai minus jika order produksi atau penjualan melebihi stok yang tersedia — belum ada validasi stok minimum
 
 ---
 
