@@ -6,19 +6,20 @@ Aplikasi ERP (Enterprise Resource Planning) untuk usaha kerajinan kayu, dibangun
 
 ## 🚀 Tech Stack
 
-| Layer | Teknologi |
-|-------|-----------|
-| Frontend | Next.js 16 (App Router) |
-| Database | Supabase (PostgreSQL) |
-| Auth | Supabase Auth (Email) |
-| Styling | Tailwind CSS |
-| Deployment | Vercel |
+| Layer      | Teknologi               |
+| ---------- | ----------------------- |
+| Frontend   | Next.js 16 (App Router) |
+| Database   | Supabase (PostgreSQL)   |
+| Auth       | Supabase Auth (Email)   |
+| Styling    | Tailwind CSS            |
+| Deployment | Vercel                  |
 
 ---
 
 ## 📦 Modul
 
 ### Manufaktur
+
 - **Produk** — CRUD produk dengan kalkulasi stok otomatis
 - **Bahan** — CRUD bahan baku dengan tracking stok
 - **Kategori** — Kategorisasi produk
@@ -26,19 +27,23 @@ Aplikasi ERP (Enterprise Resource Planning) untuk usaha kerajinan kayu, dibangun
 - **Order Produksi** — Flow: Draft → Konfirmasi → Dalam Proses → Selesai
 
 ### Purchase
+
 - **Vendor** — CRUD data vendor
 - **Bills** — Pencatatan tagihan vendor dengan flow pembayaran
 
 ### Sales
+
 - **Customer** — CRUD data customer
 - **Quotation** — Pembuatan penawaran harga
 - **Sales Orders** — Konversi quotation → sales order → invoice
 
 ### Accounting
+
 - **Customer Invoice** — Ringkasan invoice dari Sales Orders yang sudah Fully Invoice
 - **Vendor Bill** — Ringkasan tagihan dari Bills yang sudah Paid
 
 ### Employees
+
 - **Departemen** — Manajemen departemen
 - **Karyawan** — CRUD data karyawan
 
@@ -115,17 +120,20 @@ node scripts/seed_supabase.js
 ## 🔄 Demo Flow End-to-End
 
 ### Flow Produksi
+
 1. Buat **Kategori** → Buat **Bahan** → Buat **Produk**
 2. Buat **BOM** untuk produk (daftar komponen + jumlah)
 3. Buat **Order Produksi** → Konfirmasi → Dalam Proses → Selesai
 4. Stok produk otomatis bertambah ✅
 
 ### Flow Pembelian
+
 1. Buat **Vendor** → Buat **Bill** dengan item bahan
 2. Proses pembayaran bill → Status **Paid**
 3. Stok bahan otomatis bertambah ✅
 
 ### Flow Penjualan
+
 1. Buat **Customer** → Buat **Quotation**
 2. Konfirmasi Quotation → otomatis jadi **Sales Order**
 3. Proses pembayaran → Status **Fully Invoice**
@@ -136,18 +144,23 @@ node scripts/seed_supabase.js
 ## 📸 Screenshots
 
 ### Dashboard Produk
+
 ![Manufaktur](./docs/screenshots/manufaktur.png)
 
 ### BOM
+
 ![Manufaktur](./docs/screenshots/detail-bom.png)
 
 ### Order Produksi
+
 ![Manufaktur](./docs/screenshots/detail-order-produksi.png)
 
 ### Quotation
+
 ![Quotation](./docs/screenshots/quotation.png)
 
 ### Sales Orders
+
 ![Sales Orders](./docs/screenshots/detail-sales-order.png)
 
 ---
@@ -161,6 +174,9 @@ node scripts/seed_supabase.js
 - Belum ada role-based access control (semua user authenticated memiliki akses penuh)
 - Pagination belum diimplementasikan (semua data ditampilkan sekaligus)
 - Stok produk dan bahan bisa bernilai minus jika order produksi atau penjualan melebihi stok yang tersedia — belum ada validasi stok minimum
+- BOM tidak memiliki fitur edit — jika harga bahan berubah, total biaya di BOM tidak otomatis terupdate (idealnya: tambah fitur edit BOM atau snapshot harga saat Order Produksi dibuat)
+- Tidak ada search/filter di halaman list
+- Tidak ada notifikasi stok menipis
 
 ---
 
