@@ -1,6 +1,6 @@
 # ERP Kerajinan Kayu
 
-Aplikasi ERP (Enterprise Resource Planning) untuk usaha kerajinan kayu, dibangun sebagai project portfolio. Rebuild dari aplikasi Laravel 8 + MySQL ke stack modern **Next.js 16 + Supabase**.
+Aplikasi ERP (Enterprise Resource Planning) untuk usaha kerajinan kayu, dibangun sebagai project portfolio menggunakan stack modern **Next.js 16 + Supabase**.
 
 ---
 
