@@ -154,6 +154,7 @@ node scripts/seed_supabase.js
 
 ## ⚠️ Known Limitations
 
+- Stok bahan bertambah saat Bill berstatus Paid (simplifikasi MVP — idealnya stok naik saat Goods Receipt setelah Purchase Order)
 - Tidak ada fitur pembatalan (Cancel) untuk Order Produksi dan Sales Order
 - Tampilan tabel belum optimal di layar mobile (< 768px) — direkomendasikan akses via desktop atau tablet landscape
 - Modul Accounting hanya menampilkan ringkasan data, belum ada implementasi jurnal ganda
@@ -164,6 +165,7 @@ node scripts/seed_supabase.js
 
 ## 🗺️ Roadmap
 
+- [ ] Flow RFQ → Purchase Order → Goods Receipt → Bill → Paid
 - [ ] Fitur Cancel untuk Order Produksi & Sales Order
 - [ ] Pagination pada halaman list
 - [ ] Upload gambar produk & bahan via Supabase Storage
