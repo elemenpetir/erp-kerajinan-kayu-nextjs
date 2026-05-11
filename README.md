@@ -34,6 +34,10 @@ Aplikasi ERP (Enterprise Resource Planning) untuk usaha kerajinan kayu, dibangun
 - **Quotation** — Pembuatan penawaran harga
 - **Sales Orders** — Konversi quotation → sales order → invoice
 
+### Accounting
+- **Customer Invoice** — Ringkasan invoice dari Sales Orders yang sudah Fully Invoice
+- **Vendor Bill** — Ringkasan tagihan dari Bills yang sudah Paid
+
 ### Employees
 - **Departemen** — Manajemen departemen
 - **Karyawan** — CRUD data karyawan
