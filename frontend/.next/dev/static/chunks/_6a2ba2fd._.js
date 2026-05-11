@@ -11,7 +11,7 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist
 ;
 function Header({ onMobileToggle }) {
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("header", {
-        className: "flex items-center justify-between border-b border-slate-200 bg-slate-950 px-4 py-4 text-white sm:px-6",
+        className: "flex w-full items-center justify-between border-b border-slate-200 bg-slate-950 px-4 py-4 text-white sm:px-6",
         children: [
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                 className: "text-lg font-semibold uppercase tracking-[0.24em] text-slate-100",
@@ -24,7 +24,7 @@ function Header({ onMobileToggle }) {
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                 type: "button",
                 onClick: onMobileToggle,
-                className: "inline-flex h-11 w-11 items-center justify-center rounded-lg border border-slate-700 bg-slate-900 text-slate-100 transition hover:bg-slate-800 sm:hidden",
+                className: "inline-flex h-11 w-11 items-center justify-center rounded-lg border border-slate-700 bg-slate-900 text-slate-100 transition hover:bg-slate-800 lg:hidden",
                 "aria-label": "Buka navigasi",
                 children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("svg", {
                     className: "h-5 w-5",
@@ -92,87 +92,87 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/compiled/react/index.js [app-client] (ecmascript)");
 ;
 var _s = __turbopack_context__.k.signature();
-'use client';
+"use client";
 ;
 const navSections = [
     {
-        title: 'Manufaktur',
+        title: "Manufaktur",
         items: [
             {
-                label: 'Produk',
-                href: '/manufaktur'
+                label: "Produk",
+                href: "/manufaktur"
             },
             {
-                label: 'Bahan',
-                href: '/manufaktur/bahan'
+                label: "Bahan",
+                href: "/manufaktur/bahan"
             },
             {
-                label: 'Kategori',
-                href: '/manufaktur/kategori'
+                label: "Kategori",
+                href: "/manufaktur/kategori"
             },
             {
-                label: 'BoM',
-                href: '/manufaktur/bom'
+                label: "BoM",
+                href: "/manufaktur/bom"
             },
             {
-                label: 'Order Produksi',
-                href: '/manufaktur/order-produksi'
+                label: "Order Produksi",
+                href: "/manufaktur/order-produksi"
             }
         ]
     },
     {
-        title: 'Purchase',
+        title: "Purchase",
         items: [
             {
-                label: 'Vendor',
-                href: '/purchase/vendors'
+                label: "Vendor",
+                href: "/purchase/vendors"
             },
             {
-                label: 'Bills',
-                href: '/purchase/bills'
+                label: "Bills",
+                href: "/purchase/bills"
             }
         ]
     },
     {
-        title: 'Sales',
+        title: "Sales",
         items: [
             {
-                label: 'Customer',
-                href: '/sales/customers'
+                label: "Customer",
+                href: "/sales/customers"
             },
             {
-                label: 'Quotation',
-                href: '/sales/quotation'
+                label: "Quotation",
+                href: "/sales/quotation"
             },
             {
-                label: 'Sales Orders',
-                href: '/sales/orders'
+                label: "Sales Orders",
+                href: "/sales/orders"
             }
         ]
     },
     {
-        title: 'Accounting',
+        title: "Accounting",
         items: [
             {
-                label: 'Customer Invoice',
-                href: '/accounting/invoices'
+                label: "Customer Invoice",
+                href: "/accounting/invoices"
             },
             {
-                label: 'Vendor Bill',
-                href: '/accounting/bills'
+                label: "Vendor Bill",
+                href: "/accounting/bills"
             }
         ]
     },
     {
-        title: 'Employees',
+        title: "Employees",
         items: [
             {
-                label: 'Departemen',
-                href: '/employees/departemen'
+                label: "Departemen",
+                href: "/employees/departemen"
             },
             {
-                label: 'Karyawan',
-                href: '/employees/karyawan'
+                label: "Karyawan",
+                href: "/employees/karyawan"
             }
         ]
     }
@@ -192,7 +192,7 @@ function Sidebar({ open, onClose }) {
             }));
     };
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("aside", {
-        className: `fixed inset-y-0 left-0 z-40 w-72 overflow-y-auto border-r border-slate-200 bg-white p-4 shadow-lg transition-transform duration-200 sm:static sm:translate-x-0 ${open ? 'translate-x-0' : '-translate-x-full'} sm:translate-x-0`,
+        className: `fixed inset-y-0 left-0 z-40 w-72 overflow-y-auto border-r border-slate-200 bg-white p-4 shadow-lg transition-transform duration-200 lg:static lg:translate-x-0 ${open ? "translate-x-0" : "-translate-x-full"}`,
         children: [
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                 className: "flex items-center justify-between pb-4 mb-4 border-b border-slate-200",
@@ -204,7 +204,7 @@ function Sidebar({ open, onClose }) {
                                 children: "Navigasi"
                             }, void 0, false, {
                                 fileName: "[project]/components/Sidebar.jsx",
-                                lineNumber: 59,
+                                lineNumber: 65,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
@@ -212,29 +212,29 @@ function Sidebar({ open, onClose }) {
                                 children: "ERP Menu"
                             }, void 0, false, {
                                 fileName: "[project]/components/Sidebar.jsx",
-                                lineNumber: 60,
+                                lineNumber: 68,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/Sidebar.jsx",
-                        lineNumber: 58,
+                        lineNumber: 64,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                         type: "button",
-                        className: "rounded-md bg-slate-900 px-3 py-2 text-white transition hover:bg-slate-700 sm:hidden",
+                        className: "rounded-md bg-slate-900 px-3 py-2 text-white transition hover:bg-slate-700 lg:hidden",
                         onClick: onClose,
                         children: "Tutup"
                     }, void 0, false, {
                         fileName: "[project]/components/Sidebar.jsx",
-                        lineNumber: 62,
+                        lineNumber: 70,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/Sidebar.jsx",
-                lineNumber: 57,
+                lineNumber: 63,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("nav", {
@@ -251,21 +251,21 @@ function Sidebar({ open, onClose }) {
                                         children: section.title
                                     }, void 0, false, {
                                         fileName: "[project]/components/Sidebar.jsx",
-                                        lineNumber: 75,
+                                        lineNumber: 90,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                         className: "ml-2 text-slate-500",
-                                        children: openSections[section.title] ? '−' : '+'
+                                        children: openSections[section.title] ? "−" : "+"
                                     }, void 0, false, {
                                         fileName: "[project]/components/Sidebar.jsx",
-                                        lineNumber: 76,
+                                        lineNumber: 91,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/Sidebar.jsx",
-                                lineNumber: 70,
+                                lineNumber: 85,
                                 columnNumber: 13
                             }, this),
                             openSections[section.title] && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("ul", {
@@ -277,38 +277,38 @@ function Sidebar({ open, onClose }) {
                                             children: item.label
                                         }, void 0, false, {
                                             fileName: "[project]/components/Sidebar.jsx",
-                                            lineNumber: 82,
+                                            lineNumber: 99,
                                             columnNumber: 21
                                         }, this)
                                     }, item.href, false, {
                                         fileName: "[project]/components/Sidebar.jsx",
-                                        lineNumber: 81,
+                                        lineNumber: 98,
                                         columnNumber: 19
                                     }, this))
                             }, void 0, false, {
                                 fileName: "[project]/components/Sidebar.jsx",
-                                lineNumber: 79,
+                                lineNumber: 96,
                                 columnNumber: 15
                             }, this)
                         ]
                     }, section.title, true, {
                         fileName: "[project]/components/Sidebar.jsx",
-                        lineNumber: 69,
+                        lineNumber: 81,
                         columnNumber: 11
                     }, this))
             }, void 0, false, {
                 fileName: "[project]/components/Sidebar.jsx",
-                lineNumber: 67,
+                lineNumber: 79,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/components/Sidebar.jsx",
-        lineNumber: 56,
+        lineNumber: 60,
         columnNumber: 5
     }, this);
 }
-_s(Sidebar, "HG+wmZ3XBoLowd2yBEQqDwCiuNI=");
+_s(Sidebar, "VUb7VkSvvc2u7FITKuzOrQy67hM=");
 _c = Sidebar;
 var _c;
 __turbopack_context__.k.register(_c, "Sidebar");
@@ -358,7 +358,7 @@ function AppShell({ children }) {
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                        className: "flex-1 p-4 sm:p-6 lg:p-8",
+                        className: "flex-1 p-4 sm:p-6 lg:p-8 overflow-x-auto",
                         children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                             className: "mx-auto max-w-full",
                             children: children

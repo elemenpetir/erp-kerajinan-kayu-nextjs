@@ -69,7 +69,7 @@ export default function QuotationDetail({ params }) {
   if (loading) return <p>Loading...</p>;
   if (!q) return <p>Quotation tidak ditemukan</p>;
 
-  const isDraft = q.status !== "Sales Order";
+  const isDraft = q.status === "Quotation";
 
   return (
     <div className="detail-card">

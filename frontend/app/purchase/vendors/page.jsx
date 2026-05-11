@@ -16,6 +16,20 @@ export default function VendorsList() {
     setItems(data || []);
   }
 
+  async function handleDelete(id, nama) {
+    if (!confirm(`Hapus vendor "${nama}"?`)) return;
+    const { error } = await supabase
+      .from("vendor_individual")
+      .delete()
+      .eq("id", id);
+    if (error) {
+      alert("Gagal menghapus vendor.");
+      console.error(error);
+    } else {
+      setItems((prev) => prev.filter((v) => v.id !== id));
+    }
+  }
+
   return (
     <div>
       <h2>Vendors</h2>
@@ -46,10 +60,43 @@ export default function VendorsList() {
               <td>
                 <div className="action-buttons">
                   <a href={`/purchase/vendors/${v.id}`}>Lihat</a>
+                  <button
+                    className="btn-danger"
+                    onClick={() => handleDelete(v.id, v.nama)}
+                  >
+                    Hapus
+                  </button>
                 </div>
               </td>
             </tr>
           ))}
+          {items.length === 0 && (
+            <tr>
+              <td colSpan={6}>
+                <div
+                  style={{
+                    textAlign: "center",
+                    padding: "48px 24px",
+                    color: "#94a3b8",
+                  }}
+                >
+                  <div style={{ fontSize: 32, marginBottom: 8 }}>🏪</div>
+                  <p
+                    style={{
+                      fontWeight: 600,
+                      color: "#64748b",
+                      marginBottom: 4,
+                    }}
+                  >
+                    Belum ada vendor
+                  </p>
+                  <p style={{ fontSize: 14 }}>
+                    Klik "Tambah Vendor" untuk mendaftarkan vendor pertama.
+                  </p>
+                </div>
+              </td>
+            </tr>
+          )}
         </tbody>
       </table>
     </div>

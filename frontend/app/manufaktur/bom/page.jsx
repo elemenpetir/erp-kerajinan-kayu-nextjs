@@ -45,7 +45,7 @@ export default function BomList() {
           <tbody>
             {items.map((b) => (
               <tr key={b.id}>
-                <td>BOM-{String(b.kode).padStart(4, '0')}</td>
+                <td>BOM-{String(b.kode).padStart(4, "0")}</td>
                 <td>{b.produk?.nama || "-"}</td>
                 <td>{b.total_biaya_produk}</td>
                 <td>{b.total_biaya_bahan}</td>
@@ -56,6 +56,33 @@ export default function BomList() {
                 </td>
               </tr>
             ))}
+            {items.length === 0 && (
+              <tr>
+                <td colSpan={5}>
+                  <div
+                    style={{
+                      textAlign: "center",
+                      padding: "48px 24px",
+                      color: "#94a3b8",
+                    }}
+                  >
+                    <div style={{ fontSize: 32, marginBottom: 8 }}>🔩</div>
+                    <p
+                      style={{
+                        fontWeight: 600,
+                        color: "#64748b",
+                        marginBottom: 4,
+                      }}
+                    >
+                      Belum ada Bill of Materials
+                    </p>
+                    <p style={{ fontSize: 14 }}>
+                      Buat BOM dari halaman detail produk.
+                    </p>
+                  </div>
+                </td>
+              </tr>
+            )}
           </tbody>
         </table>
       )}

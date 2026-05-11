@@ -20,7 +20,11 @@ export default function CreateOrderProduksi() {
   async function fetchOptions() {
     const [{ data: produkData }, { data: bomData }] = await Promise.all([
       supabase.from("produk").select("id,nama"),
-      supabase.from("bom").select("id,produk_id,jumlah_produk,internal_referensi,total_biaya_produk,total_biaya_bahan,components, produk:produk_id(nama)")
+      supabase
+        .from("bom")
+        .select(
+          "id,produk_id,jumlah_produk,internal_referensi,total_biaya_produk,total_biaya_bahan,components, produk:produk_id(nama)",
+        ),
     ]);
     setProducts(produkData || []);
     setBoms(bomData || []);
@@ -59,10 +63,14 @@ export default function CreateOrderProduksi() {
     <div>
       <h2>Buat Order Produksi</h2>
       <form onSubmit={handleSubmit}>
-        <div>
+        <div className="form-group">
           <label>Produk</label>
-          <br />
-          <select value={produkId} onChange={(e) => setProdukId(e.target.value)} required>
+          <select
+            className="form-input"
+            value={produkId}
+            onChange={(e) => setProdukId(e.target.value)}
+            required
+          >
             <option value="">-- pilih produk --</option>
             {products.map((product) => (
               <option key={product.id} value={product.id}>
@@ -71,10 +79,15 @@ export default function CreateOrderProduksi() {
             ))}
           </select>
         </div>
-        <div>
+
+        <div className="form-group">
           <label>BOM</label>
-          <br />
-          <select value={bomId} onChange={(e) => setBomId(e.target.value)} required>
+          <select
+            className="form-input"
+            value={bomId}
+            onChange={(e) => setBomId(e.target.value)}
+            required
+          >
             <option value="">-- pilih BOM --</option>
             {boms.map((bom) => (
               <option key={bom.id} value={bom.id}>
@@ -83,10 +96,11 @@ export default function CreateOrderProduksi() {
             ))}
           </select>
         </div>
-        <div>
+
+        <div className="form-group">
           <label>Jumlah Produksi</label>
-          <br />
           <input
+            className="form-input"
             type="number"
             min="1"
             value={jumlahProduk}
@@ -94,12 +108,16 @@ export default function CreateOrderProduksi() {
             required
           />
         </div>
-        <div style={{ marginTop: 12 }}>
-          <button className="btn" type="submit" disabled={loading}>
-            {loading ? "Menyimpan..." : "Simpan"}
-          </button>
-          <span style={{ marginLeft: 12 }}>{message}</span>
-        </div>
+
+        {message && (
+          <p style={{ color: "#dc2626", fontSize: 14, marginBottom: 8 }}>
+            {message}
+          </p>
+        )}
+
+        <button className="btn mb-0" type="submit" disabled={loading}>
+          {loading ? "Menyimpan..." : "Simpan"}
+        </button>
       </form>
     </div>
   );

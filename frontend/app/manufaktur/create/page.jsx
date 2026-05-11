@@ -1,25 +1,23 @@
 "use client";
 import { useState } from "react";
-import { useRouter } from "next/navigation"
+import { useRouter } from "next/navigation";
 import { supabase } from "../../../lib/supabaseClient";
 
 export default function CreateProduk() {
-  const router = useRouter()
+  const router = useRouter();
   const [nama, setNama] = useState("");
   const [harga, setHarga] = useState("");
-  const [biaya, setBiaya] = useState("");
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
 
   async function handleSubmit(e) {
     e.preventDefault();
     setLoading(true);
-    const { data, error } = await supabase.from("produk").insert([
+    const { error } = await supabase.from("produk").insert([
       {
         nama,
         harga_produksi: parseFloat(harga || 0),
-        biaya_produksi: parseFloat(biaya || 0),
-        internal_referensi: null,
+        biaya_produksi: 0, // akan dihitung otomatis dari BOM
       },
     ]);
     if (error) {
@@ -34,30 +32,33 @@ export default function CreateProduk() {
     <div>
       <h2>Buat Produk</h2>
       <form onSubmit={handleSubmit}>
-        <div>
-          <label>Nama</label>
-          <br />
+        <div className="form-group">
+          <label>Nama Produk</label>
           <input
+            className="form-input"
             value={nama}
             onChange={(e) => setNama(e.target.value)}
             required
           />
         </div>
-        <div>
-          <label>Harga Produksi</label>
-          <br />
-          <input value={harga} onChange={(e) => setHarga(e.target.value)} />
-        </div>
-        <div>
-          <label>Biaya Produksi</label>
-          <br />
-          <input value={biaya} onChange={(e) => setBiaya(e.target.value)} />
+        <div className="form-group">
+          <label>Harga Jual</label>
+          <input
+            className="form-input"
+            type="number"
+            min="0"
+            value={harga}
+            onChange={(e) => setHarga(e.target.value)}
+            placeholder="Rp 0"
+          />
         </div>
         <div style={{ marginTop: 12 }}>
           <button className="btn" type="submit" disabled={loading}>
             {loading ? "Menyimpan..." : "Simpan"}
           </button>
-          <span style={{ marginLeft: 12 }}>{message}</span>
+          {message && (
+            <span style={{ marginLeft: 12, color: "red" }}>{message}</span>
+          )}
         </div>
       </form>
     </div>

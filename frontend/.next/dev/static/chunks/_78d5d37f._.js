@@ -63,6 +63,8 @@ function QuotationDetail({ params }) {
     }
     async function handleConfirm() {
         if (!confirm("Konfirmasi quotation ini menjadi Sales Order?")) return;
+        const { data: existing } = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$supabaseClient$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["supabase"].from("sales_order").select("id").eq("quotation_id", id).single();
+        if (existing) return alert("Sales Order untuk quotation ini sudah pernah dibuat!");
         const { error: errQ } = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$supabaseClient$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["supabase"].from("quotation").update({
             status: "Sales Order"
         }).eq("id", id);
@@ -86,17 +88,17 @@ function QuotationDetail({ params }) {
         children: "Loading..."
     }, void 0, false, {
         fileName: "[project]/app/sales/quotation/[id]/page.jsx",
-        lineNumber: 61,
+        lineNumber: 69,
         columnNumber: 23
     }, this);
     if (!q) return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
         children: "Quotation tidak ditemukan"
     }, void 0, false, {
         fileName: "[project]/app/sales/quotation/[id]/page.jsx",
-        lineNumber: 62,
+        lineNumber: 70,
         columnNumber: 18
     }, this);
-    const isDraft = q.status !== "Sales Order";
+    const isDraft = q.status === "Quotation";
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
         className: "detail-card",
         children: [
@@ -104,7 +106,7 @@ function QuotationDetail({ params }) {
                 children: "Detail Quotation"
             }, void 0, false, {
                 fileName: "[project]/app/sales/quotation/[id]/page.jsx",
-                lineNumber: 68,
+                lineNumber: 76,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -118,7 +120,7 @@ function QuotationDetail({ params }) {
                                 children: "Customer:"
                             }, void 0, false, {
                                 fileName: "[project]/app/sales/quotation/[id]/page.jsx",
-                                lineNumber: 71,
+                                lineNumber: 79,
                                 columnNumber: 11
                             }, this),
                             " ",
@@ -126,7 +128,7 @@ function QuotationDetail({ params }) {
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/sales/quotation/[id]/page.jsx",
-                        lineNumber: 70,
+                        lineNumber: 78,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -135,7 +137,7 @@ function QuotationDetail({ params }) {
                                 children: "Email:"
                             }, void 0, false, {
                                 fileName: "[project]/app/sales/quotation/[id]/page.jsx",
-                                lineNumber: 74,
+                                lineNumber: 82,
                                 columnNumber: 11
                             }, this),
                             " ",
@@ -143,7 +145,7 @@ function QuotationDetail({ params }) {
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/sales/quotation/[id]/page.jsx",
-                        lineNumber: 73,
+                        lineNumber: 81,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -152,7 +154,7 @@ function QuotationDetail({ params }) {
                                 children: "Payment Terms:"
                             }, void 0, false, {
                                 fileName: "[project]/app/sales/quotation/[id]/page.jsx",
-                                lineNumber: 77,
+                                lineNumber: 85,
                                 columnNumber: 11
                             }, this),
                             " ",
@@ -160,7 +162,7 @@ function QuotationDetail({ params }) {
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/sales/quotation/[id]/page.jsx",
-                        lineNumber: 76,
+                        lineNumber: 84,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -169,7 +171,7 @@ function QuotationDetail({ params }) {
                                 children: "Expiration:"
                             }, void 0, false, {
                                 fileName: "[project]/app/sales/quotation/[id]/page.jsx",
-                                lineNumber: 80,
+                                lineNumber: 88,
                                 columnNumber: 11
                             }, this),
                             " ",
@@ -177,7 +179,7 @@ function QuotationDetail({ params }) {
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/sales/quotation/[id]/page.jsx",
-                        lineNumber: 79,
+                        lineNumber: 87,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -186,7 +188,7 @@ function QuotationDetail({ params }) {
                                 children: "Status:"
                             }, void 0, false, {
                                 fileName: "[project]/app/sales/quotation/[id]/page.jsx",
-                                lineNumber: 83,
+                                lineNumber: 91,
                                 columnNumber: 11
                             }, this),
                             " ",
@@ -194,7 +196,7 @@ function QuotationDetail({ params }) {
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/sales/quotation/[id]/page.jsx",
-                        lineNumber: 82,
+                        lineNumber: 90,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -203,7 +205,7 @@ function QuotationDetail({ params }) {
                                 children: "Tanggal:"
                             }, void 0, false, {
                                 fileName: "[project]/app/sales/quotation/[id]/page.jsx",
-                                lineNumber: 86,
+                                lineNumber: 94,
                                 columnNumber: 11
                             }, this),
                             " ",
@@ -211,20 +213,20 @@ function QuotationDetail({ params }) {
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/sales/quotation/[id]/page.jsx",
-                        lineNumber: 85,
+                        lineNumber: 93,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/app/sales/quotation/[id]/page.jsx",
-                lineNumber: 69,
+                lineNumber: 77,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
                 children: "Daftar Produk"
             }, void 0, false, {
                 fileName: "[project]/app/sales/quotation/[id]/page.jsx",
-                lineNumber: 92,
+                lineNumber: 100,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("table", {
@@ -237,39 +239,39 @@ function QuotationDetail({ params }) {
                                     children: "Produk"
                                 }, void 0, false, {
                                     fileName: "[project]/app/sales/quotation/[id]/page.jsx",
-                                    lineNumber: 96,
+                                    lineNumber: 104,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
                                     children: "Jumlah"
                                 }, void 0, false, {
                                     fileName: "[project]/app/sales/quotation/[id]/page.jsx",
-                                    lineNumber: 97,
+                                    lineNumber: 105,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
                                     children: "Harga Satuan"
                                 }, void 0, false, {
                                     fileName: "[project]/app/sales/quotation/[id]/page.jsx",
-                                    lineNumber: 98,
+                                    lineNumber: 106,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
                                     children: "Subtotal"
                                 }, void 0, false, {
                                     fileName: "[project]/app/sales/quotation/[id]/page.jsx",
-                                    lineNumber: 99,
+                                    lineNumber: 107,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/app/sales/quotation/[id]/page.jsx",
-                            lineNumber: 95,
+                            lineNumber: 103,
                             columnNumber: 11
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/app/sales/quotation/[id]/page.jsx",
-                        lineNumber: 94,
+                        lineNumber: 102,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("tbody", {
@@ -283,12 +285,12 @@ function QuotationDetail({ params }) {
                                     children: "Tidak ada item"
                                 }, void 0, false, {
                                     fileName: "[project]/app/sales/quotation/[id]/page.jsx",
-                                    lineNumber: 105,
+                                    lineNumber: 113,
                                     columnNumber: 15
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/app/sales/quotation/[id]/page.jsx",
-                                lineNumber: 104,
+                                lineNumber: 112,
                                 columnNumber: 13
                             }, this),
                             (q.items || []).map((it, idx)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("tr", {
@@ -297,14 +299,14 @@ function QuotationDetail({ params }) {
                                             children: it.nama_produk
                                         }, void 0, false, {
                                             fileName: "[project]/app/sales/quotation/[id]/page.jsx",
-                                            lineNumber: 112,
+                                            lineNumber: 120,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
                                             children: it.jumlah
                                         }, void 0, false, {
                                             fileName: "[project]/app/sales/quotation/[id]/page.jsx",
-                                            lineNumber: 113,
+                                            lineNumber: 121,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
@@ -314,7 +316,7 @@ function QuotationDetail({ params }) {
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/app/sales/quotation/[id]/page.jsx",
-                                            lineNumber: 114,
+                                            lineNumber: 122,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
@@ -324,13 +326,13 @@ function QuotationDetail({ params }) {
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/app/sales/quotation/[id]/page.jsx",
-                                            lineNumber: 115,
+                                            lineNumber: 123,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, idx, true, {
                                     fileName: "[project]/app/sales/quotation/[id]/page.jsx",
-                                    lineNumber: 111,
+                                    lineNumber: 119,
                                     columnNumber: 13
                                 }, this)),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("tr", {
@@ -344,7 +346,7 @@ function QuotationDetail({ params }) {
                                         children: "Total"
                                     }, void 0, false, {
                                         fileName: "[project]/app/sales/quotation/[id]/page.jsx",
-                                        lineNumber: 119,
+                                        lineNumber: 127,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
@@ -355,30 +357,30 @@ function QuotationDetail({ params }) {
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/app/sales/quotation/[id]/page.jsx",
-                                            lineNumber: 123,
+                                            lineNumber: 131,
                                             columnNumber: 15
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/app/sales/quotation/[id]/page.jsx",
-                                        lineNumber: 122,
+                                        lineNumber: 130,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/sales/quotation/[id]/page.jsx",
-                                lineNumber: 118,
+                                lineNumber: 126,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/sales/quotation/[id]/page.jsx",
-                        lineNumber: 102,
+                        lineNumber: 110,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/app/sales/quotation/[id]/page.jsx",
-                lineNumber: 93,
+                lineNumber: 101,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -405,7 +407,7 @@ function QuotationDetail({ params }) {
                                 children: "← Kembali"
                             }, void 0, false, {
                                 fileName: "[project]/app/sales/quotation/[id]/page.jsx",
-                                lineNumber: 140,
+                                lineNumber: 148,
                                 columnNumber: 11
                             }, this),
                             isDraft && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -417,13 +419,13 @@ function QuotationDetail({ params }) {
                                 children: "Hapus"
                             }, void 0, false, {
                                 fileName: "[project]/app/sales/quotation/[id]/page.jsx",
-                                lineNumber: 148,
+                                lineNumber: 156,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/sales/quotation/[id]/page.jsx",
-                        lineNumber: 139,
+                        lineNumber: 147,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -436,24 +438,24 @@ function QuotationDetail({ params }) {
                             children: "Konfirmasi → Sales Order"
                         }, void 0, false, {
                             fileName: "[project]/app/sales/quotation/[id]/page.jsx",
-                            lineNumber: 159,
+                            lineNumber: 167,
                             columnNumber: 13
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/app/sales/quotation/[id]/page.jsx",
-                        lineNumber: 157,
+                        lineNumber: 165,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/app/sales/quotation/[id]/page.jsx",
-                lineNumber: 131,
+                lineNumber: 139,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/app/sales/quotation/[id]/page.jsx",
-        lineNumber: 67,
+        lineNumber: 75,
         columnNumber: 5
     }, this);
 }

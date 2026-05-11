@@ -92,7 +92,7 @@ export default function DepartemenPage() {
             </option>
           ))}
         </select>
-        <button className="btn" style={{ marginLeft: 8 }}>
+        <button className="btn mb-0" style={{ marginLeft: 8 }}>
           Tambah
         </button>
       </form>
@@ -163,6 +163,33 @@ export default function DepartemenPage() {
                 </td>
               </tr>
             ))
+          )}
+          {items.length === 0 && (
+            <tr>
+              <td colSpan={4}>
+                <div
+                  style={{
+                    textAlign: "center",
+                    padding: "48px 24px",
+                    color: "#94a3b8",
+                  }}
+                >
+                  <div style={{ fontSize: 32, marginBottom: 8 }}>🏢</div>
+                  <p
+                    style={{
+                      fontWeight: 600,
+                      color: "#64748b",
+                      marginBottom: 4,
+                    }}
+                  >
+                    Belum ada departemen
+                  </p>
+                  <p style={{ fontSize: 14 }}>
+                    Klik "Tambah Departemen" untuk membuat struktur organisasi.
+                  </p>
+                </div>
+              </td>
+            </tr>
           )}
         </tbody>
       </table>

@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { supabase } from "../../../../lib/supabaseClient";
 
 const PAYMENT_TERMS = [
-  "immadiate payment",
+  "immediate payment",
   "15 hari",
   "30 hari",
   "45 hari",

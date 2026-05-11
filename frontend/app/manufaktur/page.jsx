@@ -6,6 +6,7 @@ export default function ManufakturList() {
   const [produk, setProduk] = useState([]);
   const [stokMap, setStokMap] = useState({});
   const [loading, setLoading] = useState(true);
+  const [bomMap, setBomMap] = useState({});
 
   useEffect(() => {
     fetchAll();
@@ -13,8 +14,20 @@ export default function ManufakturList() {
 
   async function fetchAll() {
     setLoading(true);
-    await Promise.all([fetchProduk(), fetchStok()]);
+    await Promise.all([fetchProduk(), fetchStok(), fetchBom()]);
     setLoading(false);
+  }
+
+  async function fetchBom() {
+    const { data, error } = await supabase
+      .from("bom")
+      .select("produk_id, total_biaya_bahan");
+    if (error) return;
+    const map = {};
+    (data || []).forEach((b) => {
+      if (b.produk_id) map[b.produk_id] = b.total_biaya_bahan || 0;
+    });
+    setBomMap(map);
   }
 
   async function fetchProduk() {
@@ -33,11 +46,11 @@ export default function ManufakturList() {
       .select("produk_id, jumlah_produk")
       .eq("status", "Selesai");
 
-    // Keluar: sales_order status bukan Draft
+    // Keluar: sales_order status to invoice - fully invoice
     const { data: salesOrders } = await supabase
       .from("sales_order")
       .select("items, status")
-      .neq("status", "Draft");
+      .in("status", ["To Invoice", "Fully Invoice"]);
 
     const stok = {};
 
@@ -96,10 +109,10 @@ export default function ManufakturList() {
               const { value, style } = getStokStyle(p.id);
               return (
                 <tr key={p.id}>
-                  <td>PRD-{String(p.kode).padStart(4, '0')}</td>
+                  <td>PRD-{String(p.kode).padStart(4, "0")}</td>
                   <td>{p.nama}</td>
-                  <td>{p.harga_produksi}</td>
-                  <td>{p.biaya_produksi}</td>
+                  <td>{(p.harga_produksi || 0).toLocaleString("id-ID")}</td>
+                  <td>{(bomMap[p.id] || 0).toLocaleString("id-ID")}</td>
                   <td style={style}>{value}</td>
                   <td>
                     <div className="action-buttons">
@@ -109,6 +122,33 @@ export default function ManufakturList() {
                 </tr>
               );
             })}
+            {produk.length === 0 && (
+              <tr>
+                <td colSpan={6}>
+                  <div
+                    style={{
+                      textAlign: "center",
+                      padding: "48px 24px",
+                      color: "#94a3b8",
+                    }}
+                  >
+                    <div style={{ fontSize: 32, marginBottom: 8 }}>📦</div>
+                    <p
+                      style={{
+                        fontWeight: 600,
+                        color: "#64748b",
+                        marginBottom: 4,
+                      }}
+                    >
+                      Belum ada produk
+                    </p>
+                    <p style={{ fontSize: 14 }}>
+                      Klik "Buat Produk" untuk menambahkan produk pertama.
+                    </p>
+                  </div>
+                </td>
+              </tr>
+            )}
           </tbody>
         </table>
       )}

@@ -85,7 +85,7 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$supabaseClient$2e$js_
 ;
 ;
 const PAYMENT_TERMS = [
-    "immadiate payment",
+    "immediate payment",
     "15 hari",
     "30 hari",
     "45 hari",

@@ -425,7 +425,8 @@ h1 + *, h2 + *, h3 + * {
   border-radius: .375rem;
   justify-content: center;
   align-items: center;
-  padding: .5rem 1rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
   font-size: .875rem;
   font-weight: 500;
   line-height: 1.25rem;
@@ -688,8 +689,20 @@ h1 + *, h2 + *, h3 + * {
   margin-top: .75rem;
 }
 
+.mb-0 {
+  margin-bottom: 0;
+}
+
 .block {
   display: block;
+}
+
+.inline-block {
+  display: inline-block;
+}
+
+.inline {
+  display: inline;
 }
 
 .flex {
@@ -776,6 +789,10 @@ h1 + *, h2 + *, h3 + * {
   --tw-space-y-reverse: 0;
   margin-top: calc(1rem * calc(1 - var(--tw-space-y-reverse)));
   margin-bottom: calc(1rem * var(--tw-space-y-reverse));
+}
+
+.overflow-x-auto {
+  overflow-x: auto;
 }
 
 .overflow-y-auto {
@@ -879,6 +896,10 @@ h1 + *, h2 + *, h3 + * {
 
 .text-left {
   text-align: left;
+}
+
+.align-middle {
+  vertical-align: middle;
 }
 
 .text-lg {
@@ -1065,6 +1086,19 @@ button {
 }
 
 @media (min-width: 1024px) {
+  .lg\:static {
+    position: static;
+  }
+
+  .lg\:hidden {
+    display: none;
+  }
+
+  .lg\:translate-x-0 {
+    --tw-translate-x: 0px;
+    transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+  }
+
   .lg\:p-8 {
     padding: 2rem;
   }

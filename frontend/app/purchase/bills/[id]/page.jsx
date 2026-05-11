@@ -91,92 +91,113 @@ export default function BillDetail({ params }) {
   const items = bill.items || [];
 
   return (
-    <div>
-      <h2>Detail Bill</h2>
-      <div className="detail-card">
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "flex-start",
-          }}
-        >
-          <div>
-            <p>
-              <strong>Vendor:</strong> {vendor || "-"}
-            </p>
-            <p>
-              <strong>Referensi:</strong> {bill.referensi_vendor || "-"}
-            </p>
-            <p>
-              <strong>Deadline:</strong> {bill.deadline_order || "-"}
-            </p>
-            <p>
-              <strong>Jenis Pembayaran:</strong> {bill.jenis_pembayaran || "-"}
-            </p>
-            <p>
-              <strong>Status:</strong> {bill.status}
-            </p>
-          </div>
-          <div style={{ display: "flex", gap: 8 }}>
-            {bill.status === "Draft Bill" && (
-              <button className="btn-table-action" onClick={handleKonfirmasi}>
-                Konfirmasi
+    <>
+      <style>{`
+        @media print {
+          nav, aside, .no-print { display: none !important; }
+          body { background: white !important; }
+          .detail-card { box-shadow: none !important; border: 1px solid #ccc !important; }
+          button, a { display: none !important; }
+        }
+      `}</style>
+
+      <div>
+        <h2>Detail Bill</h2>
+        <div className="detail-card">
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "flex-start",
+            }}
+          >
+            <div>
+              <p>
+                <strong>Vendor:</strong> {vendor || "-"}
+              </p>
+              <p>
+                <strong>Referensi:</strong> {bill.referensi_vendor || "-"}
+              </p>
+              <p>
+                <strong>Deadline:</strong> {bill.deadline_order || "-"}
+              </p>
+              <p>
+                <strong>Jenis Pembayaran:</strong>{" "}
+                {bill.jenis_pembayaran || "-"}
+              </p>
+              <p>
+                <strong>Status:</strong> {bill.status}
+              </p>
+            </div>
+            <div style={{ display: "flex", gap: 8 }} className="no-print">
+              {bill.status === "Draft Bill" && (
+                <button className="btn-table-action" onClick={handleKonfirmasi}>
+                  Konfirmasi
+                </button>
+              )}
+              {bill.status === "Bill" && (
+                <button className="btn-table-action" onClick={handleBayar}>
+                  Bayar
+                </button>
+              )}
+              <button
+                className="btn-table-action"
+                onClick={() => window.print()}
+              >
+                🖨️ Print
               </button>
-            )}
-            {bill.status === "Bill" && (
-              <button className="btn-table-action" onClick={handleBayar}>
-                Bayar
-              </button>
-            )}
-            {bill.status === "Draft Bill" && (
-              <button className="btn-danger" onClick={handleDelete}>
-                Hapus
-              </button>
-            )}
+              {bill.status === "Draft Bill" && (
+                <button className="btn-danger" onClick={handleDelete}>
+                  Hapus
+                </button>
+              )}
+            </div>
           </div>
         </div>
-      </div>
 
-      <h3 style={{ marginTop: 24 }}>Daftar Bahan</h3>
-      <table className="table-slate">
-        <thead>
-          <tr>
-            <th>No</th>
-            <th>Nama Bahan</th>
-            <th>Jumlah</th>
-            <th>Harga Satuan</th>
-            <th>Subtotal</th>
-          </tr>
-        </thead>
-        <tbody>
-          {items.length === 0 ? (
+        <h3 style={{ marginTop: 24 }}>Daftar Bahan</h3>
+        <table className="table-slate">
+          <thead>
             <tr>
-              <td colSpan={5}>Tidak ada item.</td>
+              <th>No</th>
+              <th>Nama Bahan</th>
+              <th>Jumlah</th>
+              <th>Harga Satuan</th>
+              <th>Subtotal</th>
             </tr>
-          ) : (
-            items.map((item, i) => (
-              <tr key={i}>
-                <td>{i + 1}</td>
-                <td>{item.nama_bahan}</td>
-                <td>{item.jumlah}</td>
-                <td>{formatRupiah(item.harga_satuan)}</td>
-                <td>{formatRupiah(item.subtotal)}</td>
+          </thead>
+          <tbody>
+            {items.length === 0 ? (
+              <tr>
+                <td colSpan={5}>Tidak ada item.</td>
               </tr>
-            ))
-          )}
-        </tbody>
-        <tfoot>
-          <tr>
-            <td colSpan={4} style={{ textAlign: "right", fontWeight: "bold" }}>
-              Total
-            </td>
-            <td style={{ fontWeight: "bold" }}>
-              {formatRupiah(bill.total_biaya)}
-            </td>
-          </tr>
-        </tfoot>
-      </table>
-    </div>
+            ) : (
+              items.map((item, i) => (
+                <tr key={i}>
+                  <td>{i + 1}</td>
+                  <td>{item.nama_bahan}</td>
+                  <td>{item.jumlah}</td>
+                  <td>{formatRupiah(item.harga_satuan)}</td>
+                  <td>{formatRupiah(item.subtotal)}</td>
+                </tr>
+              ))
+            )}
+          </tbody>
+          <tfoot>
+            <tr>
+              <td
+                colSpan={4}
+                style={{ textAlign: "right", fontWeight: "bold" }}
+              >
+                Total
+              </td>
+              <td style={{ fontWeight: "bold" }}>
+                {formatRupiah(bill.total_biaya)}
+              </td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </>
   );
 }

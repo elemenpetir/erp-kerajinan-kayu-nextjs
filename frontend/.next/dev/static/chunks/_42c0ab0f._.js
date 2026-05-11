@@ -36,7 +36,7 @@ var _s = __turbopack_context__.k.signature();
 ;
 ;
 const PAYMENT_TERMS = [
-    "immadiate payment",
+    "immediate payment",
     "15 hari",
     "30 hari",
     "45 hari",

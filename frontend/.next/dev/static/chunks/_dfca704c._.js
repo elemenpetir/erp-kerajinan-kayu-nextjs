@@ -38,6 +38,7 @@ function KategoriPage() {
     const [items, setItems] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])([]);
     const [nama, setNama] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])("");
     const [loading, setLoading] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(true);
+    const [submitting, setSubmitting] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
     const [message, setMessage] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])("");
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
         "KategoriPage.useEffect": ()=>{
@@ -46,33 +47,53 @@ function KategoriPage() {
     }["KategoriPage.useEffect"], []);
     async function fetchData() {
         setLoading(true);
-        const { data, error } = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$supabaseClient$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["supabase"].from("kategori").select("*").order("created_at", {
-            ascending: false
+        const { data, error } = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$supabaseClient$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["supabase"].from("kategori").select("*").order("nama", {
+            ascending: true
         });
-        if (error) console.error(error);
-        else setItems(data || []);
+        if (error) {
+            console.error(error);
+            setMessage("Gagal mengambil data");
+        } else {
+            setItems(data || []);
+        }
         setLoading(false);
     }
     async function handleCreate(e) {
         e.preventDefault();
+        const trimmedNama = nama.trim();
+        if (!trimmedNama) {
+            setMessage("Nama kategori wajib diisi");
+            return;
+        }
+        setSubmitting(true);
         const { error } = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$supabaseClient$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["supabase"].from("kategori").insert([
             {
-                nama
+                nama: trimmedNama
             }
         ]);
         if (error) {
-            setMessage("Error: " + error.message);
-        } else {
-            setNama("");
-            setMessage("");
-            fetchData();
+            if (error.code === "23505") {
+                setMessage("Kategori sudah ada");
+            } else {
+                setMessage("Error: " + error.message);
+            }
+            setSubmitting(false);
+            return;
         }
+        setNama("");
+        setMessage("");
+        await fetchData();
+        setSubmitting(false);
     }
     async function handleDelete(id) {
-        if (!confirm("Hapus kategori ini?")) return;
+        const confirmed = confirm("Hapus kategori ini?");
+        if (!confirmed) return;
         const { error } = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$supabaseClient$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["supabase"].from("kategori").delete().eq("id", id);
-        if (error) alert("Gagal hapus: " + error.message);
-        else fetchData();
+        if (error) {
+            alert("Gagal hapus: " + error.message);
+            return;
+        }
+        fetchData();
     }
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
         children: [
@@ -80,58 +101,67 @@ function KategoriPage() {
                 children: "Manufaktur — Kategori"
             }, void 0, false, {
                 fileName: "[project]/app/manufaktur/kategori/page.jsx",
-                lineNumber: 47,
+                lineNumber: 89,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("form", {
                 onSubmit: handleCreate,
                 style: {
-                    marginBottom: 12
+                    marginBottom: 16,
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 8
                 },
                 children: [
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
+                        className: "form-input",
                         placeholder: "Nama kategori",
                         value: nama,
-                        onChange: (e)=>setNama(e.target.value),
-                        required: true
+                        onChange: (e)=>{
+                            setNama(e.target.value);
+                            setMessage("");
+                        },
+                        required: true,
+                        style: {
+                            height: "42px"
+                        }
                     }, void 0, false, {
                         fileName: "[project]/app/manufaktur/kategori/page.jsx",
-                        lineNumber: 49,
+                        lineNumber: 100,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                        className: "btn",
+                        className: "btn mb-0",
                         type: "submit",
-                        style: {
-                            marginLeft: 8
-                        },
-                        children: "Tambah Kategori"
+                        disabled: submitting,
+                        children: submitting ? "Menyimpan..." : "Tambah Kategori"
                     }, void 0, false, {
                         fileName: "[project]/app/manufaktur/kategori/page.jsx",
-                        lineNumber: 55,
+                        lineNumber: 112,
                         columnNumber: 9
                     }, this),
-                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                    message && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                         style: {
-                            marginLeft: 12
+                            color: "#dc2626",
+                            fontSize: 14
                         },
                         children: message
                     }, void 0, false, {
                         fileName: "[project]/app/manufaktur/kategori/page.jsx",
-                        lineNumber: 58,
-                        columnNumber: 9
+                        lineNumber: 117,
+                        columnNumber: 11
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/app/manufaktur/kategori/page.jsx",
-                lineNumber: 48,
+                lineNumber: 91,
                 columnNumber: 7
             }, this),
             loading ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                 children: "Loading..."
             }, void 0, false, {
                 fileName: "[project]/app/manufaktur/kategori/page.jsx",
-                lineNumber: 61,
+                lineNumber: 129,
                 columnNumber: 9
             }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("table", {
                 className: "table-slate",
@@ -143,83 +173,146 @@ function KategoriPage() {
                                     children: "Nama"
                                 }, void 0, false, {
                                     fileName: "[project]/app/manufaktur/kategori/page.jsx",
-                                    lineNumber: 66,
+                                    lineNumber: 134,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
+                                    style: {
+                                        width: 120
+                                    },
                                     children: "Aksi"
                                 }, void 0, false, {
                                     fileName: "[project]/app/manufaktur/kategori/page.jsx",
-                                    lineNumber: 67,
+                                    lineNumber: 135,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/app/manufaktur/kategori/page.jsx",
-                            lineNumber: 65,
+                            lineNumber: 133,
                             columnNumber: 13
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/app/manufaktur/kategori/page.jsx",
-                        lineNumber: 64,
+                        lineNumber: 132,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("tbody", {
-                        children: items.map((kategori)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("tr", {
+                        children: items.length === 0 ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("tr", {
+                            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
+                                colSpan: 2,
+                                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    style: {
+                                        textAlign: "center",
+                                        padding: "48px 24px",
+                                        color: "#94a3b8"
+                                    },
+                                    children: [
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                            style: {
+                                                fontSize: 32,
+                                                marginBottom: 8
+                                            },
+                                            children: "🗂️"
+                                        }, void 0, false, {
+                                            fileName: "[project]/app/manufaktur/kategori/page.jsx",
+                                            lineNumber: 150,
+                                            columnNumber: 21
+                                        }, this),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                            style: {
+                                                fontWeight: 600,
+                                                color: "#64748b",
+                                                marginBottom: 4
+                                            },
+                                            children: "Belum ada kategori"
+                                        }, void 0, false, {
+                                            fileName: "[project]/app/manufaktur/kategori/page.jsx",
+                                            lineNumber: 151,
+                                            columnNumber: 21
+                                        }, this),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                            style: {
+                                                fontSize: 14
+                                            },
+                                            children: "Tambah kategori pertama menggunakan form di atas."
+                                        }, void 0, false, {
+                                            fileName: "[project]/app/manufaktur/kategori/page.jsx",
+                                            lineNumber: 160,
+                                            columnNumber: 21
+                                        }, this)
+                                    ]
+                                }, void 0, true, {
+                                    fileName: "[project]/app/manufaktur/kategori/page.jsx",
+                                    lineNumber: 143,
+                                    columnNumber: 19
+                                }, this)
+                            }, void 0, false, {
+                                fileName: "[project]/app/manufaktur/kategori/page.jsx",
+                                lineNumber: 142,
+                                columnNumber: 17
+                            }, this)
+                        }, void 0, false, {
+                            fileName: "[project]/app/manufaktur/kategori/page.jsx",
+                            lineNumber: 141,
+                            columnNumber: 15
+                        }, this) : items.map((kategori)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("tr", {
                                 children: [
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
                                         children: kategori.nama
                                     }, void 0, false, {
                                         fileName: "[project]/app/manufaktur/kategori/page.jsx",
-                                        lineNumber: 73,
-                                        columnNumber: 17
+                                        lineNumber: 169,
+                                        columnNumber: 19
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
                                         children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                             className: "action-buttons",
                                             children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                                type: "button",
+                                                className: "btn-danger",
                                                 onClick: ()=>handleDelete(kategori.id),
                                                 children: "Hapus"
                                             }, void 0, false, {
                                                 fileName: "[project]/app/manufaktur/kategori/page.jsx",
-                                                lineNumber: 76,
-                                                columnNumber: 21
+                                                lineNumber: 173,
+                                                columnNumber: 23
                                             }, this)
                                         }, void 0, false, {
                                             fileName: "[project]/app/manufaktur/kategori/page.jsx",
-                                            lineNumber: 75,
-                                            columnNumber: 19
+                                            lineNumber: 172,
+                                            columnNumber: 21
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/app/manufaktur/kategori/page.jsx",
-                                        lineNumber: 74,
-                                        columnNumber: 17
+                                        lineNumber: 171,
+                                        columnNumber: 19
                                     }, this)
                                 ]
                             }, kategori.id, true, {
                                 fileName: "[project]/app/manufaktur/kategori/page.jsx",
-                                lineNumber: 72,
-                                columnNumber: 15
+                                lineNumber: 168,
+                                columnNumber: 17
                             }, this))
                     }, void 0, false, {
                         fileName: "[project]/app/manufaktur/kategori/page.jsx",
-                        lineNumber: 70,
+                        lineNumber: 139,
                         columnNumber: 11
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/app/manufaktur/kategori/page.jsx",
-                lineNumber: 63,
+                lineNumber: 131,
                 columnNumber: 9
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/app/manufaktur/kategori/page.jsx",
-        lineNumber: 46,
+        lineNumber: 88,
         columnNumber: 5
     }, this);
 }
-_s(KategoriPage, "99squ8f2/ySy+4T7HsyjkMqSj/Q=");
+_s(KategoriPage, "LINgDqozi3uu1R/Gjh6lloLsCio=");
 _c = KategoriPage;
 var _c;
 __turbopack_context__.k.register(_c, "KategoriPage");

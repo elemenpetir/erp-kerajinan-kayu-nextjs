@@ -1,5 +1,4 @@
 {
-  "/_not-found/page": "app/_not-found/page.js",
   "/accounting/bills/page": "app/accounting/bills/page.js",
   "/accounting/invoices/page": "app/accounting/invoices/page.js",
   "/employees/departemen/page": "app/employees/departemen/page.js",
@@ -30,7 +29,6 @@
   "/sales/customers/create/page": "app/sales/customers/create/page.js",
   "/sales/customers/page": "app/sales/customers/page.js",
   "/sales/orders/[id]/page": "app/sales/orders/[id]/page.js",
-  "/sales/orders/create/page": "app/sales/orders/create/page.js",
   "/sales/orders/page": "app/sales/orders/page.js",
   "/sales/quotation/[id]/page": "app/sales/quotation/[id]/page.js",
   "/sales/quotation/create/page": "app/sales/quotation/create/page.js",

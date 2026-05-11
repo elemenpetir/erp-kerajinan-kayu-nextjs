@@ -125,6 +125,33 @@ export default function BillsList() {
               </td>
             </tr>
           ))}
+          {items.length === 0 && (
+            <tr>
+              <td colSpan={6}>
+                <div
+                  style={{
+                    textAlign: "center",
+                    padding: "48px 24px",
+                    color: "#94a3b8",
+                  }}
+                >
+                  <div style={{ fontSize: 32, marginBottom: 8 }}>🧾</div>
+                  <p
+                    style={{
+                      fontWeight: 600,
+                      color: "#64748b",
+                      marginBottom: 4,
+                    }}
+                  >
+                    Belum ada tagihan
+                  </p>
+                  <p style={{ fontSize: 14 }}>
+                    Klik "Buat Bill" untuk mencatat tagihan pertama.
+                  </p>
+                </div>
+              </td>
+            </tr>
+          )}
         </tbody>
       </table>
     </div>

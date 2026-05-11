@@ -37,7 +37,7 @@ export default function BahanList() {
     const { data: orderSelesai } = await supabase
       .from("order_produksi")
       .select("components, jumlah_produk")
-      .eq("status", "Dalam Proses");
+      .in("status", ["Dalam Proses", "Selesai"]);
 
     const stok = {};
 
@@ -111,8 +111,8 @@ export default function BahanList() {
                 <tr key={b.id}>
                   <td>BHN-{String(b.kode).padStart(4, "0")}</td>
                   <td>{b.nama}</td>
-                  <td>{b.biaya}</td>
-                  <td>{b.harga}</td>
+                  <td>{(b.biaya || 0).toLocaleString("id-ID")}</td>
+                  <td>{(b.harga || 0).toLocaleString("id-ID")}</td>
                   <td>{b.internal_referensi}</td>
                   <td style={style}>{label}</td>
                   <td>
@@ -123,6 +123,33 @@ export default function BahanList() {
                 </tr>
               );
             })}
+            {items.length === 0 && (
+              <tr>
+                <td colSpan={7}>
+                  <div
+                    style={{
+                      textAlign: "center",
+                      padding: "48px 24px",
+                      color: "#94a3b8",
+                    }}
+                  >
+                    <div style={{ fontSize: 32, marginBottom: 8 }}>🪵</div>
+                    <p
+                      style={{
+                        fontWeight: 600,
+                        color: "#64748b",
+                        marginBottom: 4,
+                      }}
+                    >
+                      Belum ada bahan
+                    </p>
+                    <p style={{ fontSize: 14 }}>
+                      Klik "Tambah Bahan" untuk menambahkan bahan baku pertama.
+                    </p>
+                  </div>
+                </td>
+              </tr>
+            )}
           </tbody>
         </table>
       )}

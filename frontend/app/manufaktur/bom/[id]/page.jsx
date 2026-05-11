@@ -58,7 +58,7 @@ export default function BomDetail({ params }) {
           <tbody>
             {(bom.components || []).map((item, index) => (
               <tr key={index}>
-                <td>{item.nama}</td>
+                <td>{item.nama_bahan}</td>
                 <td>{item.jumlah}</td>
                 <td>{item.harga}</td>
                 <td>{item.harga * (item.jumlah || 0)}</td>

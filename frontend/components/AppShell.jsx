@@ -12,7 +12,7 @@ export default function AppShell({ children }) {
       <Header onMobileToggle={() => setSidebarOpen(true)} />
       <div className="flex min-h-[calc(100vh-64px)]">
         <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
-        <div className="flex-1 p-4 sm:p-6 lg:p-8">
+        <div className="flex-1 p-4 sm:p-6 lg:p-8 overflow-x-auto">
           <div className="mx-auto max-w-full">
             {children}
           </div>

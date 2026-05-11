@@ -60,15 +60,15 @@ __turbopack_context__.s([
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react-jsx-dev-runtime.js [app-ssr] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react.js [app-ssr] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$supabaseClient$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/lib/supabaseClient.js [app-ssr] (ecmascript)");
-'use client';
+"use client";
 ;
 ;
 ;
 const statusFlow = [
-    'Draft',
-    'Konfirmasi',
-    'Dalam Proses',
-    'Selesai'
+    "Draft",
+    "Konfirmasi",
+    "Dalam Proses",
+    "Selesai"
 ];
 function OrderProduksiDetail({ params }) {
     const { id } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["use"])(params);
@@ -82,7 +82,7 @@ function OrderProduksiDetail({ params }) {
     ]);
     async function fetchOrder() {
         setLoading(true);
-        const { data, error } = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$supabaseClient$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["supabase"].from('order_produksi').select('*, produk:produk_id(nama), bom: bom_id(jumlah_produk,total_biaya_produk,total_biaya_bahan,components)').eq('id', id).single();
+        const { data, error } = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$supabaseClient$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["supabase"].from("order_produksi").select("*, produk:produk_id(nama), bom:bom_id(id, kode, internal_referensi, jumlah_produk, total_biaya_produk, total_biaya_bahan, components)").eq("id", id).single();
         if (error) console.error(error);
         else setOrder(data);
         setLoading(false);
@@ -93,10 +93,10 @@ function OrderProduksiDetail({ params }) {
         if (currentIndex === -1 || currentIndex === statusFlow.length - 1) return;
         const nextStatus = statusFlow[currentIndex + 1];
         setUpdating(true);
-        const { error } = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$supabaseClient$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["supabase"].from('order_produksi').update({
+        const { error } = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$supabaseClient$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["supabase"].from("order_produksi").update({
             status: nextStatus
-        }).eq('id', id);
-        if (error) alert('Gagal ubah status: ' + error.message);
+        }).eq("id", id);
+        if (error) alert("Gagal ubah status: " + error.message);
         else fetchOrder();
         setUpdating(false);
     }
@@ -104,19 +104,19 @@ function OrderProduksiDetail({ params }) {
         children: "Loading..."
     }, void 0, false, {
         fileName: "[project]/app/manufaktur/order-produksi/[id]/page.jsx",
-        lineNumber: 49,
+        lineNumber: 46,
         columnNumber: 23
     }, this);
     if (!order) return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
         children: "Order Produksi tidak ditemukan"
     }, void 0, false, {
         fileName: "[project]/app/manufaktur/order-produksi/[id]/page.jsx",
-        lineNumber: 50,
+        lineNumber: 47,
         columnNumber: 22
     }, this);
     const currentIndex = statusFlow.indexOf(order.status);
     const canAdvance = currentIndex >= 0 && currentIndex < statusFlow.length - 1;
-    const nextLabel = canAdvance ? `Ubah ke ${statusFlow[currentIndex + 1]}` : 'Selesai';
+    const nextLabel = canAdvance ? `Ubah ke ${statusFlow[currentIndex + 1]}` : "Selesai";
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
         className: "detail-card",
         children: [
@@ -124,17 +124,17 @@ function OrderProduksiDetail({ params }) {
                 children: "Order Produksi"
             }, void 0, false, {
                 fileName: "[project]/app/manufaktur/order-produksi/[id]/page.jsx",
-                lineNumber: 58,
+                lineNumber: 57,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                 children: [
                     "Produk: ",
-                    order.produk?.nama || '-'
+                    order.produk?.nama || "-"
                 ]
             }, void 0, true, {
                 fileName: "[project]/app/manufaktur/order-produksi/[id]/page.jsx",
-                lineNumber: 59,
+                lineNumber: 58,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -144,7 +144,7 @@ function OrderProduksiDetail({ params }) {
                 ]
             }, void 0, true, {
                 fileName: "[project]/app/manufaktur/order-produksi/[id]/page.jsx",
-                lineNumber: 60,
+                lineNumber: 59,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -154,27 +154,29 @@ function OrderProduksiDetail({ params }) {
                 ]
             }, void 0, true, {
                 fileName: "[project]/app/manufaktur/order-produksi/[id]/page.jsx",
+                lineNumber: 60,
+                columnNumber: 7
+            }, this),
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                children: [
+                    "Tanggal:",
+                    " ",
+                    order.created_at ? new Date(order.created_at).toLocaleDateString("id-ID") : "-"
+                ]
+            }, void 0, true, {
+                fileName: "[project]/app/manufaktur/order-produksi/[id]/page.jsx",
                 lineNumber: 61,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                 children: [
-                    "Tanggal: ",
-                    order.created_at ? new Date(order.created_at).toLocaleDateString('id-ID') : '-'
+                    "BOM:",
+                    " ",
+                    order.bom?.internal_referensi || order.bom?.kode || order.bom?.id || "-"
                 ]
             }, void 0, true, {
                 fileName: "[project]/app/manufaktur/order-produksi/[id]/page.jsx",
-                lineNumber: 62,
-                columnNumber: 7
-            }, this),
-            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                children: [
-                    "BOM: ",
-                    order.bom?.produk?.nama || order.bom?.id || '-'
-                ]
-            }, void 0, true, {
-                fileName: "[project]/app/manufaktur/order-produksi/[id]/page.jsx",
-                lineNumber: 63,
+                lineNumber: 67,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -183,15 +185,15 @@ function OrderProduksiDetail({ params }) {
                     className: "btn",
                     onClick: advanceStatus,
                     disabled: !canAdvance || updating,
-                    children: updating ? 'Memproses...' : nextLabel
+                    children: updating ? "Memproses..." : nextLabel
                 }, void 0, false, {
                     fileName: "[project]/app/manufaktur/order-produksi/[id]/page.jsx",
-                    lineNumber: 65,
+                    lineNumber: 75,
                     columnNumber: 9
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/app/manufaktur/order-produksi/[id]/page.jsx",
-                lineNumber: 64,
+                lineNumber: 74,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -203,7 +205,7 @@ function OrderProduksiDetail({ params }) {
                         children: "Komponen"
                     }, void 0, false, {
                         fileName: "[project]/app/manufaktur/order-produksi/[id]/page.jsx",
-                        lineNumber: 70,
+                        lineNumber: 84,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("table", {
@@ -216,99 +218,103 @@ function OrderProduksiDetail({ params }) {
                                             children: "Nama"
                                         }, void 0, false, {
                                             fileName: "[project]/app/manufaktur/order-produksi/[id]/page.jsx",
-                                            lineNumber: 74,
+                                            lineNumber: 88,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
                                             children: "Jumlah"
                                         }, void 0, false, {
                                             fileName: "[project]/app/manufaktur/order-produksi/[id]/page.jsx",
-                                            lineNumber: 75,
+                                            lineNumber: 89,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
                                             children: "Harga"
                                         }, void 0, false, {
                                             fileName: "[project]/app/manufaktur/order-produksi/[id]/page.jsx",
-                                            lineNumber: 76,
+                                            lineNumber: 90,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
                                             children: "Subtotal"
                                         }, void 0, false, {
                                             fileName: "[project]/app/manufaktur/order-produksi/[id]/page.jsx",
-                                            lineNumber: 77,
+                                            lineNumber: 91,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/app/manufaktur/order-produksi/[id]/page.jsx",
-                                    lineNumber: 73,
+                                    lineNumber: 87,
                                     columnNumber: 13
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/app/manufaktur/order-produksi/[id]/page.jsx",
-                                lineNumber: 72,
+                                lineNumber: 86,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("tbody", {
-                                children: (order.components || []).map((item, index)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("tr", {
+                                children: (order.components || []).map((item, index)=>{
+                                    const jumlahTotal = (item.jumlah || 0) * (order.jumlah_produk || 1);
+                                    const subtotal = (item.harga || 0) * jumlahTotal;
+                                    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("tr", {
                                         children: [
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
-                                                children: item.nama
+                                                children: item.nama_bahan
                                             }, void 0, false, {
                                                 fileName: "[project]/app/manufaktur/order-produksi/[id]/page.jsx",
-                                                lineNumber: 83,
-                                                columnNumber: 17
+                                                lineNumber: 101,
+                                                columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
-                                                children: item.jumlah
+                                                children: jumlahTotal
                                             }, void 0, false, {
                                                 fileName: "[project]/app/manufaktur/order-produksi/[id]/page.jsx",
-                                                lineNumber: 84,
-                                                columnNumber: 17
+                                                lineNumber: 102,
+                                                columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
-                                                children: item.harga
+                                                children: (item.harga || 0).toLocaleString("id-ID")
                                             }, void 0, false, {
                                                 fileName: "[project]/app/manufaktur/order-produksi/[id]/page.jsx",
-                                                lineNumber: 85,
-                                                columnNumber: 17
+                                                lineNumber: 103,
+                                                columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
-                                                children: item.harga * (item.jumlah || 0)
+                                                children: subtotal.toLocaleString("id-ID")
                                             }, void 0, false, {
                                                 fileName: "[project]/app/manufaktur/order-produksi/[id]/page.jsx",
-                                                lineNumber: 86,
-                                                columnNumber: 17
+                                                lineNumber: 104,
+                                                columnNumber: 19
                                             }, this)
                                         ]
                                     }, index, true, {
                                         fileName: "[project]/app/manufaktur/order-produksi/[id]/page.jsx",
-                                        lineNumber: 82,
-                                        columnNumber: 15
-                                    }, this))
+                                        lineNumber: 100,
+                                        columnNumber: 17
+                                    }, this);
+                                })
                             }, void 0, false, {
                                 fileName: "[project]/app/manufaktur/order-produksi/[id]/page.jsx",
-                                lineNumber: 80,
+                                lineNumber: 94,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/manufaktur/order-produksi/[id]/page.jsx",
-                        lineNumber: 71,
+                        lineNumber: 85,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/app/manufaktur/order-produksi/[id]/page.jsx",
-                lineNumber: 69,
+                lineNumber: 83,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/app/manufaktur/order-produksi/[id]/page.jsx",
-        lineNumber: 57,
+        lineNumber: 56,
         columnNumber: 5
     }, this);
 }
