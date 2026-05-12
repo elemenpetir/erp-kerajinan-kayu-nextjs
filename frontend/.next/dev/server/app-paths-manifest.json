@@ -4,6 +4,7 @@
   "/manufaktur/bom/page": "app/manufaktur/bom/page.js",
   "/manufaktur/kategori/page": "app/manufaktur/kategori/page.js",
   "/manufaktur/order-produksi/[id]/page": "app/manufaktur/order-produksi/[id]/page.js",
+  "/manufaktur/order-produksi/create/page": "app/manufaktur/order-produksi/create/page.js",
   "/manufaktur/order-produksi/page": "app/manufaktur/order-produksi/page.js",
   "/manufaktur/page": "app/manufaktur/page.js",
   "/purchase/bills/page": "app/purchase/bills/page.js",
