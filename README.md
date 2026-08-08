@@ -4,52 +4,52 @@ Aplikasi ERP (Enterprise Resource Planning) untuk usaha kerajinan kayu, dibangun
 
 ---
 
-## 🚀 Tech Stack
+## Tech Stack
 
-| Layer      | Teknologi               |
+| Layer | Teknologi |
 | ---------- | ----------------------- |
-| Frontend   | Next.js 16 (App Router) |
-| Database   | Supabase (PostgreSQL)   |
-| Auth       | Supabase Auth (Email)   |
-| Styling    | Tailwind CSS            |
-| Deployment | Vercel                  |
+| Frontend | Next.js 16 (App Router) |
+| Database | Supabase (PostgreSQL) |
+| Auth | Supabase Auth (Email) |
+| Styling | Tailwind CSS |
+| Deployment | Vercel |
 
 ---
 
-## 📦 Modul
+## Modul
 
 ### Manufaktur
 
-- **Produk** — CRUD produk dengan kalkulasi stok otomatis
-- **Bahan** — CRUD bahan baku dengan tracking stok
-- **Kategori** — Kategorisasi produk
-- **Bill of Materials (BOM)** — Daftar komponen per produk beserta total biaya
-- **Order Produksi** — Flow: Draft → Konfirmasi → Dalam Proses → Selesai
+- **Produk**: CRUD produk dengan kalkulasi stok otomatis
+- **Bahan**: CRUD bahan baku dengan tracking stok
+- **Kategori**: Kategorisasi produk
+- **Bill of Materials (BOM)**: Daftar komponen per produk beserta total biaya
+- **Order Produksi**: Draft → Konfirmasi → Dalam Proses → Selesai
 
 ### Purchase
 
-- **Vendor** — CRUD data vendor
-- **Bills** — Pencatatan tagihan vendor dengan flow pembayaran
+- **Vendor**: CRUD data vendor
+- **Bills**: Pencatatan tagihan vendor dengan flow pembayaran
 
 ### Sales
 
-- **Customer** — CRUD data customer
-- **Quotation** — Pembuatan penawaran harga
-- **Sales Orders** — Konversi quotation → sales order → invoice
+- **Customer**: CRUD data customer
+- **Quotation**: Pembuatan penawaran harga
+- **Sales Orders**: Konversi quotation → sales order → invoice
 
 ### Accounting
 
-- **Customer Invoice** — Ringkasan invoice dari Sales Orders yang sudah Fully Invoice
-- **Vendor Bill** — Ringkasan tagihan dari Bills yang sudah Paid
+- **Customer Invoice**: Ringkasan invoice dari Sales Orders yang sudah Fully Invoice
+- **Vendor Bill**: Ringkasan tagihan dari Bills yang sudah Paid
 
 ### Employees
 
-- **Departemen** — Manajemen departemen
-- **Karyawan** — CRUD data karyawan
+- **Departemen**: Manajemen departemen
+- **Karyawan**: CRUD data karyawan
 
 ---
 
-## ⚙️ Setup Lokal
+## Setup Lokal
 
 ### 1. Clone Repository
 
@@ -89,7 +89,7 @@ Buka [http://localhost:3000](http://localhost:3000)
 
 ---
 
-## 🗄️ Setup Supabase
+## Setup Supabase
 
 ### 1. Buat Project Supabase
 
@@ -115,35 +115,35 @@ export SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
 node scripts/seed_supabase.js
 ```
 
-> **Catatan:** Script seed bersifat **wipe & reseed** — setiap kali dijalankan, semua data tabel ERP akan dihapus lalu diisi ulang dengan dataset demo (6 kategori, 15 bahan, 16 produk, 16 BOM, 12 order produksi, 8 bills, 7 quotation, 5 sales order, 12 karyawan, dsb.) sehingga hasilnya selalu bersih dan konsisten untuk demo portofolio.
+> **Catatan:** Script seed bersifat **wipe & reseed**. Setiap kali dijalankan, semua data tabel ERP akan dihapus lalu diisi ulang dengan dataset demo (6 kategori, 15 bahan, 16 produk, 16 BOM, 12 order produksi, 8 bills, 7 quotation, 5 sales order, 12 karyawan, dsb.) sehingga hasilnya selalu bersih dan konsisten untuk demo portofolio.
 
 ---
 
-## 🔄 Demo Flow End-to-End
+## Demo Flow End-to-End
 
 ### Flow Produksi
 
 1. Buat **Kategori** → Buat **Bahan** → Buat **Produk**
 2. Buat **BOM** untuk produk (daftar komponen + jumlah)
 3. Buat **Order Produksi** → Konfirmasi → Dalam Proses → Selesai
-4. Stok produk otomatis bertambah ✅
+4. Stok produk otomatis bertambah
 
 ### Flow Pembelian
 
 1. Buat **Vendor** → Buat **Bill** dengan item bahan
 2. Proses pembayaran bill → Status **Paid**
-3. Stok bahan otomatis bertambah ✅
+3. Stok bahan otomatis bertambah
 
 ### Flow Penjualan
 
 1. Buat **Customer** → Buat **Quotation**
 2. Konfirmasi Quotation → otomatis jadi **Sales Order**
 3. Proses pembayaran → Status **Fully Invoice**
-4. Stok produk otomatis berkurang ✅
+4. Stok produk otomatis berkurang
 
 ---
 
-## 📸 Screenshots
+## Screenshots
 
 ### Dashboard Produk
 
@@ -167,22 +167,22 @@ node scripts/seed_supabase.js
 
 ---
 
-## ⚠️ Known Limitations
+## Known Limitations
 
-- Stok bahan bertambah saat Bill berstatus Paid (simplifikasi MVP — idealnya stok naik saat Goods Receipt setelah Purchase Order)
+- Stok bahan bertambah saat Bill berstatus Paid (simplifikasi MVP; idealnya stok naik saat Goods Receipt setelah Purchase Order)
 - Tidak ada fitur pembatalan (Cancel) untuk Order Produksi dan Sales Order
-- Tampilan tabel belum optimal di layar mobile (< 768px) — direkomendasikan akses via desktop atau tablet landscape
-- Modul Accounting hanya menampilkan ringkasan data, belum ada implementasi jurnal ganda
+- Tampilan tabel belum optimal di layar mobile (< 768px); direkomendasikan akses via desktop atau tablet landscape
+- Modul Accounting menampilkan ringkasan data, belum ada implementasi jurnal ganda
 - Belum ada role-based access control (semua user authenticated memiliki akses penuh)
 - Pagination belum diimplementasikan (semua data ditampilkan sekaligus)
-- Stok produk dan bahan bisa bernilai minus jika order produksi atau penjualan melebihi stok yang tersedia — belum ada validasi stok minimum
-- BOM tidak memiliki fitur edit — jika harga bahan berubah, total biaya di BOM tidak otomatis terupdate (idealnya: tambah fitur edit BOM atau snapshot harga saat Order Produksi dibuat)
+- Stok produk dan bahan bisa bernilai minus jika order produksi atau penjualan melebihi stok yang tersedia; belum ada validasi stok minimum
+- BOM tidak memiliki fitur edit; jika harga bahan berubah, total biaya di BOM tidak otomatis terupdate (idealnya: tambah fitur edit BOM atau snapshot harga saat Order Produksi dibuat)
 - Tidak ada search/filter di halaman list
 - Tidak ada notifikasi stok menipis
 
 ---
 
-## 🗺️ Roadmap
+## Roadmap
 
 - [ ] Flow RFQ → Purchase Order → Goods Receipt → Bill → Paid
 - [ ] Fitur Cancel untuk Order Produksi & Sales Order
@@ -194,8 +194,8 @@ node scripts/seed_supabase.js
 
 ---
 
-## 👤 Author
+## Author
 
-**Mochammad Rafi**  
-Web Developer  
+**Mochammad Rafi**
+Web Developer
 [GitHub](https://github.com/elemenpetir) | [LinkedIn](https://linkedin.com/in/davlilv)
