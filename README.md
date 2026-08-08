@@ -115,6 +115,8 @@ export SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
 node scripts/seed_supabase.js
 ```
 
+> **Catatan:** Script seed bersifat **wipe & reseed** — setiap kali dijalankan, semua data tabel ERP akan dihapus lalu diisi ulang dengan dataset demo (6 kategori, 15 bahan, 16 produk, 16 BOM, 12 order produksi, 8 bills, 7 quotation, 5 sales order, 12 karyawan, dsb.) sehingga hasilnya selalu bersih dan konsisten untuk demo portofolio.
+
 ---
 
 ## 🔄 Demo Flow End-to-End
