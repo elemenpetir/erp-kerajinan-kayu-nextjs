@@ -1,34 +1,16 @@
-"use client";
-import { useEffect, useState } from "react";
-import { supabase } from "../../../lib/supabaseClient";
+import { createClient } from '../../../lib/supabase/server';
+import { getVendorsPage, PAGE_SIZE } from '../../../lib/services/purchase';
+import { shortId } from '../../../lib/utils/format';
+import Pagination from '../../../components/ui/Pagination';
+import ActionButton from '../../../components/ui/ActionButton';
+import { deleteVendor } from './actions';
 
-export default function VendorsList() {
-  const [items, setItems] = useState([]);
+export const dynamic = 'force-dynamic';
 
-  useEffect(() => {
-    fetchData();
-  }, []);
-  async function fetchData() {
-    const { data } = await supabase
-      .from("vendor_individual")
-      .select("*")
-      .order("created_at", { ascending: false });
-    setItems(data || []);
-  }
-
-  async function handleDelete(id, nama) {
-    if (!confirm(`Hapus vendor "${nama}"?`)) return;
-    const { error } = await supabase
-      .from("vendor_individual")
-      .delete()
-      .eq("id", id);
-    if (error) {
-      alert("Gagal menghapus vendor.");
-      console.error(error);
-    } else {
-      setItems((prev) => prev.filter((v) => v.id !== id));
-    }
-  }
+export default async function VendorsList({ searchParams }) {
+  const { page } = await searchParams;
+  const supabase = await createClient();
+  const { items, count, page: safePage } = await getVendorsPage(supabase, { page });
 
   return (
     <div>
@@ -52,7 +34,7 @@ export default function VendorsList() {
         <tbody>
           {items.map((v) => (
             <tr key={v.id}>
-              <td>VND-{String(v.kode).padStart(4, "0")}</td>
+              <td>{shortId('VND', v.id)}</td>
               <td>{v.nama}</td>
               <td>{v.nama_perusahaan}</td>
               <td>{v.telp}</td>
@@ -60,12 +42,12 @@ export default function VendorsList() {
               <td>
                 <div className="action-buttons">
                   <a href={`/purchase/vendors/${v.id}`}>Lihat</a>
-                  <button
+                  <ActionButton
+                    run={deleteVendor.bind(null, v.id)}
+                    confirmText={`Hapus vendor "${v.nama}"?`}
+                    label="Hapus"
                     className="btn-danger"
-                    onClick={() => handleDelete(v.id, v.nama)}
-                  >
-                    Hapus
-                  </button>
+                  />
                 </div>
               </td>
             </tr>
@@ -73,32 +55,19 @@ export default function VendorsList() {
           {items.length === 0 && (
             <tr>
               <td colSpan={6}>
-                <div
-                  style={{
-                    textAlign: "center",
-                    padding: "48px 24px",
-                    color: "#94a3b8",
-                  }}
-                >
+                <div style={{ textAlign: 'center', padding: '48px 24px', color: '#94a3b8' }}>
                   <div style={{ fontSize: 32, marginBottom: 8 }}>🏪</div>
-                  <p
-                    style={{
-                      fontWeight: 600,
-                      color: "#64748b",
-                      marginBottom: 4,
-                    }}
-                  >
+                  <p style={{ fontWeight: 600, color: '#64748b', marginBottom: 4 }}>
                     Belum ada vendor
                   </p>
-                  <p style={{ fontSize: 14 }}>
-                    Klik "Tambah Vendor" untuk mendaftarkan vendor pertama.
-                  </p>
+                  <p style={{ fontSize: 14 }}>Klik "Tambah Vendor" untuk mendaftarkan vendor pertama.</p>
                 </div>
               </td>
             </tr>
           )}
         </tbody>
       </table>
+      <Pagination page={safePage} pageSize={PAGE_SIZE} count={count} basePath="/purchase/vendors" />
     </div>
   );
 }

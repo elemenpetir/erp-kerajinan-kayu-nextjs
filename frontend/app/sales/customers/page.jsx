@@ -1,31 +1,16 @@
-"use client";
-import { useEffect, useState } from "react";
-import { supabase } from "../../../lib/supabaseClient";
+import { createClient } from '../../../lib/supabase/server';
+import { getCustomersPage, PAGE_SIZE } from '../../../lib/services/sales';
+import { shortId } from '../../../lib/utils/format';
+import Pagination from '../../../components/ui/Pagination';
+import ActionButton from '../../../components/ui/ActionButton';
+import { deleteCustomer } from './actions';
 
-export default function CustomersList() {
-  const [items, setItems] = useState([]);
+export const dynamic = 'force-dynamic';
 
-  useEffect(() => {
-    fetchData();
-  }, []);
-
-  async function fetchData() {
-    const { data } = await supabase
-      .from("customer_individual")
-      .select("*")
-      .order("created_at", { ascending: false });
-    setItems(data || []);
-  }
-
-  async function handleDelete(id) {
-    if (!confirm("Hapus customer ini?")) return;
-    const { error } = await supabase
-      .from("customer_individual")
-      .delete()
-      .eq("id", id);
-    if (error) alert("Gagal hapus: " + error.message);
-    else fetchData();
-  }
+export default async function CustomersList({ searchParams }) {
+  const { page } = await searchParams;
+  const supabase = await createClient();
+  const { items, count, page: safePage } = await getCustomersPage(supabase, { page });
 
   return (
     <div>
@@ -49,25 +34,22 @@ export default function CustomersList() {
         <tbody>
           {items.map((c) => (
             <tr key={c.id}>
-              <td>CUST-{String(c.kode).padStart(4, "0")}</td>
+              <td>{shortId('CUST', c.id)}</td>
               <td>{c.nama}</td>
               <td>{c.nama_perusahaan}</td>
               <td>{c.telp}</td>
               <td>{c.email}</td>
               <td>
                 <div className="action-buttons">
-                  <a
-                    className="btn-table-action"
-                    href={`/sales/customers/${c.id}`}
-                  >
+                  <a className="btn-table-action" href={`/sales/customers/${c.id}`}>
                     Lihat
                   </a>
-                  <button
+                  <ActionButton
+                    run={deleteCustomer.bind(null, c.id)}
+                    confirmText="Hapus customer ini?"
+                    label="Hapus"
                     className="btn-danger"
-                    onClick={() => handleDelete(c.id)}
-                  >
-                    Hapus
-                  </button>
+                  />
                 </div>
               </td>
             </tr>
@@ -75,32 +57,19 @@ export default function CustomersList() {
           {items.length === 0 && (
             <tr>
               <td colSpan={6}>
-                <div
-                  style={{
-                    textAlign: "center",
-                    padding: "48px 24px",
-                    color: "#94a3b8",
-                  }}
-                >
+                <div style={{ textAlign: 'center', padding: '48px 24px', color: '#94a3b8' }}>
                   <div style={{ fontSize: 32, marginBottom: 8 }}>🤝</div>
-                  <p
-                    style={{
-                      fontWeight: 600,
-                      color: "#64748b",
-                      marginBottom: 4,
-                    }}
-                  >
+                  <p style={{ fontWeight: 600, color: '#64748b', marginBottom: 4 }}>
                     Belum ada customer
                   </p>
-                  <p style={{ fontSize: 14 }}>
-                    Klik "Tambah Customer" untuk mendaftarkan customer pertama.
-                  </p>
+                  <p style={{ fontSize: 14 }}>Klik "Tambah Customer" untuk mendaftarkan customer pertama.</p>
                 </div>
               </td>
             </tr>
           )}
         </tbody>
       </table>
+      <Pagination page={safePage} pageSize={PAGE_SIZE} count={count} basePath="/sales/customers" />
     </div>
   );
 }

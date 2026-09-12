@@ -114,7 +114,7 @@ export default function DepartemenPage() {
           ) : (
             items.map((d) => (
               <tr key={d.id}>
-                <td>DEPT-{String(d.kode).padStart(4, "0")}</td>
+                <td>DEPT-{String(d.id).slice(0, 8)}</td>
                 <td>{d.nama_departemen}</td>
                 <td>
                   {editId === d.id ? (

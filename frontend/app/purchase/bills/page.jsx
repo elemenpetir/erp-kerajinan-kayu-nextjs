@@ -1,71 +1,16 @@
-"use client";
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-import { supabase } from "../../../lib/supabaseClient";
+import { createClient } from '../../../lib/supabase/server';
+import { getBillsPage, PAGE_SIZE } from '../../../lib/services/purchase';
+import { shortId } from '../../../lib/utils/format';
+import Pagination from '../../../components/ui/Pagination';
+import ActionButton from '../../../components/ui/ActionButton';
+import { deleteBill, confirmBill, payBill } from './actions';
 
-export default function BillsList() {
-  const [items, setItems] = useState([]);
-  const router = useRouter();
+export const dynamic = 'force-dynamic';
 
-  useEffect(() => {
-    fetchData();
-  }, []);
-
-  async function fetchData() {
-    const { data } = await supabase
-      .from("bills")
-      .select("*")
-      .order("created_at", { ascending: false });
-    setItems(data || []);
-  }
-
-  async function handleDelete(id) {
-    if (!confirm("Hapus bill ini?")) return;
-    const { error } = await supabase.from("bills").delete().eq("id", id);
-    if (error) alert("Gagal hapus: " + error.message);
-    else fetchData();
-  }
-
-  async function handleBayar(b) {
-    if (!confirm("Bayar bill ini? Data akan masuk ke Vendor Bill Accounting."))
-      return;
-
-    const { error: updateError } = await supabase
-      .from("bills")
-      .update({ status: "Paid" })
-      .eq("id", b.id);
-
-    if (updateError) {
-      alert("Gagal update status: " + updateError.message);
-      return;
-    }
-
-    const { error: insertError } = await supabase.from("vendor_bill").insert([
-      {
-        bill_id: b.id,
-        jumlah_pembayaran: b.total_biaya,
-        payment_date: new Date().toISOString().split("T")[0],
-      },
-    ]);
-
-    if (insertError) {
-      alert("Gagal insert vendor bill: " + insertError.message);
-      return;
-    }
-
-    alert("Bill berhasil dibayar!");
-    fetchData();
-  }
-
-  async function handleKonfirmasi(id) {
-    if (!confirm("Konfirmasi bill ini?")) return;
-    const { error } = await supabase
-      .from("bills")
-      .update({ status: "Bill" })
-      .eq("id", id);
-    if (error) alert("Gagal konfirmasi: " + error.message);
-    else fetchData();
-  }
+export default async function BillsList({ searchParams }) {
+  const { page } = await searchParams;
+  const supabase = await createClient();
+  const { items, count, page: safePage } = await getBillsPage(supabase, { page });
 
   return (
     <div>
@@ -89,37 +34,39 @@ export default function BillsList() {
         <tbody>
           {items.map((b) => (
             <tr key={b.id}>
-              <td>BILL-{String(b.kode).padStart(4, "0")}</td>
+              <td>{shortId('BILL', b.id)}</td>
               <td>{b.referensi_vendor}</td>
               <td>{b.deadline_order}</td>
               <td>{b.total_biaya}</td>
               <td>{b.status}</td>
               <td>
                 <div className="action-buttons">
-                  <button
-                    className="btn-table-action"
-                    onClick={() => router.push(`/purchase/bills/${b.id}`)}
-                  >
+                  <a className="btn-table-action" href={`/purchase/bills/${b.id}`}>
                     Lihat
-                  </button>
-                  {b.status === "Bill" && (
-                    <button
+                  </a>
+                  {b.status === 'Bill' && (
+                    <ActionButton
+                      run={payBill.bind(null, b.id)}
+                      confirmText="Bayar bill ini? Data akan masuk ke Vendor Bill Accounting."
+                      successText="Bill berhasil dibayar!"
+                      label="Bayar"
                       className="btn-table-action"
-                      onClick={() => handleBayar(b)}
-                    >
-                      Bayar
-                    </button>
+                    />
                   )}
-                  {b.status === "Draft Bill" && (
-                    <button
+                  {b.status === 'Draft Bill' && (
+                    <ActionButton
+                      run={confirmBill.bind(null, b.id)}
+                      confirmText="Konfirmasi bill ini?"
+                      label="Konfirmasi"
                       className="btn-table-action"
-                      onClick={() => handleKonfirmasi(b.id)}
-                    >
-                      Konfirmasi
-                    </button>
+                    />
                   )}
-                  {b.status === "Draft Bill" && (
-                    <button onClick={() => handleDelete(b.id)}>Hapus</button>
+                  {b.status === 'Draft Bill' && (
+                    <ActionButton
+                      run={deleteBill.bind(null, b.id)}
+                      confirmText="Hapus bill ini?"
+                      label="Hapus"
+                    />
                   )}
                 </div>
               </td>
@@ -128,32 +75,19 @@ export default function BillsList() {
           {items.length === 0 && (
             <tr>
               <td colSpan={6}>
-                <div
-                  style={{
-                    textAlign: "center",
-                    padding: "48px 24px",
-                    color: "#94a3b8",
-                  }}
-                >
+                <div style={{ textAlign: 'center', padding: '48px 24px', color: '#94a3b8' }}>
                   <div style={{ fontSize: 32, marginBottom: 8 }}>🧾</div>
-                  <p
-                    style={{
-                      fontWeight: 600,
-                      color: "#64748b",
-                      marginBottom: 4,
-                    }}
-                  >
+                  <p style={{ fontWeight: 600, color: '#64748b', marginBottom: 4 }}>
                     Belum ada tagihan
                   </p>
-                  <p style={{ fontSize: 14 }}>
-                    Klik "Buat Bill" untuk mencatat tagihan pertama.
-                  </p>
+                  <p style={{ fontSize: 14 }}>Klik "Buat Bill" untuk mencatat tagihan pertama.</p>
                 </div>
               </td>
             </tr>
           )}
         </tbody>
       </table>
+      <Pagination page={safePage} pageSize={PAGE_SIZE} count={count} basePath="/purchase/bills" />
     </div>
   );
 }

@@ -8,9 +8,9 @@ const navSections = [
     items: [
       { label: "Produk", href: "/manufaktur" },
       { label: "Bahan", href: "/manufaktur/bahan" },
-      { label: "Kategori", href: "/manufaktur/kategori" },
+      { label: "Kategori", href: "/manufacturing/categories" },
       { label: "BoM", href: "/manufaktur/bom" },
-      { label: "Order Produksi", href: "/manufaktur/order-produksi" },
+      { label: "Order Produksi", href: "/manufacturing/production-orders" },
     ],
   },
   {
@@ -24,8 +24,8 @@ const navSections = [
     title: "Sales",
     items: [
       { label: "Customer", href: "/sales/customers" },
-      { label: "Quotation", href: "/sales/quotation" },
-      { label: "Sales Orders", href: "/sales/orders" },
+      { label: "Quotation", href: "/sales/quotations" },
+      { label: "Sales Orders", href: "/sales/sales-orders" },
     ],
   },
   {
@@ -38,8 +38,8 @@ const navSections = [
   {
     title: "Employees",
     items: [
-      { label: "Departemen", href: "/employees/departemen" },
-      { label: "Karyawan", href: "/employees/karyawan" },
+      { label: "Departemen", href: "/hr/departments" },
+      { label: "Karyawan", href: "/hr/employees" },
     ],
   },
 ];
