@@ -198,4 +198,4 @@ node scripts/seed_supabase.js
 
 **Mochammad Rafi**
 Web Developer
-[GitHub](https://github.com/elemenpetir) | [LinkedIn](https://linkedin.com/in/davlilv)
+[GitHub](https://github.com/elemenpetir) | [LinkedIn](https://linkedin.com/in/mochammad-rafi)
