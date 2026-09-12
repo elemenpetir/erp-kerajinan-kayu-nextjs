@@ -7,10 +7,10 @@ const navSections = [
   {
     title: "Manufaktur",
     items: [
-      { label: "Produk", href: "/manufaktur" },
-      { label: "Bahan", href: "/manufaktur/bahan" },
+      { label: "Produk", href: "/manufacturing/products" },
+      { label: "Bahan", href: "/manufacturing/materials" },
       { label: "Kategori", href: "/manufacturing/categories" },
-      { label: "BoM", href: "/manufaktur/bom" },
+      { label: "BoM", href: "/manufacturing/boms" },
       { label: "Order Produksi", href: "/manufacturing/production-orders" },
     ],
   },
@@ -32,8 +32,8 @@ const navSections = [
   {
     title: "Accounting",
     items: [
-      { label: "Customer Invoice", href: "/accounting/invoices" },
-      { label: "Vendor Bill", href: "/accounting/bills" },
+      { label: "Customer Invoice", href: "/accounting/customer-invoices" },
+      { label: "Vendor Bill", href: "/accounting/vendor-bills" },
     ],
   },
   {
