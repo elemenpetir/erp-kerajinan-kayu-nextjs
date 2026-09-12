@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 
 const navSections = [
   {
@@ -44,13 +45,31 @@ const navSections = [
   },
 ];
 
+function isActive(href, pathname) {
+  if (!pathname) return false;
+  return pathname === href || pathname.startsWith(href + "/");
+}
+
 export default function Sidebar({ open, onClose }) {
+  const pathname = usePathname();
   const [openSections, setOpenSections] = useState(
     navSections.reduce(
       (acc, section) => ({ ...acc, [section.title]: false }),
       {},
     ),
   );
+
+  // Auto-expand section berisi halaman aktif (toggle manual tetap bisa)
+  useEffect(() => {
+    const active = navSections.find((s) =>
+      s.items.some((item) => isActive(item.href, pathname)),
+    );
+    if (active) {
+      setOpenSections((prev) =>
+        prev[active.title] ? prev : { ...prev, [active.title]: true },
+      );
+    }
+  }, [pathname]);
 
   const toggleSection = (title) => {
     setOpenSections((prev) => ({ ...prev, [title]: !prev[title] }));
@@ -77,37 +96,46 @@ export default function Sidebar({ open, onClose }) {
       </div>
 
       <nav className="space-y-4 sidebar-scroll">
-        {navSections.map((section) => (
+        {navSections.map((section) => {
+          const sectionActive = section.items.some((item) =>
+            isActive(item.href, pathname),
+          );
+          return (
           <div
             key={section.title}
-            className="rounded-2xl border border-slate-200 bg-white p-3 shadow-sm"
+            className={`rounded-2xl border bg-white p-3 shadow-sm ${sectionActive ? "border-slate-900" : "border-slate-200"}`}
           >
             <button
               type="button"
-              className="flex w-full items-center justify-between rounded-xl border border-slate-200 bg-white px-4 py-3 text-left text-sm font-semibold text-slate-900 transition hover:bg-slate-50"
+              className={`flex w-full items-center justify-between rounded-xl border px-4 py-3 text-left text-sm font-semibold transition hover:bg-slate-50 ${sectionActive ? "border-slate-900 bg-slate-900 text-white hover:bg-slate-800" : "border-slate-200 bg-white text-slate-900"}`}
               onClick={() => toggleSection(section.title)}
             >
               <span>{section.title}</span>
-              <span className="ml-2 text-slate-500">
+              <span className={`ml-2 ${sectionActive ? "text-slate-300" : "text-slate-500"}`}>
                 {openSections[section.title] ? "−" : "+"}
               </span>
             </button>
             {openSections[section.title] && (
               <ul className="mt-3 space-y-2 text-sm text-slate-700">
-                {section.items.map((item) => (
+                {section.items.map((item) => {
+                  const active = isActive(item.href, pathname);
+                  return (
                   <li key={item.href}>
                     <a
                       href={item.href}
-                      className="block rounded-xl px-3 py-2 transition hover:bg-slate-100 hover:text-slate-900"
+                      aria-current={active ? "page" : undefined}
+                      className={`block rounded-xl px-3 py-2 transition ${active ? "bg-slate-900 font-semibold text-white" : "hover:bg-slate-100 hover:text-slate-900"}`}
                     >
                       {item.label}
                     </a>
                   </li>
-                ))}
+                  );
+                })}
               </ul>
             )}
           </div>
-        ))}
+          );
+        })}
       </nav>
     </aside>
   );
