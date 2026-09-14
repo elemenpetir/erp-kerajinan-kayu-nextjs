@@ -11,7 +11,7 @@ export default function HomeAuth() {
 
   // Satu kelas dasar untuk semua tombol: tinggi & tipografi identik,
   // beda hanya warna. Menghilangkan selisih <a> vs <button> dan ilusi kontras.
-  const btn = 'inline-flex h-10 items-center rounded-lg px-4 text-sm font-semibold';
+  const btn = 'inline-flex h-10 items-center rounded-lg px-4 text-sm font-semibold mb-0';
 
   useEffect(() => {
     supabase.auth.getUser().then(({ data }) => {
