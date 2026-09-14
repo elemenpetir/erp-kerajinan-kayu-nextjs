@@ -37,6 +37,7 @@ export default function Header({ onMobileToggle }) {
           <path d="M4 18h16" />
         </svg>
       </button>
+      </div>
     </header>
   )
 }
