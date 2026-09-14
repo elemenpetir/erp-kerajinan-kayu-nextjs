@@ -1,5 +1,4 @@
 import './globals.css'
-import AppShell from '../components/AppShell'
 
 export const metadata = {
   title: 'ERP Kerajinan Kayu ERP',
@@ -9,9 +8,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="id">
-      <body>
-        <AppShell>{children}</AppShell>
-      </body>
+      <body>{children}</body>
     </html>
   )
 }
