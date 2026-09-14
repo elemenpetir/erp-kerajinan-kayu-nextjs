@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState, use } from "react";
-import { supabase } from "../../../lib/supabaseClient";
+import { supabase } from "../../../../../lib/supabase/client";
 
 const formatRupiah = (amount) =>
   new Intl.NumberFormat("id-ID", {
@@ -64,7 +64,7 @@ export default function ProdukDetail({ params }) {
   async function handleDelete() {
     if (!confirm("Hapus produk ini?")) return;
     await supabase.from("produk").delete().eq("id", id);
-    window.location.href = "/manufaktur";
+    window.location.href = "/manufacturing/products";
   }
 
   if (loading) return <p>Loading...</p>;
@@ -164,7 +164,7 @@ export default function ProdukDetail({ params }) {
         <div className="detail-actions">
           <a
             className="btn-outline"
-            href={bom ? `/manufaktur/bom/${bom.id}` : `/manufaktur/bom/create?produk_id=${id}`}
+            href={bom ? `/manufacturing/boms/${bom.id}` : `/manufacturing/boms/new?produk_id=${id}`}
           >
             {bom ? "Lihat BOM" : "+ Buat BOM"}
           </a>

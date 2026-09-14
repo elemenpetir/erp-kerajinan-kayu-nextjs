@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { supabase } from "../../../../lib/supabaseClient";
+import { supabase } from "../../../../../lib/supabase/client";
 
 export default function CreateBahan() {
   const router = useRouter();
@@ -27,7 +27,7 @@ export default function CreateBahan() {
       setMessage("Error: " + error.message);
       setLoading(false);
     } else {
-      router.push("/manufaktur/bahan");
+      router.push("/manufacturing/materials");
     }
   }
 

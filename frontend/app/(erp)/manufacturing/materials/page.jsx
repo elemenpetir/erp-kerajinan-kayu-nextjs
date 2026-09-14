@@ -25,7 +25,7 @@ export default async function MaterialsPage({ searchParams }) {
     <div>
       <h2>Manufaktur — Bahan</h2>
       <p>
-        <a className="btn" href="/manufaktur/bahan/create">
+        <a className="btn" href="/manufacturing/materials/new">
           Tambah Bahan
         </a>
       </p>
@@ -54,7 +54,7 @@ export default async function MaterialsPage({ searchParams }) {
                 <td style={style}>{label}</td>
                 <td>
                   <div className="action-buttons">
-                    <a href={`/manufaktur/bahan/${b.id}`}>Lihat</a>
+                      <a href={`/manufacturing/materials/${b.id}`}>Lihat</a>
                   </div>
                 </td>
               </tr>

@@ -14,7 +14,7 @@ export default async function BomsPage({ searchParams }) {
     <div>
       <h2>Manufaktur — BOM</h2>
       <p>
-        <a className="btn" href="/manufaktur/bom/create">
+        <a className="btn" href="/manufacturing/boms/new">
           Tambah BOM
         </a>
       </p>
@@ -37,7 +37,7 @@ export default async function BomsPage({ searchParams }) {
               <td>{b.total_biaya_bahan}</td>
               <td>
                 <div className="action-buttons">
-                  <a href={`/manufaktur/bom/${b.id}`}>Lihat</a>
+                  <a href={`/manufacturing/boms/${b.id}`}>Lihat</a>
                 </div>
               </td>
             </tr>

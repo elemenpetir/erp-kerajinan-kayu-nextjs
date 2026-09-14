@@ -26,7 +26,7 @@ export default async function ProductsPage({ searchParams }) {
     <div>
       <h2>Manufaktur — Produk</h2>
       <p>
-        <a className="btn" href="/manufaktur/create">
+        <a className="btn" href="/manufacturing/products/new">
           Buat Produk
         </a>
       </p>
@@ -53,7 +53,7 @@ export default async function ProductsPage({ searchParams }) {
                 <td style={style}>{value}</td>
                 <td>
                   <div className="action-buttons">
-                    <a href={`/manufaktur/${p.id}`}>Lihat / Edit</a>
+                      <a href={`/manufacturing/products/${p.id}`}>Lihat / Edit</a>
                   </div>
                 </td>
               </tr>

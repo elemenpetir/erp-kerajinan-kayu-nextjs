@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { supabase } from "../../../lib/supabaseClient";
+import { supabase } from "../../../../../lib/supabase/client";
 
 export default function CreateProduk() {
   const router = useRouter();
@@ -24,7 +24,7 @@ export default function CreateProduk() {
       setMessage("Error: " + error.message);
       setLoading(false);
     } else {
-      router.push("/manufaktur");
+      router.push("/manufacturing/products");
     }
   }
 

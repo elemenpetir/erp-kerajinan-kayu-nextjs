@@ -21,6 +21,9 @@ const nextConfig = {
       { source: '/purchase/vendors/create', destination: '/purchase/vendors/new', permanent: false },
       { source: '/sales/customers/create', destination: '/sales/customers/new', permanent: false },
       { source: '/purchase/bills/create', destination: '/purchase/bills/new', permanent: false },
+      { source: '/manufaktur/bahan/:path*', destination: '/manufacturing/materials/:path*', permanent: false },
+      { source: '/manufaktur/bom/:path*', destination: '/manufacturing/boms/:path*', permanent: false },
+      { source: '/manufaktur/:id', destination: '/manufacturing/products/:id', permanent: false },
     ];
   },
 };

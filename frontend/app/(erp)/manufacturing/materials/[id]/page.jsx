@@ -1,7 +1,7 @@
 'use client'
 import { useEffect, useState, use } from 'react'
 import { useRouter } from 'next/navigation'
-import { supabase } from '../../../../lib/supabaseClient'
+import { supabase } from '../../../../../lib/supabase/client'
 
 export default function BahanDetail({ params }) {
   const { id } = use(params)
@@ -50,7 +50,7 @@ export default function BahanDetail({ params }) {
   async function handleDelete() {
     if (!confirm('Hapus bahan ini?')) return
     await supabase.from('bahan').delete().eq('id', id)
-    router.push('/manufaktur/bahan')
+    router.push('/manufacturing/materials')
   }
 
   if (loading) return <p>Loading...</p>

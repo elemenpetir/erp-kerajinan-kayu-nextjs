@@ -1,6 +1,6 @@
 'use client'
 import { useEffect, useState, use } from 'react'
-import { supabase } from '../../../../lib/supabaseClient'
+import { supabase } from '../../../../../lib/supabase/client'
 
 export default function BomDetail({ params }) {
   const { id } = use(params)
@@ -26,7 +26,7 @@ export default function BomDetail({ params }) {
   async function handleDelete() {
     if (!confirm('Hapus BOM ini?')) return
     await supabase.from('bom').delete().eq('id', id)
-    window.location.href = '/manufaktur/bom'
+    window.location.href = '/manufacturing/boms'
   }
 
   if (loading) return <p>Loading...</p>

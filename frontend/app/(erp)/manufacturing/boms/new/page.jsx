@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { supabase } from "../../../../lib/supabaseClient";
+import { supabase } from "../../../../../lib/supabase/client";
 
 const formatRupiah = (amount) =>
   new Intl.NumberFormat("id-ID", {
@@ -106,7 +106,7 @@ export default function CreateBom() {
       setMessage("Error: " + error.message);
       setLoading(false);
     } else {
-      router.push("/manufaktur/bom");
+      router.push("/manufacturing/boms");
     }
   }
 
