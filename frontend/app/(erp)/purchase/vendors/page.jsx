@@ -1,8 +1,8 @@
-import { createClient } from '../../../lib/supabase/server';
-import { getVendorsPage, PAGE_SIZE } from '../../../lib/services/purchase';
-import { shortId } from '../../../lib/utils/format';
-import Pagination from '../../../components/ui/Pagination';
-import ActionButton from '../../../components/ui/ActionButton';
+import { createClient } from '../../../../lib/supabase/server';
+import { getVendorsPage, PAGE_SIZE } from '../../../../lib/services/purchase';
+import { shortId } from '../../../../lib/utils/format';
+import Pagination from '../../../../components/ui/Pagination';
+import ActionButton from '../../../../components/ui/ActionButton';
 import { deleteVendor } from './actions';
 
 export const dynamic = 'force-dynamic';
@@ -16,7 +16,7 @@ export default async function VendorsList({ searchParams }) {
     <div>
       <h2>Vendors</h2>
       <p>
-        <a className="btn" href="/purchase/vendors/create">
+        <a className="btn" href="/purchase/vendors/new">
           Tambah Vendor
         </a>
       </p>

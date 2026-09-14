@@ -1,8 +1,8 @@
-import { createClient } from '../../../lib/supabase/server';
-import { getCustomersPage, PAGE_SIZE } from '../../../lib/services/sales';
-import { shortId } from '../../../lib/utils/format';
-import Pagination from '../../../components/ui/Pagination';
-import ActionButton from '../../../components/ui/ActionButton';
+import { createClient } from '../../../../lib/supabase/server';
+import { getCustomersPage, PAGE_SIZE } from '../../../../lib/services/sales';
+import { shortId } from '../../../../lib/utils/format';
+import Pagination from '../../../../components/ui/Pagination';
+import ActionButton from '../../../../components/ui/ActionButton';
 import { deleteCustomer } from './actions';
 
 export const dynamic = 'force-dynamic';
@@ -16,7 +16,7 @@ export default async function CustomersList({ searchParams }) {
     <div>
       <h2>Customers</h2>
       <p>
-        <a className="btn" href="/sales/customers/create">
+        <a className="btn" href="/sales/customers/new">
           Tambah Customer
         </a>
       </p>

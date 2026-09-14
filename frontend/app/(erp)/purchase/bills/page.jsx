@@ -1,8 +1,8 @@
-import { createClient } from '../../../lib/supabase/server';
-import { getBillsPage, PAGE_SIZE } from '../../../lib/services/purchase';
-import { shortId } from '../../../lib/utils/format';
-import Pagination from '../../../components/ui/Pagination';
-import ActionButton from '../../../components/ui/ActionButton';
+import { createClient } from '../../../../lib/supabase/server';
+import { getBillsPage, PAGE_SIZE } from '../../../../lib/services/purchase';
+import { shortId } from '../../../../lib/utils/format';
+import Pagination from '../../../../components/ui/Pagination';
+import ActionButton from '../../../../components/ui/ActionButton';
 import { deleteBill, confirmBill, payBill } from './actions';
 
 export const dynamic = 'force-dynamic';
@@ -16,7 +16,7 @@ export default async function BillsList({ searchParams }) {
     <div>
       <h2>Purchase - Bills</h2>
       <p>
-        <a className="btn" href="/purchase/bills/create">
+        <a className="btn" href="/purchase/bills/new">
           Buat Bill
         </a>
       </p>

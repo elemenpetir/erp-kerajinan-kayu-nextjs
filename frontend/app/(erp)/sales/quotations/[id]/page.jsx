@@ -123,7 +123,7 @@ export default function QuotationDetail({ params }) {
         <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
           <a
             className="btn-outline"
-            href="/sales/quotation"
+            href="/sales/quotations"
             style={{ marginBottom: 0 }}
           >
             ← Kembali
