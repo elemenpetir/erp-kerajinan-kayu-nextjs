@@ -64,18 +64,11 @@ export default function BillDetail({ params }) {
   }
 
   async function handleBayar() {
-    const { error } = await supabase.from("vendor_bill").insert([
-      {
-        bill_id: id,
-        jumlah_pembayaran: bill.total_biaya,
-        payment_date: new Date().toISOString().split("T")[0],
-      },
-    ]);
+    const { error } = await supabase.rpc("pay_bill", { p_bill_id: id });
     if (error) {
       alert("Gagal bayar: " + error.message);
       return;
     }
-    await supabase.from("bills").update({ status: "Paid" }).eq("id", id);
     fetchBill();
   }
 

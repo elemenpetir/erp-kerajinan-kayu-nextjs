@@ -27,28 +27,10 @@ export default function SalesOrderDetail({ params }) {
 
   async function handleCreateInvoice() {
     if (!confirm("Buat invoice untuk Sales Order ini?")) return;
-    const today = new Date().toISOString().split("T")[0];
 
-    const { error: updateError } = await supabase
-      .from("sales_order")
-      .update({ status: "Fully Invoice" })
-      .eq("id", id);
-    if (updateError) {
-      alert("Gagal update: " + updateError.message);
-      return;
-    }
-
-    const { error: insertError } = await supabase
-      .from("customer_invoice")
-      .insert([
-        {
-          sales_order_id: id,
-          jumlah_pembayaran: order.total_biaya,
-          payment_date: today,
-        },
-      ]);
-    if (insertError) {
-      alert("Gagal buat invoice: " + insertError.message);
+    const { error } = await supabase.rpc("invoice_sales_order", { p_so_id: id });
+    if (error) {
+      alert("Gagal buat invoice: " + error.message);
       return;
     }
 

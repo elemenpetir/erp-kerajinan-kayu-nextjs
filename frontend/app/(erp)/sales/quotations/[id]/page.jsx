@@ -35,32 +35,8 @@ export default function QuotationDetail({ params }) {
   async function handleConfirm() {
     if (!confirm("Konfirmasi quotation ini menjadi Sales Order?")) return;
 
-    const { data: existing } = await supabase
-      .from("sales_order")
-      .select("id")
-      .eq("quotation_id", id)
-      .single();
-    if (existing)
-      return alert("Sales Order untuk quotation ini sudah pernah dibuat!");
-
-    const { error: errQ } = await supabase
-      .from("quotation")
-      .update({ status: "Sales Order" })
-      .eq("id", id);
-    if (errQ) return alert("Gagal update quotation: " + errQ.message);
-
-    const { error: errSO } = await supabase.from("sales_order").insert({
-      quotation_id: id,
-      customer_id: q.customer_id,
-      customer_snapshot: q.customer_snapshot,
-      expiration: q.expiration,
-      payment_terms: q.payment_terms,
-      items: q.items,
-      total_biaya: q.total_biaya,
-      status: "To Invoice",
-      status_delivery: "Sedang Dikirim",
-    });
-    if (errSO) return alert("Gagal buat Sales Order: " + errSO.message);
+    const { error } = await supabase.rpc("confirm_quotation", { p_q_id: id });
+    if (error) return alert("Gagal konfirmasi: " + error.message);
 
     alert("Berhasil! Sales Order telah dibuat.");
     fetchData();
