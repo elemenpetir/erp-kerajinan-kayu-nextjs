@@ -1,3 +1,5 @@
+import HomeAuth from '../components/HomeAuth';
+
 export default function Home() {
   return (
     <div>
@@ -5,9 +7,7 @@ export default function Home() {
         <div className="text-lg font-semibold uppercase tracking-[0.24em] text-slate-100">
           ERP Kerajinan Kayu
         </div>
-        <a className="rounded-lg bg-white px-4 py-2 text-sm font-semibold text-slate-900" href="/login">
-          Masuk
-        </a>
+        <HomeAuth />
       </header>
       <main style={{ padding: 24 }}>
         <h1>ERP Portfolio — Next.js + Supabase</h1>
