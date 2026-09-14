@@ -1,56 +1,35 @@
-# Files Added / Modified in This Session
+# Files Added / Modified — Refactor Readable + Scalable
 
-Ringkasan file yang dibuat atau dimodifikasi selama sesi rebuild ke Next.js + Supabase.
+Struktur saat ini (pasca-refactor, Next.js 16 App Router + Supabase).
+Lihat `docs/PRD.md` dan `docs/ERD.md` untuk konteks produk.
 
-## Database & Seed
-- `supabase/migrations/001_create_schema.sql` — SQL migration untuk membuat schema Postgres (tabel, FK, index).
-- `scripts/seed_supabase.js` — Script Node.js untuk menyisipkan seed demo (2–3 record/tabel) menggunakan `SUPABASE_SERVICE_ROLE_KEY`.
+## Database
+- `supabase/migrations/001_create_schema.sql` — schema awal (tabel, FK, index).
+- `supabase/migrations/002_add_indexes.sql` — index status/produk untuk list pagination.
+- `supabase/migrations/003_stock_views.sql` — `v_stok_produk`, `v_stok_bahan` (1 row per produk/bahan).
+- `supabase/migrations/004_atomic_transactions.sql` — RPC `pay_bill`, `invoice_sales_order`, `confirm_quotation`.
+- `scripts/seed_supabase.js` — wipe & reseed demo (`SUPABASE_SERVICE_ROLE_KEY`).
+- `scripts/smoke.js` — smoke HTTP read-only: `node scripts/smoke.js [baseURL]` (38 cek: 200 + redirect).
 
-## Docs
-- `docs/ERD.md` — ERD ringkas dan catatan desain.
-- `docs/PRD.md` — PRD final (Bahasa Indonesia) berisi executive summary, user stories, technical spec, roadmap, risks, checklist.
-- `docs/FILES_ADDED.md` — (file ini) ringkasan file sesi.
+> Semua migration `002–004` dijalankan manual sekali via Supabase SQL Editor (tidak ikut deploy).
 
-## Frontend (Next.js 16)
-- `frontend/package.json` — package manifest untuk Next.js app.
-- `frontend/next.config.js` — Next.js config (App Router enabled).
-- `frontend/.env.example` — contoh environment variables.
-- `frontend/README.md` — panduan run & notes untuk frontend.
-- `frontend/lib/supabaseClient.js` — wrapper `@supabase/supabase-js` client.
+## Frontend — fondasi
+- `frontend/proxy.js` — refresh session Supabase per-request (konvensi `proxy` Next.js 16).
+- `frontend/next.config.js` — redirects URL lama → baru (masa transisi).
+- `frontend/lib/supabase/client.js` — browser client (`@supabase/ssr`).
+- `frontend/lib/supabase/server.js` — server client fresh per-request.
+- `frontend/lib/supabaseClient.js` — re-export legacy (jangan dipakai di kode baru).
+- `frontend/lib/services/{pagination,manufacturing,purchase,sales,accounting,hr}.js` — query + `range/count`.
+- `frontend/lib/utils/format.js` — `formatRupiah`, `shortId`.
+- `frontend/components/ui/{Pagination,ActionButton}.jsx` — island klien generik.
+- `frontend/components/{AppShell,Header,Sidebar}.jsx` — Sidebar auto-expand + penanda aktif.
 
-### Layout & UI
-- `frontend/app/layout.jsx` — Root layout menggunakan `Header`.
-- `frontend/components/Header.jsx` — Header client-side termasuk mobile hamburger toggle.
-- `frontend/app/globals.css` — global styles + responsive menu styles.
-- `frontend/app/page.jsx` — homepage.
-
-### Modul Manufaktur
-- `frontend/app/manufaktur/page.jsx` — list produk.
-- `frontend/app/manufaktur/create/page.jsx` — form create produk.
-- `frontend/app/manufaktur/[id]/page.jsx` — detail / edit / delete produk.
-
-### Modul Employees
-- `frontend/app/employees/departemen/page.jsx` — create + list departemen.
-- `frontend/app/employees/karyawan/page.jsx` — list karyawan.
-- `frontend/app/employees/karyawan/create/page.jsx` — create karyawan.
-- `frontend/app/employees/karyawan/[id]/page.jsx` — detail / edit / delete karyawan.
-
-### Modul Purchase
-- `frontend/app/purchase/vendors/page.jsx` — list vendor individual.
-- `frontend/app/purchase/vendors/create/page.jsx` — create vendor.
-- `frontend/app/purchase/vendors/[id]/page.jsx` — vendor detail.
-- `frontend/app/purchase/bills/page.jsx` — list bills.
-- `frontend/app/purchase/bills/create/page.jsx` — create bill (simple form).
-
-### Modul Sales
-- `frontend/app/sales/customers/page.jsx` — list customers.
-- `frontend/app/sales/customers/create/page.jsx` — create customer.
-- `frontend/app/sales/customers/[id]/page.jsx` — customer detail.
-- `frontend/app/sales/quotation/page.jsx` — list quotations.
-- `frontend/app/sales/quotation/create/page.jsx` — create quotation (items JSONB, total calculation).
-- `frontend/app/sales/orders/page.jsx` — list sales orders.
-- `frontend/app/sales/orders/create/page.jsx` — convert quotation to sales order.
+## Frontend — rute (`app/(erp)/`, URL English plural)
+- `manufacturing/{products,materials,boms,categories,production-orders}` — `page.jsx` (server list) + `[id]` + `new/` + `_components/` + `actions.js` bila ada mutasi.
+- `purchase/{vendors,bills}`, `sales/{customers,quotations,sales-orders}`, `accounting/{customer-invoices,vendor-bills}`, `hr/{departments,employees}` — pola sama.
+- `(erp)/layout.jsx` — teruskan children (shell tunggal dari root; TODO: pindahkan `<AppShell>` ke sini saat 100% rute di dalam `(erp)`).
 
 ## Catatan
-- Semua frontend berada di folder `frontend/` — jika dipindah ke `erp-nextjs/`, sesuaikan root di Vercel.
-- Jangan commit `SUPABASE_SERVICE_ROLE_KEY`; simpan sebagai secret di Vercel atau lingkungan lokal.
+- Tabel DB tetap Indonesia (`bahan`, `karyawan`, …); English hanya di URL + services.
+- Total accounting = per halaman (label "Total halaman ini").
+- Jangan commit `SUPABASE_SERVICE_ROLE_KEY`; simpan sebagai secret.
