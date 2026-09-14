@@ -21,7 +21,7 @@ export default function Header({ onMobileToggle }) {
         <button
           type="button"
           onClick={handleLogout}
-          className="rounded-lg border border-slate-700 bg-slate-900 px-4 py-2 text-sm text-slate-100 transition hover:bg-slate-800"
+          className="inline-flex h-11 items-center rounded-lg border border-slate-700 bg-slate-900 px-4 text-sm text-slate-100 transition hover:bg-slate-800"
         >
           Keluar
         </button>

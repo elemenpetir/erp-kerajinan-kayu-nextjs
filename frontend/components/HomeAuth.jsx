@@ -20,7 +20,7 @@ export default function HomeAuth() {
 
   if (!user) {
     return (
-      <a className="rounded-lg bg-white px-4 py-2 text-sm font-semibold text-slate-900" href="/login">
+      <a className="inline-flex h-10 items-center rounded-lg bg-white px-4 text-sm font-semibold text-slate-900" href="/login">
         Masuk
       </a>
     );
@@ -28,12 +28,12 @@ export default function HomeAuth() {
 
   return (
     <div className="flex items-center gap-2">
-      <a className="rounded-lg bg-white px-4 py-2 text-sm font-semibold text-slate-900" href="/manufacturing/products">
+      <a className="inline-flex h-10 items-center rounded-lg bg-white px-4 text-sm font-semibold text-slate-900" href="/manufacturing/products">
         Buka Dashboard
       </a>
       <button
         type="button"
-        className="rounded-lg border border-slate-700 px-4 py-2 text-sm text-slate-100"
+        className="inline-flex h-10 items-center rounded-lg border border-slate-700 px-4 text-sm text-slate-100"
         onClick={async () => {
           await supabase.auth.signOut();
           setUser(null);
