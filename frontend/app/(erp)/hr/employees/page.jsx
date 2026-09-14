@@ -14,7 +14,7 @@ export default async function EmployeesPage({ searchParams }) {
     <div>
       <h2>Karyawan</h2>
       <p>
-        <a className="btn" href="/employees/karyawan/create">
+        <a className="btn" href="/hr/employees/new">
           Tambah Karyawan
         </a>
       </p>
@@ -39,7 +39,7 @@ export default async function EmployeesPage({ searchParams }) {
               <td>{k.email}</td>
               <td>
                 <div className="action-buttons">
-                  <a href={`/employees/karyawan/${k.id}`}>Lihat / Edit</a>
+                  <a href={`/hr/employees/${k.id}`}>Lihat / Edit</a>
                 </div>
               </td>
             </tr>

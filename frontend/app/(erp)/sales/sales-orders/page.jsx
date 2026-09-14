@@ -36,7 +36,7 @@ export default async function SalesOrdersPage({ searchParams }) {
               <td>{o.status}</td>
               <td>
                 <div className="action-buttons">
-                  <a href={`/sales/orders/${o.id}`}>Lihat</a>
+                  <a href={`/sales/sales-orders/${o.id}`}>Lihat</a>
                   {o.status === 'To Invoice' && (
                     <ActionButton
                       run={createInvoice.bind(null, o.id)}

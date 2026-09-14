@@ -16,7 +16,7 @@ export default async function ProductionOrdersPage({ searchParams }) {
     <div>
       <h2>Order Produksi</h2>
       <p>
-        <a className="btn" href="/manufaktur/order-produksi/create">
+        <a className="btn" href="/manufacturing/production-orders/new">
           Buat Order
         </a>
       </p>
@@ -41,7 +41,7 @@ export default async function ProductionOrdersPage({ searchParams }) {
               <td>{new Date(order.created_at).toLocaleDateString('id-ID')}</td>
               <td>
                 <div className="action-buttons">
-                  <a href={`/manufaktur/order-produksi/${order.id}`}>Lihat</a>
+                  <a href={`/manufacturing/production-orders/${order.id}`}>Lihat</a>
                   {order.status === 'Draft' && (
                     <ActionButton
                       run={deleteProductionOrder.bind(null, order.id)}

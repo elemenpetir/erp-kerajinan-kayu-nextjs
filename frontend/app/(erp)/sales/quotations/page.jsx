@@ -16,7 +16,7 @@ export default async function QuotationsPage({ searchParams }) {
     <div>
       <h2>Quotation</h2>
       <p>
-        <a className="btn" href="/sales/quotation/create">
+        <a className="btn" href="/sales/quotations/new">
           Buat Quotation
         </a>
       </p>
@@ -41,7 +41,7 @@ export default async function QuotationsPage({ searchParams }) {
               <td>{q.status}</td>
               <td>
                 <div className="action-buttons">
-                  <a href={`/sales/quotation/${q.id}`}>Lihat</a>
+                  <a href={`/sales/quotations/${q.id}`}>Lihat</a>
                   {q.status !== 'Sales Order' && (
                     <ActionButton
                       run={deleteQuotation.bind(null, q.id)}
