@@ -9,6 +9,10 @@ export default function HomeAuth() {
   const [user, setUser] = useState(null);
   const [checked, setChecked] = useState(false);
 
+  // Satu kelas dasar untuk semua tombol: tinggi & tipografi identik,
+  // beda hanya warna. Menghilangkan selisih <a> vs <button> dan ilusi kontras.
+  const btn = 'inline-flex h-10 items-center rounded-lg px-4 text-sm font-semibold';
+
   useEffect(() => {
     supabase.auth.getUser().then(({ data }) => {
       setUser(data.user || null);
@@ -20,7 +24,7 @@ export default function HomeAuth() {
 
   if (!user) {
     return (
-      <a className="inline-flex h-10 items-center rounded-lg bg-white px-4 text-sm font-semibold text-slate-900" href="/login">
+      <a className={`${btn} bg-white text-slate-900`} href="/login">
         Masuk
       </a>
     );
@@ -28,12 +32,12 @@ export default function HomeAuth() {
 
   return (
     <div className="flex items-center gap-2">
-      <a className="inline-flex h-10 items-center rounded-lg bg-white px-4 text-sm font-semibold text-slate-900" href="/manufacturing/products">
+      <a className={`${btn} bg-white text-slate-900`} href="/manufacturing/products">
         Buka Dashboard
       </a>
       <button
         type="button"
-        className="inline-flex h-10 items-center rounded-lg border border-slate-700 px-4 text-sm text-slate-100"
+        className={`${btn} bg-slate-800 text-slate-100`}
         onClick={async () => {
           await supabase.auth.signOut();
           setUser(null);
