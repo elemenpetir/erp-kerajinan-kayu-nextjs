@@ -57,25 +57,18 @@ export async function getMaterialsPage(supabase, { page = 1, pageSize = PAGE_SIZ
   return { items: data || [], count: count || 0, page: safePage, pageSize };
 }
 
-// Stok dihitung per ID halaman (bounded). Sales/bills items jsonb tak bisa
-// difilter di query → select sempit; diganti VIEW di Phase 2.
+// Stok dari VIEW Postgres (003_stock_views.sql): 1 query bounded per halaman.
 // ponytail: O(page) transfer, bukan O(table)
 export async function getProductStockMap(supabase, produkIds) {
   if (!produkIds.length) return {};
-  const [{ data: orderSelesai }, { data: salesOrders }] = await Promise.all([
-    supabase.from('order_produksi').select('produk_id,jumlah_produk').eq('status', 'Selesai').in('produk_id', produkIds),
-    supabase.from('sales_order').select('items').in('status', ['To Invoice', 'Fully Invoice']),
-  ]);
+  const { data, error } = await supabase
+    .from('v_stok_produk')
+    .select('produk_id,stok')
+    .in('produk_id', produkIds);
+  if (error) throw new Error(error.message);
   const stok = {};
-  (orderSelesai || []).forEach((o) => {
-    if (!o.produk_id) return;
-    stok[o.produk_id] = (stok[o.produk_id] || 0) + (o.jumlah_produk || 0);
-  });
-  (salesOrders || []).forEach((so) => {
-    (so.items || []).forEach((item) => {
-      if (!item.produk_id || !produkIds.includes(item.produk_id)) return;
-      stok[item.produk_id] = (stok[item.produk_id] || 0) - (item.jumlah || 0);
-    });
+  (data || []).forEach((r) => {
+    stok[r.produk_id] = Number(r.stok || 0);
   });
   return stok;
 }
@@ -96,23 +89,14 @@ export async function getProductBomMap(supabase, produkIds) {
 
 export async function getMaterialStockMap(supabase, bahanIds) {
   if (!bahanIds.length) return {};
-  const [{ data: billsPaid }, { data: orderSelesai }] = await Promise.all([
-    supabase.from('bills').select('items').eq('status', 'Paid'),
-    supabase.from('order_produksi').select('components,jumlah_produk').in('status', ['Dalam Proses', 'Selesai']),
-  ]);
+  const { data, error } = await supabase
+    .from('v_stok_bahan')
+    .select('bahan_id,stok')
+    .in('bahan_id', bahanIds);
+  if (error) throw new Error(error.message);
   const stok = {};
-  (billsPaid || []).forEach((bill) => {
-    (bill.items || []).forEach((item) => {
-      if (!item.bahan_id || !bahanIds.includes(item.bahan_id)) return;
-      stok[item.bahan_id] = (stok[item.bahan_id] || 0) + (item.jumlah || 0);
-    });
-  });
-  (orderSelesai || []).forEach((order) => {
-    const qty = order.jumlah_produk || 1;
-    (order.components || []).forEach((comp) => {
-      if (!comp.bahan_id || !bahanIds.includes(comp.bahan_id)) return;
-      stok[comp.bahan_id] = (stok[comp.bahan_id] || 0) - (comp.jumlah || 0) * qty;
-    });
+  (data || []).forEach((r) => {
+    stok[r.bahan_id] = Number(r.stok || 0);
   });
   return stok;
 }
