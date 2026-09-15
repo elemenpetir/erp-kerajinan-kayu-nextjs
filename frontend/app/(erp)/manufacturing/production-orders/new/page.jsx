@@ -56,6 +56,10 @@ export default function CreateOrderProduksi() {
     setBomId((prev) => (boms.some((bom) => bom.id === prev && bom.produk_id === value) ? prev : ""));
   }
 
+  async function handleSubmit(e) {
+    e.preventDefault();
+    setLoading(true);
+
     const selectedBom = boms.find((bom) => bom.id === bomId);
     if (!produkId || !bomId || !selectedBom) {
       setMessage("Pilih produk dan BOM terlebih dahulu.");
