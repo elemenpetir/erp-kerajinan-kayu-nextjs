@@ -43,7 +43,7 @@ BEGIN
     EXECUTE format('CREATE SEQUENCE IF NOT EXISTS %I', seq);
     EXECUTE format('SELECT COALESCE(MAX(kode), 0) + 1 FROM %I', t) INTO start_val;
     -- Only move forward, never backward (re-runs after deletes stay safe).
-    PERFORM setval(seq, GREATEST(start_val, COALESCE((SELECT last_value FROM pg_sequences WHERE schemaname = ''public'' AND sequencename = seq), 1)), false);
+    PERFORM setval(seq, GREATEST(start_val, COALESCE((SELECT last_value FROM pg_sequences WHERE schemaname = 'public' AND sequencename = seq), 1)), false);
     EXECUTE format('ALTER TABLE %I ALTER COLUMN kode SET DEFAULT nextval(%L)', t, seq);
     EXECUTE format('ALTER TABLE %I ALTER COLUMN kode SET NOT NULL', t);
     IF NOT EXISTS (
