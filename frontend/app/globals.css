@@ -5,7 +5,7 @@
 /* shadcn tokens — cool neutral (slate), light-only, low-glare. */
 @layer base {
   :root {
-    --background: 214 32% 91%;
+    --background: 210 40% 96.1%;
     --foreground: 222.2 84% 4.9%;
     --card: 0 0% 100%;
     --card-foreground: 222.2 84% 4.9%;
@@ -15,14 +15,14 @@
     --primary-foreground: 210 40% 98%;
     --secondary: 210 40% 96.1%;
     --secondary-foreground: 222.2 47.4% 11.2%;
-    --muted: 213 27% 84%;
-    --muted-foreground: 215 19% 40%;
-    --accent: 213 27% 84%;
+    --muted: 215 20.2% 92%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 215 20.2% 92%;
     --accent-foreground: 222.2 47.4% 11.2%;
     --destructive: 0 72% 51%;
     --destructive-foreground: 210 40% 98%;
-    --border: 215 16% 80%;
-    --input: 215 16% 80%;
+    --border: 213 27% 86%;
+    --input: 213 27% 86%;
     --ring: 215 20.2% 65.1%;
     --radius: 0.625rem;
   }
