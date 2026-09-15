@@ -1,6 +1,11 @@
+import { Plus, UserRound } from 'lucide-react';
 import { createClient } from '../../../../lib/supabase/server';
 import { getEmployeesPage, PAGE_SIZE } from '../../../../lib/services/hr';
 import { shortId } from '../../../../lib/utils/format';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import EmptyState from '@/components/ui/EmptyState';
 import Pagination from '../../../../components/ui/Pagination';
 
 export const dynamic = 'force-dynamic';
@@ -11,56 +16,58 @@ export default async function EmployeesPage({ searchParams }) {
   const { items, count, page: safePage } = await getEmployeesPage(supabase, { page });
 
   return (
-    <div>
-      <h2>Karyawan</h2>
-      <p>
-        <a className="btn" href="/hr/employees/new">
-          Tambah Karyawan
-        </a>
-      </p>
-      <table className="table-slate">
-        <thead>
-          <tr>
-            <th>Kode</th>
-            <th>Nama</th>
-            <th>Posisi</th>
-            <th>Telp</th>
-            <th>Email</th>
-            <th>Aksi</th>
-          </tr>
-        </thead>
-        <tbody>
-          {items.map((k) => (
-            <tr key={k.id}>
-              <td>{shortId('EMP', k.id)}</td>
-              <td>{k.nama}</td>
-              <td>{k.posisi}</td>
-              <td>{k.telp}</td>
-              <td>{k.email}</td>
-              <td>
-                <div className="action-buttons">
-                  <a href={`/hr/employees/${k.id}`}>Lihat / Edit</a>
-                </div>
-              </td>
-            </tr>
-          ))}
+    <div className="space-y-4">
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-lg font-semibold">Karyawan</h1>
+          <p className="text-sm text-muted-foreground">Data personel beserta unit kerjanya.</p>
+        </div>
+        <Button asChild>
+          <a href="/hr/employees/new">
+            <Plus />
+            Tambah Karyawan
+          </a>
+        </Button>
+      </div>
+      <Card>
+        <CardContent className="p-0">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Kode</TableHead>
+                <TableHead>Nama</TableHead>
+                <TableHead>Posisi</TableHead>
+                <TableHead>Telp</TableHead>
+                <TableHead>Email</TableHead>
+                <TableHead className="w-28">Aksi</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {items.map((k) => (
+                <TableRow key={k.id}>
+                  <TableCell className="font-mono text-xs">{shortId('EMP', k.id)}</TableCell>
+                  <TableCell className="font-medium">{k.nama}</TableCell>
+                  <TableCell>{k.posisi || '-'}</TableCell>
+                  <TableCell className="tabular-nums">{k.telp || '-'}</TableCell>
+                  <TableCell className="text-muted-foreground">{k.email || '-'}</TableCell>
+                  <TableCell>
+                    <Button variant="ghost" size="sm" asChild>
+                      <a href={`/hr/employees/${k.id}`}>Lihat</a>
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
           {items.length === 0 && (
-            <tr>
-              <td colSpan={6}>
-                <div style={{ textAlign: 'center', padding: '48px 24px', color: '#94a3b8' }}>
-                  <div style={{ fontSize: 32, marginBottom: 8 }}>👤</div>
-                  <p style={{ fontWeight: 600, color: '#64748b', marginBottom: 4 }}>
-                    Belum ada karyawan
-                  </p>
-                  <p style={{ fontSize: 14 }}>
-                    Klik "Tambah Karyawan" untuk mendaftarkan karyawan pertama.
-                  </p>
-                </div>
-              </td>
-            </tr>
+            <EmptyState
+              icon={UserRound}
+              title="Belum ada karyawan"
+              description='Klik "Tambah Karyawan" untuk mendaftarkan karyawan pertama.'
+            />
           )}
-        </tbody>
-      </table>
+        </CardContent>
+      </Card>
       <Pagination page={safePage} pageSize={PAGE_SIZE} count={count} basePath="/hr/employees" />
     </div>
   );

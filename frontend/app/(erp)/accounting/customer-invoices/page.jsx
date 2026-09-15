@@ -1,6 +1,11 @@
+import { Landmark } from 'lucide-react';
 import { createClient } from '../../../../lib/supabase/server';
 import { getCustomerInvoicesPage, PAGE_SIZE } from '../../../../lib/services/accounting';
 import { formatRupiah } from '../../../../lib/utils/format';
+import { Card, CardContent } from '@/components/ui/card';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow, TableFooter } from '@/components/ui/table';
+import EmptyState from '@/components/ui/EmptyState';
+import StatusBadge from '@/components/ui/StatusBadge';
 import Pagination from '../../../../components/ui/Pagination';
 
 export const dynamic = 'force-dynamic';
@@ -12,43 +17,55 @@ export default async function CustomerInvoicesPage({ searchParams }) {
   const pageTotal = items.reduce((s, inv) => s + parseFloat(inv.jumlah_pembayaran || 0), 0);
 
   return (
-    <div>
-      <h2>Accounting — Customer Invoices</h2>
-      {items.length === 0 ? (
-        <p>Tidak ada data customer invoice.</p>
-      ) : (
-        <table className="table-slate">
-          <thead>
-            <tr>
-              <th>Nomor Invoice</th>
-              <th>Customer</th>
-              <th>Jumlah Pembayaran</th>
-              <th>Tanggal Pembayaran</th>
-              <th>Status Sales Order</th>
-            </tr>
-          </thead>
-          <tbody>
-            {items.map((invoice, index) => (
-              <tr key={invoice.id || index}>
-                <td>INV-{String((safePage - 1) * PAGE_SIZE + index + 1).padStart(3, '0')}</td>
-                <td>{invoice.sales_order?.customer_snapshot?.nama || '-'}</td>
-                <td>{formatRupiah(invoice.jumlah_pembayaran)}</td>
-                <td>{invoice.payment_date}</td>
-                <td>{invoice.sales_order?.status || '-'}</td>
-              </tr>
-            ))}
-          </tbody>
-          <tfoot>
-            <tr>
-              <td colSpan={2} style={{ textAlign: 'right', fontWeight: 'bold' }}>
-                Total halaman ini
-              </td>
-              <td style={{ fontWeight: 'bold' }}>{formatRupiah(pageTotal)}</td>
-              <td colSpan={2} />
-            </tr>
-          </tfoot>
-        </table>
-      )}
+    <div className="space-y-4">
+      <div>
+        <h1 className="text-lg font-semibold">Customer Invoices</h1>
+        <p className="text-sm text-muted-foreground">Ringkasan invoice dari sales order yang sudah terbayar penuh.</p>
+      </div>
+      <Card>
+        <CardContent className="p-0">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Nomor Invoice</TableHead>
+                <TableHead>Customer</TableHead>
+                <TableHead className="text-right">Jumlah Pembayaran</TableHead>
+                <TableHead>Tanggal Pembayaran</TableHead>
+                <TableHead>Status Sales Order</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {items.map((invoice, index) => (
+                <TableRow key={invoice.id || index}>
+                  <TableCell className="font-mono text-xs">
+                    INV-{String((safePage - 1) * PAGE_SIZE + index + 1).padStart(3, '0')}
+                  </TableCell>
+                  <TableCell className="font-medium">{invoice.sales_order?.customer_snapshot?.nama || '-'}</TableCell>
+                  <TableCell className="text-right tabular-nums">{formatRupiah(invoice.jumlah_pembayaran)}</TableCell>
+                  <TableCell className="text-muted-foreground">{invoice.payment_date}</TableCell>
+                  <TableCell>
+                    <StatusBadge status={invoice.sales_order?.status} />
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+            {items.length > 0 && (
+              <TableFooter>
+                <TableRow>
+                  <TableCell colSpan={2} className="text-right font-semibold">
+                    Total halaman ini
+                  </TableCell>
+                  <TableCell className="text-right font-semibold tabular-nums">{formatRupiah(pageTotal)}</TableCell>
+                  <TableCell colSpan={2} />
+                </TableRow>
+              </TableFooter>
+            )}
+          </Table>
+          {items.length === 0 && (
+            <EmptyState icon={Landmark} title="Tidak ada data customer invoice." />
+          )}
+        </CardContent>
+      </Card>
       <Pagination page={safePage} pageSize={PAGE_SIZE} count={count} basePath="/accounting/customer-invoices" />
     </div>
   );

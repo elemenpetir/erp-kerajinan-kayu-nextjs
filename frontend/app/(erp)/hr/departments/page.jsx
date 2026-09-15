@@ -1,6 +1,11 @@
+import { Building2, Plus } from 'lucide-react';
 import { createClient } from '../../../../lib/supabase/server';
 import { getDepartmentsPage, getEmployeeOptions, PAGE_SIZE } from '../../../../lib/services/hr';
 import { shortId } from '../../../../lib/utils/format';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import EmptyState from '@/components/ui/EmptyState';
 import Pagination from '../../../../components/ui/Pagination';
 import { CreateForm, RowActions } from './_components/DepartemenForm';
 
@@ -15,37 +20,49 @@ export default async function DepartmentsPage({ searchParams }) {
   ]);
 
   return (
-    <div>
-      <h2>Departemen</h2>
-      <CreateForm employees={employees} />
-      <table className="table-slate">
-        <thead>
-          <tr>
-            <th>Kode</th>
-            <th>Nama</th>
-            <th>Manager</th>
-            <th>Aksi</th>
-          </tr>
-        </thead>
-        <tbody>
-          {items.length === 0 ? (
-            <tr>
-              <td colSpan={4}>Belum ada departemen.</td>
-            </tr>
-          ) : (
-            items.map((d) => (
-              <tr key={d.id}>
-                <td>{shortId('DEPT', d.id)}</td>
-                <td>{d.nama_departemen}</td>
-                <td>{d.manager || '-'}</td>
-                <td>
-                  <RowActions dept={d} employees={employees} />
-                </td>
-              </tr>
-            ))
+    <div className="space-y-4">
+      <div>
+        <h1 className="text-lg font-semibold">Departemen</h1>
+        <p className="text-sm text-muted-foreground">Struktur organisasi dan penanggung jawab tiap unit.</p>
+      </div>
+      <Card>
+        <CardContent className="pt-6">
+          <CreateForm employees={employees} />
+        </CardContent>
+      </Card>
+      <Card>
+        <CardContent className="p-0">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Kode</TableHead>
+                <TableHead>Nama</TableHead>
+                <TableHead>Manager</TableHead>
+                <TableHead className="w-44">Aksi</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {items.map((d) => (
+                <TableRow key={d.id}>
+                  <TableCell className="font-mono text-xs">{shortId('DEPT', d.id)}</TableCell>
+                  <TableCell className="font-medium">{d.nama_departemen}</TableCell>
+                  <TableCell>{d.manager || '-'}</TableCell>
+                  <TableCell>
+                    <RowActions dept={d} employees={employees} />
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+          {items.length === 0 && (
+            <EmptyState
+              icon={Building2}
+              title="Belum ada departemen."
+              description="Tambah departemen pertama menggunakan form di atas."
+            />
           )}
-        </tbody>
-      </table>
+        </CardContent>
+      </Card>
       <Pagination page={safePage} pageSize={PAGE_SIZE} count={count} basePath="/hr/departments" />
     </div>
   );

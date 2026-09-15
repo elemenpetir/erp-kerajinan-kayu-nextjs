@@ -1,5 +1,9 @@
+import { Layers } from 'lucide-react';
 import { createClient } from '../../../../lib/supabase/server';
 import { getCategoriesPage, PAGE_SIZE } from '../../../../lib/services/manufacturing';
+import { Card, CardContent } from '@/components/ui/card';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import EmptyState from '@/components/ui/EmptyState';
 import Pagination from '../../../../components/ui/Pagination';
 import ActionButton from '../../../../components/ui/ActionButton';
 import CategoryForm from './_components/CategoryForm';
@@ -13,48 +17,47 @@ export default async function CategoriesPage({ searchParams }) {
   const { items, count, page: safePage } = await getCategoriesPage(supabase, { page });
 
   return (
-    <div>
-      <h2>Manufaktur — Kategori</h2>
+    <div className="space-y-4">
+      <div>
+        <h1 className="text-lg font-semibold">Kategori</h1>
+        <p className="text-sm text-muted-foreground">Kelompok produk untuk katalog dan laporan.</p>
+      </div>
       <CategoryForm />
-      <table className="table-slate">
-        <thead>
-          <tr>
-            <th>Nama</th>
-            <th style={{ width: 120 }}>Aksi</th>
-          </tr>
-        </thead>
-        <tbody>
-          {items.length === 0 ? (
-            <tr>
-              <td colSpan={2}>
-                <div style={{ textAlign: 'center', padding: '48px 24px', color: '#94a3b8' }}>
-                  <div style={{ fontSize: 32, marginBottom: 8 }}>🗂️</div>
-                  <p style={{ fontWeight: 600, color: '#64748b', marginBottom: 4 }}>
-                    Belum ada kategori
-                  </p>
-                  <p style={{ fontSize: 14 }}>Tambah kategori pertama menggunakan form di atas.</p>
-                </div>
-              </td>
-            </tr>
-          ) : (
-            items.map((kategori) => (
-              <tr key={kategori.id}>
-                <td>{kategori.nama}</td>
-                <td>
-                  <div className="action-buttons">
+      <Card>
+        <CardContent className="p-0">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Nama</TableHead>
+                <TableHead className="w-28">Aksi</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {items.map((kategori) => (
+                <TableRow key={kategori.id}>
+                  <TableCell className="font-medium">{kategori.nama}</TableCell>
+                  <TableCell>
                     <ActionButton
                       run={deleteCategory.bind(null, kategori.id)}
-                      confirmText="Hapus kategori ini?"
+                      confirmTitle="Hapus kategori?"
+                      confirmText="Hapus kategori ini? Produk yang memakai kategori ini tidak ikut terhapus."
                       label="Hapus"
-                      className="btn-danger"
+                      variant="destructive"
                     />
-                  </div>
-                </td>
-              </tr>
-            ))
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+          {items.length === 0 && (
+            <EmptyState
+              icon={Layers}
+              title="Belum ada kategori"
+              description="Tambah kategori pertama menggunakan form di atas."
+            />
           )}
-        </tbody>
-      </table>
+        </CardContent>
+      </Card>
       <Pagination page={safePage} pageSize={PAGE_SIZE} count={count} basePath="/manufacturing/categories" />
     </div>
   );

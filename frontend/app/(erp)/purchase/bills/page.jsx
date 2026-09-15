@@ -1,6 +1,12 @@
+import { Plus, Receipt } from 'lucide-react';
 import { createClient } from '../../../../lib/supabase/server';
 import { getBillsPage, PAGE_SIZE } from '../../../../lib/services/purchase';
 import { shortId } from '../../../../lib/utils/format';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import EmptyState from '@/components/ui/EmptyState';
+import StatusBadge from '@/components/ui/StatusBadge';
 import Pagination from '../../../../components/ui/Pagination';
 import ActionButton from '../../../../components/ui/ActionButton';
 import { deleteBill, confirmBill, payBill } from './actions';
@@ -13,80 +19,91 @@ export default async function BillsList({ searchParams }) {
   const { items, count, page: safePage } = await getBillsPage(supabase, { page });
 
   return (
-    <div>
-      <h2>Purchase - Bills</h2>
-      <p>
-        <a className="btn" href="/purchase/bills/new">
-          Buat Bill
-        </a>
-      </p>
-      <table className="table-slate">
-        <thead>
-          <tr>
-            <th>Kode</th>
-            <th>Referensi Vendor</th>
-            <th>Deadline</th>
-            <th>Total</th>
-            <th>Status</th>
-            <th>Aksi</th>
-          </tr>
-        </thead>
-        <tbody>
-          {items.map((b) => (
-            <tr key={b.id}>
-              <td>{shortId('BILL', b.id)}</td>
-              <td>{b.referensi_vendor}</td>
-              <td>{b.deadline_order}</td>
-              <td>{b.total_biaya}</td>
-              <td>{b.status}</td>
-              <td>
-                <div className="action-buttons">
-                  <a className="btn-table-action" href={`/purchase/bills/${b.id}`}>
-                    Lihat
-                  </a>
-                  {b.status === 'Bill' && (
-                    <ActionButton
-                      run={payBill.bind(null, b.id)}
-                      confirmText="Bayar bill ini? Data akan masuk ke Vendor Bill Accounting."
-                      successText="Bill berhasil dibayar!"
-                      label="Bayar"
-                      className="btn-table-action"
-                    />
-                  )}
-                  {b.status === 'Draft Bill' && (
-                    <ActionButton
-                      run={confirmBill.bind(null, b.id)}
-                      confirmText="Konfirmasi bill ini?"
-                      label="Konfirmasi"
-                      className="btn-table-action"
-                    />
-                  )}
-                  {b.status === 'Draft Bill' && (
-                    <ActionButton
-                      run={deleteBill.bind(null, b.id)}
-                      confirmText="Hapus bill ini?"
-                      label="Hapus"
-                    />
-                  )}
-                </div>
-              </td>
-            </tr>
-          ))}
+    <div className="space-y-4">
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-lg font-semibold">Bills</h1>
+          <p className="text-sm text-muted-foreground">Draft Bill → Bill → Paid.</p>
+        </div>
+        <Button asChild>
+          <a href="/purchase/bills/new">
+            <Plus />
+            Buat Bill
+          </a>
+        </Button>
+      </div>
+      <Card>
+        <CardContent className="p-0">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Kode</TableHead>
+                <TableHead>Referensi Vendor</TableHead>
+                <TableHead>Deadline</TableHead>
+                <TableHead className="text-right">Total</TableHead>
+                <TableHead>Status</TableHead>
+                <TableHead className="w-48">Aksi</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {items.map((b) => (
+                <TableRow key={b.id}>
+                  <TableCell className="font-mono text-xs">{shortId('BILL', b.id)}</TableCell>
+                  <TableCell className="font-medium">{b.referensi_vendor || '-'}</TableCell>
+                  <TableCell className="text-muted-foreground">{b.deadline_order || '-'}</TableCell>
+                  <TableCell className="text-right tabular-nums">
+                    {Number(b.total_biaya || 0).toLocaleString('id-ID')}
+                  </TableCell>
+                  <TableCell>
+                    <StatusBadge status={b.status} />
+                  </TableCell>
+                  <TableCell>
+                    <div className="flex flex-wrap gap-1">
+                      <Button variant="ghost" size="sm" asChild>
+                        <a href={`/purchase/bills/${b.id}`}>Lihat</a>
+                      </Button>
+                      {b.status === 'Bill' && (
+                        <ActionButton
+                          run={payBill.bind(null, b.id)}
+                          confirmTitle="Bayar bill?"
+                          confirmText="Bayar bill ini? Data akan masuk ke Vendor Bill Accounting."
+                          successText="Bill berhasil dibayar!"
+                          label="Bayar"
+                        />
+                      )}
+                      {b.status === 'Draft Bill' && (
+                        <ActionButton
+                          run={confirmBill.bind(null, b.id)}
+                          confirmTitle="Konfirmasi bill?"
+                          confirmText="Konfirmasi bill ini?"
+                          label="Konfirmasi"
+                          variant="secondary"
+                        />
+                      )}
+                      {b.status === 'Draft Bill' && (
+                        <ActionButton
+                          run={deleteBill.bind(null, b.id)}
+                          confirmTitle="Hapus bill?"
+                          confirmText="Hapus bill ini?"
+                          label="Hapus"
+                          variant="destructive"
+                        />
+                      )}
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
           {items.length === 0 && (
-            <tr>
-              <td colSpan={6}>
-                <div style={{ textAlign: 'center', padding: '48px 24px', color: '#94a3b8' }}>
-                  <div style={{ fontSize: 32, marginBottom: 8 }}>🧾</div>
-                  <p style={{ fontWeight: 600, color: '#64748b', marginBottom: 4 }}>
-                    Belum ada tagihan
-                  </p>
-                  <p style={{ fontSize: 14 }}>Klik "Buat Bill" untuk mencatat tagihan pertama.</p>
-                </div>
-              </td>
-            </tr>
+            <EmptyState
+              icon={Receipt}
+              title="Belum ada tagihan"
+              description='Klik "Buat Bill" untuk mencatat tagihan pertama.'
+            />
           )}
-        </tbody>
-      </table>
+        </CardContent>
+      </Card>
       <Pagination page={safePage} pageSize={PAGE_SIZE} count={count} basePath="/purchase/bills" />
     </div>
   );

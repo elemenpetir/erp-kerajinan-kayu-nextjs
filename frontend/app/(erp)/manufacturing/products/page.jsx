@@ -1,15 +1,20 @@
+import { Package, Plus } from 'lucide-react';
 import { createClient } from '../../../../lib/supabase/server';
 import { getProductsPage, getProductStockMap, getProductBomMap, PAGE_SIZE } from '../../../../lib/services/manufacturing';
 import { shortId } from '../../../../lib/utils/format';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import EmptyState from '@/components/ui/EmptyState';
 import Pagination from '../../../../components/ui/Pagination';
 
 export const dynamic = 'force-dynamic';
 
-function stokStyle(stok) {
-  if (stok === undefined) return { value: 0, style: { color: '#64748b' } };
-  if (stok <= 0) return { value: stok, style: { color: '#dc2626', fontWeight: '600' } };
-  if (stok <= 5) return { value: stok, style: { color: '#d97706', fontWeight: '600' } };
-  return { value: stok, style: { color: '#16a34a', fontWeight: '600' } };
+function stokClass(stok) {
+  if (stok === undefined) return 'text-muted-foreground';
+  if (stok <= 0) return 'font-semibold text-destructive';
+  if (stok <= 5) return 'font-semibold text-amber-600';
+  return 'font-semibold text-emerald-600';
 }
 
 export default async function ProductsPage({ searchParams }) {
@@ -23,57 +28,64 @@ export default async function ProductsPage({ searchParams }) {
   ]);
 
   return (
-    <div>
-      <h2>Manufaktur — Produk</h2>
-      <p>
-        <a className="btn" href="/manufacturing/products/new">
-          Buat Produk
-        </a>
-      </p>
-      <table className="table-slate">
-        <thead>
-          <tr>
-            <th>Kode</th>
-            <th>Nama</th>
-            <th>Harga Produksi</th>
-            <th>Biaya Produksi</th>
-            <th>Stok</th>
-            <th>Aksi</th>
-          </tr>
-        </thead>
-        <tbody>
-          {items.map((p) => {
-            const { value, style } = stokStyle(stokMap[p.id]);
-            return (
-              <tr key={p.id}>
-                <td>{shortId('PRD', p.id)}</td>
-                <td>{p.nama}</td>
-                <td>{(p.harga_produksi || 0).toLocaleString('id-ID')}</td>
-                <td>{(bomMap[p.id] || 0).toLocaleString('id-ID')}</td>
-                <td style={style}>{value}</td>
-                <td>
-                  <div className="action-buttons">
-                      <a href={`/manufacturing/products/${p.id}`}>Lihat / Edit</a>
-                  </div>
-                </td>
-              </tr>
-            );
-          })}
+    <div className="space-y-4">
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-lg font-semibold">Produk</h1>
+          <p className="text-sm text-muted-foreground">Kelola produk kerajinan kayu beserta stoknya.</p>
+        </div>
+        <Button asChild>
+          <a href="/manufacturing/products/new">
+            <Plus />
+            Buat Produk
+          </a>
+        </Button>
+      </div>
+      <Card>
+        <CardContent className="p-0">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Kode</TableHead>
+                <TableHead>Nama</TableHead>
+                <TableHead className="text-right">Harga Produksi</TableHead>
+                <TableHead className="text-right">Biaya Produksi</TableHead>
+                <TableHead className="text-right">Stok</TableHead>
+                <TableHead className="w-28">Aksi</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {items.map((p) => (
+                <TableRow key={p.id}>
+                  <TableCell className="font-mono text-xs">{shortId('PRD', p.id)}</TableCell>
+                  <TableCell className="font-medium">{p.nama}</TableCell>
+                  <TableCell className="text-right tabular-nums">
+                    {(p.harga_produksi || 0).toLocaleString('id-ID')}
+                  </TableCell>
+                  <TableCell className="text-right tabular-nums">
+                    {(bomMap[p.id] || 0).toLocaleString('id-ID')}
+                  </TableCell>
+                  <TableCell className={`text-right tabular-nums ${stokClass(stokMap[p.id])}`}>
+                    {stokMap[p.id] ?? 0}
+                  </TableCell>
+                  <TableCell>
+                    <Button variant="ghost" size="sm" asChild>
+                      <a href={`/manufacturing/products/${p.id}`}>Lihat</a>
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
           {items.length === 0 && (
-            <tr>
-              <td colSpan={6}>
-                <div style={{ textAlign: 'center', padding: '48px 24px', color: '#94a3b8' }}>
-                  <div style={{ fontSize: 32, marginBottom: 8 }}>📦</div>
-                  <p style={{ fontWeight: 600, color: '#64748b', marginBottom: 4 }}>
-                    Belum ada produk
-                  </p>
-                  <p style={{ fontSize: 14 }}>Klik "Buat Produk" untuk menambahkan produk pertama.</p>
-                </div>
-              </td>
-            </tr>
+            <EmptyState
+              icon={Package}
+              title="Belum ada produk"
+              description='Klik "Buat Produk" untuk menambahkan produk pertama.'
+            />
           )}
-        </tbody>
-      </table>
+        </CardContent>
+      </Card>
       <Pagination page={safePage} pageSize={PAGE_SIZE} count={count} basePath="/manufacturing/products" />
     </div>
   );

@@ -1,6 +1,11 @@
+import { Landmark } from 'lucide-react';
 import { createClient } from '../../../../lib/supabase/server';
 import { getVendorBillsPage, PAGE_SIZE } from '../../../../lib/services/accounting';
 import { formatRupiah } from '../../../../lib/utils/format';
+import { Card, CardContent } from '@/components/ui/card';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow, TableFooter } from '@/components/ui/table';
+import EmptyState from '@/components/ui/EmptyState';
+import StatusBadge from '@/components/ui/StatusBadge';
 import Pagination from '../../../../components/ui/Pagination';
 
 export const dynamic = 'force-dynamic';
@@ -12,45 +17,57 @@ export default async function VendorBillsPage({ searchParams }) {
   const pageTotal = items.reduce((s, b) => s + parseFloat(b.jumlah_pembayaran || 0), 0);
 
   return (
-    <div>
-      <h2>Accounting — Vendor Bills</h2>
-      {items.length === 0 ? (
-        <p>Tidak ada data vendor bill.</p>
-      ) : (
-        <table className="table-slate">
-          <thead>
-            <tr>
-              <th>Nomor Bill</th>
-              <th>Referensi</th>
-              <th>Vendor</th>
-              <th>Jumlah Pembayaran</th>
-              <th>Tanggal Pembayaran</th>
-              <th>Status Bill</th>
-            </tr>
-          </thead>
-          <tbody>
-            {items.map((bill, index) => (
-              <tr key={bill.id}>
-                <td>BILL-{String((safePage - 1) * PAGE_SIZE + index + 1).padStart(3, '0')}</td>
-                <td>{bill.bills?.referensi_vendor || '-'}</td>
-                <td>{bill.vendor_nama}</td>
-                <td>{formatRupiah(bill.jumlah_pembayaran)}</td>
-                <td>{bill.payment_date}</td>
-                <td>{bill.bills?.status || '-'}</td>
-              </tr>
-            ))}
-          </tbody>
-          <tfoot>
-            <tr>
-              <td colSpan={3} style={{ textAlign: 'right', fontWeight: 'bold' }}>
-                Total halaman ini
-              </td>
-              <td style={{ fontWeight: 'bold' }}>{formatRupiah(pageTotal)}</td>
-              <td colSpan={2} />
-            </tr>
-          </tfoot>
-        </table>
-      )}
+    <div className="space-y-4">
+      <div>
+        <h1 className="text-lg font-semibold">Vendor Bills</h1>
+        <p className="text-sm text-muted-foreground">Ringkasan tagihan vendor yang sudah dibayar.</p>
+      </div>
+      <Card>
+        <CardContent className="p-0">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Nomor Bill</TableHead>
+                <TableHead>Referensi</TableHead>
+                <TableHead>Vendor</TableHead>
+                <TableHead className="text-right">Jumlah Pembayaran</TableHead>
+                <TableHead>Tanggal Pembayaran</TableHead>
+                <TableHead>Status Bill</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {items.map((bill, index) => (
+                <TableRow key={bill.id}>
+                  <TableCell className="font-mono text-xs">
+                    BILL-{String((safePage - 1) * PAGE_SIZE + index + 1).padStart(3, '0')}
+                  </TableCell>
+                  <TableCell className="font-medium">{bill.bills?.referensi_vendor || '-'}</TableCell>
+                  <TableCell>{bill.vendor_nama}</TableCell>
+                  <TableCell className="text-right tabular-nums">{formatRupiah(bill.jumlah_pembayaran)}</TableCell>
+                  <TableCell className="text-muted-foreground">{bill.payment_date}</TableCell>
+                  <TableCell>
+                    <StatusBadge status={bill.bills?.status} />
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+            {items.length > 0 && (
+              <TableFooter>
+                <TableRow>
+                  <TableCell colSpan={3} className="text-right font-semibold">
+                    Total halaman ini
+                  </TableCell>
+                  <TableCell className="text-right font-semibold tabular-nums">{formatRupiah(pageTotal)}</TableCell>
+                  <TableCell colSpan={2} />
+                </TableRow>
+              </TableFooter>
+            )}
+          </Table>
+          {items.length === 0 && (
+            <EmptyState icon={Landmark} title="Tidak ada data vendor bill." />
+          )}
+        </CardContent>
+      </Card>
       <Pagination page={safePage} pageSize={PAGE_SIZE} count={count} basePath="/accounting/vendor-bills" />
     </div>
   );

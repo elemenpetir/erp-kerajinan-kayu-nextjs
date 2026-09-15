@@ -1,6 +1,12 @@
+import { ShoppingBag } from 'lucide-react';
 import { createClient } from '../../../../lib/supabase/server';
 import { getSalesOrdersPage, PAGE_SIZE } from '../../../../lib/services/sales';
 import { shortId } from '../../../../lib/utils/format';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import EmptyState from '@/components/ui/EmptyState';
+import StatusBadge from '@/components/ui/StatusBadge';
 import Pagination from '../../../../components/ui/Pagination';
 import ActionButton from '../../../../components/ui/ActionButton';
 import { createInvoice } from './actions';
@@ -13,58 +19,65 @@ export default async function SalesOrdersPage({ searchParams }) {
   const { items, count, page: safePage } = await getSalesOrdersPage(supabase, { page });
 
   return (
-    <div>
-      <h2>Sales Orders</h2>
-      <table className="table-slate">
-        <thead>
-          <tr>
-            <th>Kode</th>
-            <th>Customer</th>
-            <th>Payment Terms</th>
-            <th>Total</th>
-            <th>Status</th>
-            <th>Aksi</th>
-          </tr>
-        </thead>
-        <tbody>
-          {items.map((o) => (
-            <tr key={o.id}>
-              <td>{shortId('SO', o.id)}</td>
-              <td>{o.customer_snapshot?.nama || '-'}</td>
-              <td>{o.payment_terms || '-'}</td>
-              <td>Rp {Number(o.total_biaya || 0).toLocaleString('id-ID')}</td>
-              <td>{o.status}</td>
-              <td>
-                <div className="action-buttons">
-                  <a href={`/sales/sales-orders/${o.id}`}>Lihat</a>
-                  {o.status === 'To Invoice' && (
-                    <ActionButton
-                      run={createInvoice.bind(null, o.id)}
-                      confirmText="Buat invoice untuk Sales Order ini?"
-                      successText="Invoice berhasil dibuat."
-                      label="Buat Invoice"
-                      className="btn-danger"
-                    />
-                  )}
-                </div>
-              </td>
-            </tr>
-          ))}
+    <div className="space-y-4">
+      <div>
+        <h1 className="text-lg font-semibold">Sales Orders</h1>
+        <p className="text-sm text-muted-foreground">Terbentuk dari quotation yang dikonfirmasi.</p>
+      </div>
+      <Card>
+        <CardContent className="p-0">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Kode</TableHead>
+                <TableHead>Customer</TableHead>
+                <TableHead>Payment Terms</TableHead>
+                <TableHead className="text-right">Total</TableHead>
+                <TableHead>Status</TableHead>
+                <TableHead className="w-44">Aksi</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {items.map((o) => (
+                <TableRow key={o.id}>
+                  <TableCell className="font-mono text-xs">{shortId('SO', o.id)}</TableCell>
+                  <TableCell className="font-medium">{o.customer_snapshot?.nama || '-'}</TableCell>
+                  <TableCell className="text-muted-foreground">{o.payment_terms || '-'}</TableCell>
+                  <TableCell className="text-right tabular-nums">
+                    Rp {Number(o.total_biaya || 0).toLocaleString('id-ID')}
+                  </TableCell>
+                  <TableCell>
+                    <StatusBadge status={o.status} />
+                  </TableCell>
+                  <TableCell>
+                    <div className="flex gap-1">
+                      <Button variant="ghost" size="sm" asChild>
+                        <a href={`/sales/sales-orders/${o.id}`}>Lihat</a>
+                      </Button>
+                      {o.status === 'To Invoice' && (
+                        <ActionButton
+                          run={createInvoice.bind(null, o.id)}
+                          confirmTitle="Buat invoice?"
+                          confirmText="Buat invoice untuk Sales Order ini?"
+                          successText="Invoice berhasil dibuat."
+                          label="Buat Invoice"
+                        />
+                      )}
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
           {items.length === 0 && (
-            <tr>
-              <td colSpan={6}>
-                <div style={{ textAlign: 'center', padding: '48px 24px', color: '#94a3b8' }}>
-                  <div style={{ fontSize: 32, marginBottom: 8 }}>🛒</div>
-                  <p style={{ fontWeight: 600, color: '#64748b', marginBottom: 4 }}>
-                    Belum ada sales order
-                  </p>
-                  <p style={{ fontSize: 14 }}>Sales order akan muncul setelah quotation dikonfirmasi.</p>
-                </div>
-              </td>
-            </tr>
+            <EmptyState
+              icon={ShoppingBag}
+              title="Belum ada sales order"
+              description="Sales order akan muncul setelah quotation dikonfirmasi."
+            />
           )}
-        </tbody>
-      </table>
+        </CardContent>
+      </Card>
       <Pagination page={safePage} pageSize={PAGE_SIZE} count={count} basePath="/sales/sales-orders" />
     </div>
   );
