@@ -129,7 +129,7 @@ export default function Sidebar({ open, onClose }) {
           </Button>
         </div>
 
-        <nav className="flex-1 space-y-1 overflow-y-auto p-3 sidebar-scroll">
+        <nav className="flex-1 space-y-2 overflow-y-auto p-3 sidebar-scroll">
           {navSections.map((section) => {
             const sectionActive = section.items.some((item) => item.href === activeHref);
             const Icon = section.icon;
@@ -140,7 +140,7 @@ export default function Sidebar({ open, onClose }) {
                   onClick={() => toggleSection(section.title)}
                   aria-expanded={openSections[section.title]}
                   className={cn(
-                    "flex w-full items-center gap-2 rounded-md px-2 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground",
+                    "flex w-full items-center gap-2 rounded-md px-3 py-2.5 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground",
                     sectionActive ? "text-foreground" : "text-muted-foreground",
                   )}
                 >
@@ -151,7 +151,7 @@ export default function Sidebar({ open, onClose }) {
                   />
                 </button>
                 {openSections[section.title] && (
-                  <ul className="mb-1 ml-4 space-y-0.5 border-l pl-2">
+                  <ul className="mb-1 ml-5 mt-1 space-y-0.5 border-l pl-3">
                     {section.items.map((item) => {
                       const active = item.href === activeHref;
                       return (
@@ -161,7 +161,7 @@ export default function Sidebar({ open, onClose }) {
                             aria-current={active ? "page" : undefined}
                             onClick={onClose}
                             className={cn(
-                              "block rounded-md px-2 py-1.5 text-sm transition-colors hover:bg-accent hover:text-accent-foreground",
+                              "block rounded-md px-3 py-2 text-sm transition-colors hover:bg-accent hover:text-accent-foreground",
                               active ? "bg-accent font-medium text-accent-foreground" : "text-muted-foreground",
                             )}
                           >
