@@ -2,10 +2,22 @@
 
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
+import {
+  Calculator,
+  ChevronDown,
+  Factory,
+  Handshake,
+  ShoppingCart,
+  Users,
+  X,
+} from "lucide-react";
+import { cn } from "@/lib/utils/cn";
+import { Button } from "@/components/ui/button";
 
 const navSections = [
   {
     title: "Manufaktur",
+    icon: Factory,
     items: [
       { label: "Produk", href: "/manufacturing/products" },
       { label: "Bahan", href: "/manufacturing/materials" },
@@ -16,6 +28,7 @@ const navSections = [
   },
   {
     title: "Purchase",
+    icon: ShoppingCart,
     items: [
       { label: "Vendor", href: "/purchase/vendors" },
       { label: "Bills", href: "/purchase/bills" },
@@ -23,6 +36,7 @@ const navSections = [
   },
   {
     title: "Sales",
+    icon: Handshake,
     items: [
       { label: "Customer", href: "/sales/customers" },
       { label: "Quotation", href: "/sales/quotations" },
@@ -31,6 +45,7 @@ const navSections = [
   },
   {
     title: "Accounting",
+    icon: Calculator,
     items: [
       { label: "Customer Invoice", href: "/accounting/customer-invoices" },
       { label: "Vendor Bill", href: "/accounting/vendor-bills" },
@@ -38,6 +53,7 @@ const navSections = [
   },
   {
     title: "Employees",
+    icon: Users,
     items: [
       { label: "Departemen", href: "/hr/departments" },
       { label: "Karyawan", href: "/hr/employees" },
@@ -51,7 +67,6 @@ function isActive(href, pathname) {
 }
 
 // Jika beberapa href cocok (prefix), hanya yang terpanjang yang aktif.
-// Cth: /manufaktur/bahan cocok /manufaktur + /manufaktur/bahan → menang yang kedua.
 function findActiveHref(pathname) {
   if (!pathname) return null;
   let best = null;
@@ -67,93 +82,105 @@ function findActiveHref(pathname) {
 
 export default function Sidebar({ open, onClose }) {
   const pathname = usePathname();
+  const activeHref = findActiveHref(pathname);
   const [openSections, setOpenSections] = useState(
-    navSections.reduce(
-      (acc, section) => ({ ...acc, [section.title]: false }),
-      {},
-    ),
+    navSections.reduce((acc, section) => ({ ...acc, [section.title]: false }), {}),
   );
 
   // Auto-expand section berisi halaman aktif (toggle manual tetap bisa)
   useEffect(() => {
-    const activeHref = findActiveHref(pathname);
     if (!activeHref) return;
-    const active = navSections.find((s) =>
-      s.items.some((item) => item.href === activeHref),
-    );
+    const active = navSections.find((s) => s.items.some((item) => item.href === activeHref));
     if (active) {
-      setOpenSections((prev) =>
-        prev[active.title] ? prev : { ...prev, [active.title]: true },
-      );
+      setOpenSections((prev) => (prev[active.title] ? prev : { ...prev, [active.title]: true }));
     }
-  }, [pathname]);
+  }, [pathname]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const toggleSection = (title) => {
     setOpenSections((prev) => ({ ...prev, [title]: !prev[title] }));
   };
 
-  const activeHref = findActiveHref(pathname);
-
   return (
-    <aside
-      className={`fixed inset-y-0 left-0 z-40 w-72 overflow-y-auto border-r border-slate-200 bg-white p-4 shadow-lg transition-transform duration-200 lg:static lg:translate-x-0 ${open ? "translate-x-0" : "-translate-x-full"}`}
-    >
-      <div className="flex items-center justify-between pb-4 mb-4 border-b border-slate-200">
-        <div>
-          <p className="text-sm uppercase tracking-[0.24em] text-slate-500">
-            Navigasi
-          </p>
-          <h2 className="text-xl font-semibold text-slate-900">ERP Menu</h2>
-        </div>
-        <button
-          type="button"
-          className="rounded-md bg-slate-900 px-3 py-2 text-white transition hover:bg-slate-700 lg:hidden"
+    <>
+      {open && (
+        <div
+          className="fixed inset-0 z-30 bg-black/40 lg:hidden"
           onClick={onClose}
-        >
-          Tutup
-        </button>
-      </div>
+          aria-hidden="true"
+        />
+      )}
+      <aside
+        className={cn(
+          "fixed inset-y-0 left-0 z-40 flex w-72 flex-col border-r bg-card transition-transform duration-200 lg:static lg:translate-x-0",
+          open ? "translate-x-0" : "-translate-x-full",
+        )}
+      >
+        <div className="flex h-14 items-center justify-between gap-2 border-b px-4">
+          <a href="/" className="flex min-w-0 items-center gap-2">
+            <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-primary text-primary-foreground">
+              <Factory className="h-4 w-4" />
+            </span>
+            <span className="truncate text-sm font-semibold tracking-wide">
+              ERP Kerajinan Kayu
+            </span>
+          </a>
+          <Button variant="ghost" size="icon" className="lg:hidden" onClick={onClose} aria-label="Tutup navigasi">
+            <X />
+          </Button>
+        </div>
 
-      <nav className="space-y-4 sidebar-scroll">
-        {navSections.map((section) => {
-          const sectionActive = section.items.some((item) => item.href === activeHref);
-          return (
-          <div
-            key={section.title}
-            className={`rounded-2xl border bg-white p-3 shadow-sm ${sectionActive ? "border-slate-400" : "border-slate-200"}`}
-          >
-            <button
-              type="button"
-              className={`flex w-full items-center justify-between rounded-xl border px-4 py-3 text-left text-sm transition hover:bg-slate-50 ${sectionActive ? "border-slate-300 bg-slate-100 font-bold text-slate-900" : "border-slate-200 bg-white font-semibold text-slate-900"}`}
-              onClick={() => toggleSection(section.title)}
-            >
-              <span>{section.title}</span>
-              <span className="ml-2 text-slate-500">
-                {openSections[section.title] ? "−" : "+"}
-              </span>
-            </button>
-            {openSections[section.title] && (
-              <ul className="mt-3 space-y-2 text-sm text-slate-700">
-                {section.items.map((item) => {
-                  const active = item.href === activeHref;
-                  return (
-                  <li key={item.href}>
-                    <a
-                      href={item.href}
-                      aria-current={active ? "page" : undefined}
-                      className={`block rounded-xl px-3 py-2 transition ${active ? "bg-slate-200 font-semibold text-slate-900" : "hover:bg-slate-100 hover:text-slate-900"}`}
-                    >
-                      {item.label}
-                    </a>
-                  </li>
-                  );
-                })}
-              </ul>
-            )}
-          </div>
-          );
-        })}
-      </nav>
-    </aside>
+        <nav className="flex-1 space-y-1 overflow-y-auto p-3 sidebar-scroll">
+          {navSections.map((section) => {
+            const sectionActive = section.items.some((item) => item.href === activeHref);
+            const Icon = section.icon;
+            return (
+              <div key={section.title}>
+                <button
+                  type="button"
+                  onClick={() => toggleSection(section.title)}
+                  aria-expanded={openSections[section.title]}
+                  className={cn(
+                    "flex w-full items-center gap-2 rounded-md px-2 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground",
+                    sectionActive ? "text-foreground" : "text-muted-foreground",
+                  )}
+                >
+                  <Icon className="h-4 w-4 shrink-0" />
+                  <span className="flex-1 text-left">{section.title}</span>
+                  <ChevronDown
+                    className={cn("h-4 w-4 shrink-0 transition-transform", openSections[section.title] && "rotate-180")}
+                  />
+                </button>
+                {openSections[section.title] && (
+                  <ul className="mb-1 ml-4 space-y-0.5 border-l pl-2">
+                    {section.items.map((item) => {
+                      const active = item.href === activeHref;
+                      return (
+                        <li key={item.href}>
+                          <a
+                            href={item.href}
+                            aria-current={active ? "page" : undefined}
+                            onClick={onClose}
+                            className={cn(
+                              "block rounded-md px-2 py-1.5 text-sm transition-colors hover:bg-accent hover:text-accent-foreground",
+                              active ? "bg-accent font-medium text-accent-foreground" : "text-muted-foreground",
+                            )}
+                          >
+                            {item.label}
+                          </a>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                )}
+              </div>
+            );
+          })}
+        </nav>
+
+        <div className="border-t p-3 text-xs text-muted-foreground">
+          Next.js + Supabase
+        </div>
+      </aside>
+    </>
   );
 }

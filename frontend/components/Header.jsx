@@ -1,43 +1,117 @@
 'use client'
 
-import { useRouter } from 'next/navigation';
-import { supabase } from '../lib/supabase/client';
+import { useEffect, useState } from 'react'
+import { usePathname, useRouter } from 'next/navigation'
+import { LogOut, Menu } from 'lucide-react'
+import { supabase } from '../lib/supabase/client'
+import { Button } from './ui/button'
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from './ui/breadcrumb'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from './ui/dropdown-menu'
+
+const SEGMENT_LABELS = {
+  manufacturing: 'Manufaktur',
+  products: 'Produk',
+  materials: 'Bahan',
+  categories: 'Kategori',
+  boms: 'BoM',
+  'production-orders': 'Order Produksi',
+  purchase: 'Purchase',
+  vendors: 'Vendor',
+  bills: 'Bills',
+  sales: 'Sales',
+  customers: 'Customer',
+  quotations: 'Quotation',
+  'sales-orders': 'Sales Orders',
+  accounting: 'Accounting',
+  'customer-invoices': 'Customer Invoice',
+  'vendor-bills': 'Vendor Bill',
+  hr: 'HR',
+  departments: 'Departemen',
+  employees: 'Karyawan',
+  new: 'Baru',
+}
+
+function crumbs(pathname) {
+  const segs = (pathname || '/').split('/').filter(Boolean)
+  return segs.map((seg, i) => {
+    const href = '/' + segs.slice(0, i + 1).join('/')
+    const isId = /^[0-9a-fA-F-]{8,}$/.test(seg)
+    return { href, label: isId ? 'Detail' : SEGMENT_LABELS[seg] || seg, last: i === segs.length - 1 }
+  })
+}
 
 export default function Header({ onMobileToggle }) {
-  const router = useRouter();
+  const pathname = usePathname()
+  const router = useRouter()
+  const [email, setEmail] = useState('')
+
+  useEffect(() => {
+    supabase.auth.getUser().then(({ data }) => setEmail(data.user?.email || ''))
+  }, [pathname])
 
   async function handleLogout() {
-    await supabase.auth.signOut();
-    router.push('/login');
-    router.refresh();
+    await supabase.auth.signOut()
+    router.push('/login')
+    router.refresh()
   }
 
+  const items = crumbs(pathname)
+
   return (
-    <header className="flex w-full items-center justify-between border-b border-slate-200 bg-slate-950 px-4 py-4 text-white sm:px-6">
-      <div className="text-lg font-semibold uppercase tracking-[0.24em] text-slate-100">
-        ERP Kerajinan Kayu
+    <header className="sticky top-0 z-30 flex h-14 w-full items-center justify-between gap-2 border-b bg-background/95 px-4 backdrop-blur sm:px-6">
+      <div className="flex min-w-0 items-center gap-2">
+        <Button variant="ghost" size="icon" className="lg:hidden" onClick={onMobileToggle} aria-label="Buka navigasi">
+          <Menu />
+        </Button>
+        <Breadcrumb className="hidden sm:block">
+          <BreadcrumbList>
+            {items.map((c) => (
+              <span key={c.href} className="inline-flex items-center gap-1.5">
+                <BreadcrumbItem>
+                  {c.last ? (
+                    <BreadcrumbPage>{c.label}</BreadcrumbPage>
+                  ) : (
+                    <BreadcrumbLink href={c.href}>{c.label}</BreadcrumbLink>
+                  )}
+                </BreadcrumbItem>
+                {!c.last && <BreadcrumbSeparator />}
+              </span>
+            ))}
+          </BreadcrumbList>
+        </Breadcrumb>
       </div>
-      <div className="flex items-center gap-2">
-        <button
-          type="button"
-          onClick={handleLogout}
-          className="inline-flex h-11 items-center rounded-lg border border-slate-700 bg-slate-900 px-4 text-sm text-slate-100 transition hover:bg-slate-800 mb-0"
-        >
-          Keluar
-        </button>
-        <button
-          type="button"
-          onClick={onMobileToggle}
-          className="inline-flex h-11 w-11 items-center justify-center rounded-lg border border-slate-700 bg-slate-900 text-slate-100 transition hover:bg-slate-800 lg:hidden"
-          aria-label="Buka navigasi"
-        >
-        <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M4 6h16" />
-          <path d="M4 12h16" />
-          <path d="M4 18h16" />
-        </svg>
-      </button>
-      </div>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant="outline" size="sm" className="min-w-0">
+            <span className="flex h-5 w-5 items-center justify-center rounded-full bg-primary text-[11px] font-semibold text-primary-foreground">
+              {(email || '?').charAt(0).toUpperCase()}
+            </span>
+            <span className="hidden max-w-40 truncate md:inline">{email || 'Akun'}</span>
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end">
+          <DropdownMenuLabel className="max-w-56 truncate">{email || 'Akun'}</DropdownMenuLabel>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem onClick={handleLogout}>
+            <LogOut />
+            Keluar
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
     </header>
   )
 }
