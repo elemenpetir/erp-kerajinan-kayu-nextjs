@@ -29,7 +29,7 @@ export default function CreateBahan() {
       },
     ]);
     if (error) {
-      setMessage("Error: " + error.message);
+      setMessage(error.code === "23505" ? "Referensi sudah dipakai, gunakan yang lain." : "Error: " + error.message);
       setLoading(false);
     } else {
       router.push("/manufacturing/materials");

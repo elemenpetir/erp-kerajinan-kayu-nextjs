@@ -1,7 +1,7 @@
 import { Handshake, Plus } from 'lucide-react';
 import { createClient } from '../../../../lib/supabase/server';
 import { getCustomersPage, PAGE_SIZE } from '../../../../lib/services/sales';
-import { shortId } from '../../../../lib/utils/format';
+import { docCode, shortId } from '../../../../lib/utils/format';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
@@ -47,7 +47,7 @@ export default async function CustomersList({ searchParams }) {
             <TableBody>
               {items.map((c) => (
                 <TableRow key={c.id}>
-                  <TableCell className="font-mono text-xs">{shortId('CUST', c.id)}</TableCell>
+                  <TableCell className="font-mono text-xs">{docCode('CUST', c.kode, c.id)}</TableCell>
                   <TableCell className="font-medium">{c.nama}</TableCell>
                   <TableCell>{c.nama_perusahaan || '-'}</TableCell>
                   <TableCell className="tabular-nums">{c.telp || '-'}</TableCell>

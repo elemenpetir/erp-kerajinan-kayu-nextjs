@@ -6,7 +6,7 @@ export async function getCustomersPage(supabase, { page = 1, pageSize = PAGE_SIZ
   const { safePage, from, to } = rangeOf(page, pageSize);
   const { data, count, error } = await supabase
     .from('customer_individual')
-    .select('id,nama,nama_perusahaan,telp,email,created_at', { count: 'exact' })
+    .select('id,kode,nama,nama_perusahaan,telp,email,created_at', { count: 'exact' })
     .order('created_at', { ascending: false })
     .range(from, to);
   if (error) throw new Error(error.message);
@@ -17,7 +17,7 @@ export async function getQuotationsPage(supabase, { page = 1, pageSize = PAGE_SI
   const { safePage, from, to } = rangeOf(page, pageSize);
   const { data, count, error } = await supabase
     .from('quotation')
-    .select('id,customer_snapshot,payment_terms,total_biaya,status,created_at', { count: 'exact' })
+    .select('id,kode,customer_snapshot,payment_terms,total_biaya,status,created_at', { count: 'exact' })
     .order('created_at', { ascending: false })
     .range(from, to);
   if (error) throw new Error(error.message);
@@ -28,7 +28,7 @@ export async function getSalesOrdersPage(supabase, { page = 1, pageSize = PAGE_S
   const { safePage, from, to } = rangeOf(page, pageSize);
   const { data, count, error } = await supabase
     .from('sales_order')
-    .select('id,customer_snapshot,payment_terms,total_biaya,status,created_at', { count: 'exact' })
+    .select('id,kode,customer_snapshot,payment_terms,total_biaya,status,created_at', { count: 'exact' })
     .order('created_at', { ascending: false })
     .range(from, to);
   if (error) throw new Error(error.message);

@@ -62,7 +62,7 @@ export default function BahanDetail({ params }) {
       })
       .eq('id', id)
     if (error) {
-      toast.error('Gagal update: ' + error.message)
+      toast.error(error.code === '23505' ? 'Referensi sudah dipakai, gunakan yang lain.' : 'Gagal update: ' + error.message)
       return
     }
     setEditing(false)

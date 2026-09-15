@@ -1,7 +1,7 @@
 import { Factory, Plus } from 'lucide-react';
 import { createClient } from '../../../../lib/supabase/server';
 import { getProductionOrdersPage, PAGE_SIZE } from '../../../../lib/services/manufacturing';
-import { shortId } from '../../../../lib/utils/format';
+import { docCode, shortId } from '../../../../lib/utils/format';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
@@ -48,7 +48,7 @@ export default async function ProductionOrdersPage({ searchParams }) {
             <TableBody>
               {items.map((order) => (
                 <TableRow key={order.id}>
-                  <TableCell className="font-mono text-xs">{shortId('ORP', order.id)}</TableCell>
+                  <TableCell className="font-mono text-xs">{docCode('ORP', order.kode, order.id)}</TableCell>
                   <TableCell className="font-medium">{order.produk?.nama || '-'}</TableCell>
                   <TableCell className="text-right tabular-nums">{order.jumlah_produk}</TableCell>
                   <TableCell>

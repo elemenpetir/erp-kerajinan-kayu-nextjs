@@ -1,7 +1,7 @@
 import { Plus, Store } from 'lucide-react';
 import { createClient } from '../../../../lib/supabase/server';
 import { getVendorsPage, PAGE_SIZE } from '../../../../lib/services/purchase';
-import { shortId } from '../../../../lib/utils/format';
+import { docCode, shortId } from '../../../../lib/utils/format';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
@@ -47,7 +47,7 @@ export default async function VendorsList({ searchParams }) {
             <TableBody>
               {items.map((v) => (
                 <TableRow key={v.id}>
-                  <TableCell className="font-mono text-xs">{shortId('VND', v.id)}</TableCell>
+                  <TableCell className="font-mono text-xs">{docCode('VND', v.kode, v.id)}</TableCell>
                   <TableCell className="font-medium">{v.nama}</TableCell>
                   <TableCell>{v.nama_perusahaan || '-'}</TableCell>
                   <TableCell className="tabular-nums">{v.telp || '-'}</TableCell>

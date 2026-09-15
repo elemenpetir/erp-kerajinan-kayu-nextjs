@@ -1,7 +1,7 @@
 import { Building2, Plus } from 'lucide-react';
 import { createClient } from '../../../../lib/supabase/server';
 import { getDepartmentsPage, getEmployeeOptions, PAGE_SIZE } from '../../../../lib/services/hr';
-import { shortId } from '../../../../lib/utils/format';
+import { docCode, shortId } from '../../../../lib/utils/format';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
@@ -44,7 +44,7 @@ export default async function DepartmentsPage({ searchParams }) {
             <TableBody>
               {items.map((d) => (
                 <TableRow key={d.id}>
-                  <TableCell className="font-mono text-xs">{shortId('DEPT', d.id)}</TableCell>
+                  <TableCell className="font-mono text-xs">{docCode('DEPT', d.kode, d.id)}</TableCell>
                   <TableCell className="font-medium">{d.nama_departemen}</TableCell>
                   <TableCell>{d.manager || '-'}</TableCell>
                   <TableCell>

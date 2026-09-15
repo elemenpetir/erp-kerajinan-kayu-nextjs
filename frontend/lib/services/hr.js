@@ -7,7 +7,7 @@ export async function getDepartmentsPage(supabase, { page = 1, pageSize = PAGE_S
 
   const { data, count, error } = await supabase
     .from('departemen')
-    .select('id,nama_departemen,manager,created_at', { count: 'exact' })
+    .select('id,kode,nama_departemen,manager,created_at', { count: 'exact' })
     .order('created_at', { ascending: false })
     .range(from, to);
 
@@ -31,7 +31,7 @@ export async function getEmployeesPage(supabase, { page = 1, pageSize = PAGE_SIZ
 
   const { data, count, error } = await supabase
     .from('karyawan')
-    .select('id,nama,posisi,telp,email,created_at', { count: 'exact' })
+    .select('id,kode,nama,posisi,telp,email,created_at', { count: 'exact' })
     .order('created_at', { ascending: false })
     .range(from, to);
   if (error) throw new Error(error.message);

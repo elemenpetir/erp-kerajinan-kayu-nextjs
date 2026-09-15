@@ -1,7 +1,7 @@
 import { Plus, Receipt } from 'lucide-react';
 import { createClient } from '../../../../lib/supabase/server';
 import { getBillsPage, PAGE_SIZE } from '../../../../lib/services/purchase';
-import { shortId } from '../../../../lib/utils/format';
+import { docCode, shortId } from '../../../../lib/utils/format';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
@@ -48,7 +48,7 @@ export default async function BillsList({ searchParams }) {
             <TableBody>
               {items.map((b) => (
                 <TableRow key={b.id}>
-                  <TableCell className="font-mono text-xs">{shortId('BILL', b.id)}</TableCell>
+                  <TableCell className="font-mono text-xs">{docCode('BILL', b.kode, b.id)}</TableCell>
                   <TableCell className="font-medium">{b.referensi_vendor || '-'}</TableCell>
                   <TableCell className="text-muted-foreground">{b.deadline_order || '-'}</TableCell>
                   <TableCell className="text-right tabular-nums">

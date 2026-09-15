@@ -54,3 +54,25 @@ BEGIN
     END IF;
   END LOOP;
 END $$;
+
+-- 3. Helper for the seed script: realign sequences after wipe & reseed
+-- (deletes don't move sequences, so reseed would otherwise leave gaps).
+CREATE OR REPLACE FUNCTION reset_kode_sequences()
+RETURNS void AS $$
+DECLARE
+  t text;
+  seq text;
+  m integer;
+BEGIN
+  FOREACH t IN ARRAY ARRAY[
+    'bahan','produk','bills','bom','customer_company','customer_individual',
+    'departemen','karyawan','order_produksi','quotation',
+    'sales_order','vendor_company','vendor_individual'
+  ]
+  LOOP
+    seq := t || '_kode_seq';
+    EXECUTE format('SELECT COALESCE(MAX(kode), 0) FROM %I', t) INTO m;
+    PERFORM setval(seq, GREATEST(m + 1, 1), false);
+  END LOOP;
+END;
+$$ LANGUAGE plpgsql;

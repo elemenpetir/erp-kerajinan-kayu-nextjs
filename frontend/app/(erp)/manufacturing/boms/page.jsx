@@ -1,7 +1,7 @@
 import { ClipboardList, Plus } from 'lucide-react';
 import { createClient } from '../../../../lib/supabase/server';
 import { getBomsPage, PAGE_SIZE } from '../../../../lib/services/manufacturing';
-import { shortId } from '../../../../lib/utils/format';
+import { docCode, shortId } from '../../../../lib/utils/format';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
@@ -44,7 +44,7 @@ export default async function BomsPage({ searchParams }) {
             <TableBody>
               {items.map((b) => (
                 <TableRow key={b.id}>
-                  <TableCell className="font-mono text-xs">{shortId('BOM', b.id)}</TableCell>
+                  <TableCell className="font-mono text-xs">{docCode('BOM', b.kode, b.id)}</TableCell>
                   <TableCell className="font-medium">{b.produk?.nama || '-'}</TableCell>
                   <TableCell className="text-right tabular-nums">
                     {Number(b.total_biaya_produk || 0).toLocaleString('id-ID')}

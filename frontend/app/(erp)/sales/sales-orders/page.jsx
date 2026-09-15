@@ -1,7 +1,7 @@
 import { ShoppingBag } from 'lucide-react';
 import { createClient } from '../../../../lib/supabase/server';
 import { getSalesOrdersPage, PAGE_SIZE } from '../../../../lib/services/sales';
-import { shortId } from '../../../../lib/utils/format';
+import { docCode, shortId } from '../../../../lib/utils/format';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
@@ -40,7 +40,7 @@ export default async function SalesOrdersPage({ searchParams }) {
             <TableBody>
               {items.map((o) => (
                 <TableRow key={o.id}>
-                  <TableCell className="font-mono text-xs">{shortId('SO', o.id)}</TableCell>
+                  <TableCell className="font-mono text-xs">{docCode('SO', o.kode, o.id)}</TableCell>
                   <TableCell className="font-medium">{o.customer_snapshot?.nama || '-'}</TableCell>
                   <TableCell className="text-muted-foreground">{o.payment_terms || '-'}</TableCell>
                   <TableCell className="text-right tabular-nums">

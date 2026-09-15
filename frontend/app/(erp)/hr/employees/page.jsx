@@ -1,7 +1,7 @@
 import { Plus, UserRound } from 'lucide-react';
 import { createClient } from '../../../../lib/supabase/server';
 import { getEmployeesPage, PAGE_SIZE } from '../../../../lib/services/hr';
-import { shortId } from '../../../../lib/utils/format';
+import { docCode, shortId } from '../../../../lib/utils/format';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
@@ -45,7 +45,7 @@ export default async function EmployeesPage({ searchParams }) {
             <TableBody>
               {items.map((k) => (
                 <TableRow key={k.id}>
-                  <TableCell className="font-mono text-xs">{shortId('EMP', k.id)}</TableCell>
+                  <TableCell className="font-mono text-xs">{docCode('EMP', k.kode, k.id)}</TableCell>
                   <TableCell className="font-medium">{k.nama}</TableCell>
                   <TableCell>{k.posisi || '-'}</TableCell>
                   <TableCell className="tabular-nums">{k.telp || '-'}</TableCell>

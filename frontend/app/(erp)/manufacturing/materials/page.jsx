@@ -1,7 +1,7 @@
 import { Plus, TreePine } from 'lucide-react';
 import { createClient } from '../../../../lib/supabase/server';
 import { getMaterialsPage, getMaterialStockMap, PAGE_SIZE } from '../../../../lib/services/manufacturing';
-import { shortId } from '../../../../lib/utils/format';
+import { docCode, shortId } from '../../../../lib/utils/format';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
@@ -57,7 +57,7 @@ export default async function MaterialsPage({ searchParams }) {
             <TableBody>
               {items.map((b) => (
                 <TableRow key={b.id}>
-                  <TableCell className="font-mono text-xs">{shortId('BHN', b.id)}</TableCell>
+                  <TableCell className="font-mono text-xs">{docCode('BHN', b.kode, b.id)}</TableCell>
                   <TableCell className="font-medium">{b.nama}</TableCell>
                   <TableCell className="text-right tabular-nums">{(b.biaya || 0).toLocaleString('id-ID')}</TableCell>
                   <TableCell className="text-right tabular-nums">{(b.harga || 0).toLocaleString('id-ID')}</TableCell>

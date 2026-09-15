@@ -583,6 +583,12 @@ async function seed() {
     { kode: 12, departemen_id: depByName.HRD, nama: 'Yuni', posisi: 'Staff HRD', telp: '08130000012', email: 'yuni@example.com', manager: 'Yuni' }
   ]);
 
+  // Realign kode sequences after wipe & reseed (needs 007; skipped if missing)
+  {
+    const { error } = await supabase.rpc('reset_kode_sequences');
+    console.log(error ? `  reset sequences: skipped (${error.message})` : '  reset sequences: ok');
+  }
+
   // Ringkasan
   const summaryTables = [
     'kategori', 'bahan', 'produk', 'bom', 'order_produksi',

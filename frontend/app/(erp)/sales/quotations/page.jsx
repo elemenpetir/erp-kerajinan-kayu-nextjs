@@ -1,7 +1,7 @@
 import { FileText, Plus } from 'lucide-react';
 import { createClient } from '../../../../lib/supabase/server';
 import { getQuotationsPage, PAGE_SIZE } from '../../../../lib/services/sales';
-import { shortId } from '../../../../lib/utils/format';
+import { docCode, shortId } from '../../../../lib/utils/format';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
@@ -48,7 +48,7 @@ export default async function QuotationsPage({ searchParams }) {
             <TableBody>
               {items.map((q) => (
                 <TableRow key={q.id}>
-                  <TableCell className="font-mono text-xs">{shortId('QUO', q.id)}</TableCell>
+                  <TableCell className="font-mono text-xs">{docCode('QUO', q.kode, q.id)}</TableCell>
                   <TableCell className="font-medium">{q.customer_snapshot?.nama || '-'}</TableCell>
                   <TableCell className="text-muted-foreground">{q.payment_terms || '-'}</TableCell>
                   <TableCell className="text-right tabular-nums">
