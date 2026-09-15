@@ -136,7 +136,7 @@ export default function BahanDetail({ params }) {
               </div>
               <div className="flex gap-2">
                 <Button type="submit">Simpan</Button>
-                <Button type="button" variant="outline" onClick={() => setEditing(false)}>
+                <Button type="button" variant="outline" onClick={() => { setNama(item.nama || ""); setBiaya(item.biaya || ""); setHarga(item.harga || ""); setInternalReferensi(item.internal_referensi || ""); setEditing(false); }}>
                   Batal
                 </Button>
               </div>

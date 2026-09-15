@@ -140,7 +140,7 @@ export default function CustomerDetail({ params }) {
               </div>
               <div className="flex gap-2">
                 <Button type="submit">Simpan</Button>
-                <Button type="button" variant="outline" onClick={() => setEditing(false)}>
+                <Button type="button" variant="outline" onClick={() => { setNama(item.nama || ""); setNamaPerusahaan(item.nama_perusahaan || ""); setAlamat(item.alamat || ""); setTelp(item.telp || ""); setEmail(item.email || ""); setEditing(false); }}>
                   Batal
                 </Button>
               </div>

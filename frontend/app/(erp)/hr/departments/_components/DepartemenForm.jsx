@@ -11,8 +11,23 @@ const selectClass =
   'flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring';
 
 export function CreateForm({ employees }) {
+  const [pending, start] = useTransition();
   return (
-    <form action={createDepartment} className="flex flex-wrap items-center gap-2">
+    <form
+      className="flex flex-wrap items-center gap-2"
+      onSubmit={(e) => {
+        e.preventDefault();
+        start(async () => {
+          try {
+            await createDepartment(new FormData(e.currentTarget));
+            e.currentTarget.reset();
+            toast.success("Departemen ditambahkan");
+          } catch (err) {
+            toast.error(err.message);
+          }
+        });
+      }}
+    >
       <Input name="nama_departemen" placeholder="Nama Departemen" required className="max-w-xs" />
       <select name="manager" className={`${selectClass} max-w-xs`} defaultValue="">
         <option value="">— Pilih Manager —</option>
@@ -22,7 +37,9 @@ export function CreateForm({ employees }) {
           </option>
         ))}
       </select>
-      <Button type="submit">Tambah</Button>
+      <Button type="submit" disabled={pending}>
+        {pending ? "Menyimpan..." : "Tambah"}
+      </Button>
     </form>
   );
 }
@@ -76,7 +93,7 @@ export function RowActions({ dept, employees }) {
       >
         Simpan
       </Button>
-      <Button variant="ghost" size="sm" onClick={() => setEditing(false)}>
+      <Button variant="ghost" size="sm" onClick={() => { setManager(dept.manager || ''); setEditing(false); }}>
         Batal
       </Button>
     </div>

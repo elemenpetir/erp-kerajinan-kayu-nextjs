@@ -49,6 +49,13 @@ export default function CreateBill() {
   }
 
   function handleItemChange(index, field, value) {
+    if ((field === "jumlah" || field === "harga_satuan")) {
+      const num = parseFloat(value);
+      if (value !== "" && (!Number.isFinite(num) || num < 0)) {
+        toast.error("Nilai harus angka ≥ 0.");
+        return;
+      }
+    }
     const updated = [...items];
     updated[index][field] = value;
 
@@ -81,6 +88,10 @@ export default function CreateBill() {
   async function handleSubmit(e) {
     e.preventDefault();
 
+    if (!vendorId) {
+      toast.error("Pilih vendor terlebih dahulu.");
+      return;
+    }
     const itemsToSave = items
       .filter((item) => item.bahan_id)
       .map((item) => ({
@@ -89,7 +100,8 @@ export default function CreateBill() {
         jumlah: parseFloat(item.jumlah),
         harga_satuan: parseFloat(item.harga_satuan),
         subtotal: item.subtotal,
-      }));
+      }))
+      .filter((item) => Number.isFinite(item.jumlah) && item.jumlah > 0);
 
     if (itemsToSave.length === 0) {
       toast.error("Tambahkan minimal satu bahan.");
@@ -140,7 +152,7 @@ export default function CreateBill() {
           <CardContent className="grid gap-4 pt-0 sm:grid-cols-2">
             <div className="grid gap-2">
               <Label htmlFor="vendor">Vendor</Label>
-              <select id="vendor" className={selectClass} value={vendorId} onChange={(e) => setVendorId(e.target.value)}>
+              <select id="vendor" className={selectClass} value={vendorId} onChange={(e) => setVendorId(e.target.value)} required>
                 <option value="">-- pilih --</option>
                 {vendors.map((v) => (
                   <option key={v.id} value={v.id}>

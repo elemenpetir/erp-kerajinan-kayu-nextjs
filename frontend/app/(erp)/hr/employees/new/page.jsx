@@ -28,8 +28,13 @@ export default function CreateKaryawan(){
 
   async function handleSubmit(e){
     e.preventDefault()
+    const cleanNama = nama.trim();
+    if (!cleanNama) {
+      toast.error('Nama wajib diisi.');
+      return;
+    }
     setSaving(true)
-    const { error } = await supabase.from('karyawan').insert([{ departemen_id: departemen || null, nama, posisi, telp, email }])
+    const { error } = await supabase.from('karyawan').insert([{ departemen_id: departemen || null, nama: cleanNama, posisi: posisi.trim(), telp: telp.trim(), email: email.trim() }])
     setSaving(false)
     if (error) toast.error('Gagal simpan: ' + error.message)
     else window.location.href = '/hr/employees'

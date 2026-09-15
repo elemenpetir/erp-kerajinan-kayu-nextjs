@@ -18,8 +18,13 @@ export default function CreateCustomer(){
 
   async function handleSubmit(e){
     e.preventDefault()
+    const cleanNama = nama.trim();
+    if (!cleanNama) {
+      toast.error('Nama wajib diisi.');
+      return;
+    }
     setSaving(true)
-    const { error } = await supabase.from('customer_individual').insert([{ nama, nama_perusahaan: perusahaan, alamat, telp, email }])
+    const { error } = await supabase.from('customer_individual').insert([{ nama: cleanNama, nama_perusahaan: perusahaan.trim(), alamat: alamat.trim(), telp: telp.trim(), email: email.trim() }])
     setSaving(false)
     if (error) toast.error('Gagal simpan: ' + error.message)
     else window.location.href = '/sales/customers'

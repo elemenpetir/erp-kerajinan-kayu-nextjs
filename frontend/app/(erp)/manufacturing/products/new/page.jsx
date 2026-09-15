@@ -17,10 +17,15 @@ export default function CreateProduk() {
 
   async function handleSubmit(e) {
     e.preventDefault();
+    const cleanNama = nama.trim();
+    if (!cleanNama) {
+      setMessage("Nama produk wajib diisi.");
+      return;
+    }
     setLoading(true);
     const { error } = await supabase.from("produk").insert([
       {
-        nama,
+        nama: cleanNama,
         harga_produksi: parseFloat(harga || 0),
         biaya_produksi: 0, // akan dihitung otomatis dari BOM
       },

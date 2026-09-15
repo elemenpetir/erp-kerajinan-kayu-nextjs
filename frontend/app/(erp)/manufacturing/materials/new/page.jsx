@@ -19,13 +19,18 @@ export default function CreateBahan() {
 
   async function handleSubmit(e) {
     e.preventDefault();
+    const cleanNama = nama.trim();
+    if (!cleanNama) {
+      setMessage("Nama bahan wajib diisi.");
+      return;
+    }
     setLoading(true);
     const { error } = await supabase.from("bahan").insert([
       {
-        nama,
+        nama: cleanNama,
         biaya: parseFloat(biaya || 0),
         harga: parseFloat(harga || 0),
-        internal_referensi: internalReferensi || null,
+        internal_referensi: internalReferensi.trim() || null,
       },
     ]);
     if (error) {

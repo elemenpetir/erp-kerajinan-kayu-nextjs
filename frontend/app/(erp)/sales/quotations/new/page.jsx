@@ -44,9 +44,13 @@ export default function CreateQuotation() {
   }
 
   function updateJumlah(idx, jumlah) {
+    const qty = parseFloat(jumlah);
+    if (!Number.isFinite(qty) || qty < 0) {
+      toast.error("Jumlah harus angka ≥ 0.");
+      return;
+    }
     const updated = items.map((it, i) => {
       if (i !== idx) return it;
-      const qty = parseFloat(jumlah) || 0;
       return { ...it, jumlah: qty, total_biaya: qty * it.satuan_biaya };
     });
     setItems(updated);

@@ -116,7 +116,7 @@ export default function KaryawanDetail({ params }){
               </div>
               <div className="flex gap-2">
                 <Button type="submit">Simpan</Button>
-                <Button type="button" variant="outline" onClick={()=>setEditing(false)}>Batal</Button>
+                <Button type="button" variant="outline" onClick={()=>{setNama(item.nama||"");setPosisi(item.posisi||"");setTelp(item.telp||"");setEmail(item.email||"");setEditing(false);}}>Batal</Button>
               </div>
             </form>
           )}

@@ -64,9 +64,14 @@ export default function ProdukDetail({ params }) {
 
   async function handleUpdateHarga(e) {
     e.preventDefault();
+    const parsed = parseFloat(harga);
+    if (!Number.isFinite(parsed) || parsed < 0) {
+      toast.error("Harga harus angka ≥ 0.");
+      return;
+    }
     const { error } = await supabase
       .from("produk")
-      .update({ harga_produksi: parseFloat(harga || 0) })
+      .update({ harga_produksi: parsed })
       .eq("id", id);
     if (error) {
       toast.error("Gagal update harga: " + error.message);
