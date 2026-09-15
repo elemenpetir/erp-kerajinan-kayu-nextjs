@@ -1,20 +1,29 @@
+import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+
 export default function Pagination({ page, pageSize, count, basePath }) {
   const totalPages = Math.max(1, Math.ceil((count || 0) / pageSize));
   if (totalPages <= 1) return null;
   return (
-    <div style={{ display: 'flex', gap: 8, alignItems: 'center', marginTop: 16 }}>
+    <div className="flex items-center gap-2">
       {page > 1 && (
-        <a className="btn-outline mb-0" href={`${basePath}?page=${page - 1}`}>
-          ← Prev
-        </a>
+        <Button variant="outline" size="sm" asChild>
+          <a href={`${basePath}?page=${page - 1}`}>
+            <ChevronLeft />
+            Prev
+          </a>
+        </Button>
       )}
-      <span style={{ fontSize: 14, color: '#64748b' }}>
+      <span className="text-sm text-muted-foreground">
         Hal {page} / {totalPages} ({count} data)
       </span>
       {page < totalPages && (
-        <a className="btn-outline mb-0" href={`${basePath}?page=${page + 1}`}>
-          Next →
-        </a>
+        <Button variant="outline" size="sm" asChild>
+          <a href={`${basePath}?page=${page + 1}`}>
+            Next
+            <ChevronRight />
+          </a>
+        </Button>
       )}
     </div>
   );

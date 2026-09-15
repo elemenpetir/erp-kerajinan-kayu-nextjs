@@ -41,8 +41,6 @@
     "Helvetica Neue",
     Arial,
     sans-serif;
-  background: #f8fafc;
-  color: #0f172a;
 }
 
 html {
@@ -52,8 +50,6 @@ html {
 body {
   margin: 0;
   min-height: 100vh;
-  background: #f8fafc;
-  color: #0f172a;
 }
 
 a {
@@ -70,172 +66,16 @@ button {
 }
 
 @layer base {
+  * {
+    @apply border-border;
+  }
+
   body {
-    background: #f8fafc;
-  }
-
-  input,
-  textarea,
-  select {
-    @apply rounded-lg border border-slate-300 bg-white px-4 py-2 text-slate-950 placeholder:text-slate-400 outline-none transition duration-200;
-  }
-
-  input:focus,
-  textarea:focus,
-  select:focus {
-    @apply border-slate-700 ring-2 ring-slate-200;
-  }
-
-  button,
-  .btn {
-    @apply inline-flex items-center justify-center rounded-md bg-slate-950 px-4 py-2 text-sm font-semibold text-white transition-colors duration-200 cursor-pointer border border-transparent mb-4;
-  }
-
-  button:hover,
-  .btn:hover {
-    @apply bg-slate-800;
-  }
-
-  button:disabled,
-  .btn:disabled {
-    @apply opacity-60 cursor-not-allowed;
-  }
-
-  h1,
-  h2,
-  h3 {
-    @apply text-slate-900 font-semibold leading-tight;
-  }
-
-  h1 {
-    @apply text-3xl;
-  }
-
-  h2 {
-    @apply text-2xl;
-  }
-
-  h1 + *,
-  h2 + *,
-  h3 + * {
-    margin-top: 1rem;
-  }
-
-  .content-section {
-    @apply space-y-5;
+    @apply bg-background text-foreground;
   }
 }
 
 @layer components {
-  .btn-primary {
-    @apply inline-flex items-center justify-center rounded-md bg-slate-950 px-4 py-2 text-sm font-semibold text-white transition hover:bg-slate-800;
-  }
-
-  .card {
-    @apply rounded-3xl border border-slate-200 bg-white p-6 shadow-sm shadow-slate-200/50;
-  }
-
-  .detail-card {
-    @apply rounded-3xl border border-slate-200 bg-white p-6 shadow-sm shadow-slate-200/50 my-6;
-  }
-
-  .detail-actions {
-    @apply mt-4 flex flex-wrap items-center gap-3;
-  }
-
-  .btn-outline {
-    @apply inline-flex items-center justify-center rounded-md border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-900 transition hover:bg-slate-50;
-  }
-
-  .btn-danger {
-    @apply inline-flex items-center justify-center rounded-md border border-rose-500 bg-white px-4 text-sm font-medium text-rose-600 transition hover:bg-rose-100;
-  }
-
-  .btn-table-action {
-    @apply inline-flex items-center justify-center rounded-md border border-slate-300 bg-white text-sm font-medium text-slate-900 transition hover:bg-slate-100;
-    padding: 4px 12px;
-    height: 32px;
-    line-height: 1;
-  }
-
-  .action-buttons {
-    @apply flex flex-row items-center gap-2;
-  }
-
-  .table-slate {
-    @apply min-w-full border-collapse border border-slate-300 bg-white text-left text-sm text-slate-900;
-  }
-
-  .table-slate th,
-  .table-slate td {
-    @apply border border-slate-300 px-4 py-3 align-middle whitespace-nowrap;
-  }
-
-  .table-slate th {
-    @apply bg-slate-300 font-semibold uppercase tracking-wide text-slate-900;
-  }
-
-  .table-slate a {
-    @apply inline-flex items-center rounded-md border border-slate-300 bg-white text-sm font-medium text-slate-900 transition hover:bg-slate-100;
-    padding: 4px 12px;
-    height: 32px;
-    line-height: 1;
-    margin-bottom: 0;
-  }
-
-  .table-slate button {
-    @apply inline-flex items-center rounded-md border border-rose-500 bg-white text-sm font-medium text-rose-600 transition hover:bg-rose-100;
-    padding: 4px 12px;
-    height: 32px;
-    line-height: 1;
-    margin-bottom: 0;
-  }
-
-  .table-slate button:hover {
-    @apply bg-rose-100;
-  }
-
-  .table-slate .btn-table-action {
-    border-color: #cbd5e1 !important;
-    color: #0f172a !important;
-    background: white !important;
-  }
-
-  .table-slate .btn-table-action:hover {
-    background: #f1f5f9 !important;
-  }
-
-  .table-slate tbody tr:hover {
-    @apply bg-slate-200;
-  }
-
-  .table-slate tr:nth-child(even) {
-    @apply bg-slate-50;
-  }
-
-  .table-slate thead tr {
-    @apply border-b border-slate-300;
-  }
-
-  .table-slate td {
-    @apply text-slate-900;
-  }
-
-  .form-group {
-    @apply mb-4 flex flex-col gap-1;
-  }
-
-  .form-group label {
-    @apply text-sm font-semibold text-slate-700;
-  }
-
-  .form-input {
-    @apply w-full max-w-sm rounded-lg border border-slate-300 bg-white px-4 py-2 text-slate-950 placeholder:text-slate-400 outline-none transition duration-200;
-  }
-
-  .form-input:focus {
-    @apply border-slate-700 ring-2 ring-slate-200;
-  }
 }
 
 @layer utilities {
