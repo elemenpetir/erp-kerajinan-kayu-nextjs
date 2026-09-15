@@ -1,13 +1,20 @@
 'use client';
 
 import { useState, useTransition } from 'react';
+import { toast } from 'sonner';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import ActionButton from '@/components/ui/ActionButton';
 import { createDepartment, updateDepartmentManager, deleteDepartment } from '../actions';
+
+const selectClass =
+  'flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring';
 
 export function CreateForm({ employees }) {
   return (
-    <form action={createDepartment} style={{ marginBottom: 12 }}>
-      <input name="nama_departemen" placeholder="Nama Departemen" required />
-      <select name="manager" style={{ marginLeft: 8 }} defaultValue="">
+    <form action={createDepartment} className="flex flex-wrap items-center gap-2">
+      <Input name="nama_departemen" placeholder="Nama Departemen" required className="max-w-xs" />
+      <select name="manager" className={`${selectClass} max-w-xs`} defaultValue="">
         <option value="">— Pilih Manager —</option>
         {employees.map((k) => (
           <option key={k.id} value={k.nama}>
@@ -15,9 +22,7 @@ export function CreateForm({ employees }) {
           </option>
         ))}
       </select>
-      <button className="btn mb-0" style={{ marginLeft: 8 }}>
-        Tambah
-      </button>
+      <Button type="submit">Tambah</Button>
     </form>
   );
 }
@@ -29,32 +34,24 @@ export function RowActions({ dept, employees }) {
 
   if (!editing) {
     return (
-      <div className="action-buttons">
-        <button className="btn-table-action" onClick={() => setEditing(true)}>
+      <div className="flex gap-1">
+        <Button variant="outline" size="sm" onClick={() => setEditing(true)}>
           Edit Manager
-        </button>
-        <button
-          disabled={pending}
-          onClick={() => {
-            if (!confirm('Hapus departemen ini?')) return;
-            start(async () => {
-              try {
-                await deleteDepartment(dept.id);
-              } catch (e) {
-                alert('Gagal hapus: ' + e.message);
-              }
-            });
-          }}
-        >
-          {pending ? '...' : 'Hapus'}
-        </button>
+        </Button>
+        <ActionButton
+          run={deleteDepartment.bind(null, dept.id)}
+          confirmTitle="Hapus departemen?"
+          confirmText="Hapus departemen ini?"
+          label="Hapus"
+          variant="destructive"
+        />
       </div>
     );
   }
 
   return (
-    <div className="action-buttons">
-      <select value={manager} onChange={(e) => setManager(e.target.value)}>
+    <div className="flex gap-1">
+      <select value={manager} onChange={(e) => setManager(e.target.value)} className={selectClass}>
         <option value="">— Kosongkan —</option>
         {employees.map((k) => (
           <option key={k.id} value={k.nama}>
@@ -62,8 +59,9 @@ export function RowActions({ dept, employees }) {
           </option>
         ))}
       </select>
-      <button
-        className="btn-table-action"
+      <Button
+        variant="outline"
+        size="sm"
         disabled={pending}
         onClick={() =>
           start(async () => {
@@ -71,16 +69,16 @@ export function RowActions({ dept, employees }) {
               await updateDepartmentManager(dept.id, manager);
               setEditing(false);
             } catch (e) {
-              alert('Gagal update: ' + e.message);
+              toast.error('Gagal update: ' + e.message);
             }
           })
         }
       >
         Simpan
-      </button>
-      <button className="btn-table-action" onClick={() => setEditing(false)}>
+      </Button>
+      <Button variant="ghost" size="sm" onClick={() => setEditing(false)}>
         Batal
-      </button>
+      </Button>
     </div>
   );
 }

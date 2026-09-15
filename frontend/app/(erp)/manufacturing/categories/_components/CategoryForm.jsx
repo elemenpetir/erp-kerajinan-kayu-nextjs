@@ -1,46 +1,43 @@
 'use client';
 
 import { useState, useTransition } from 'react';
+import { toast } from 'sonner';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import { createCategory } from '../actions';
 
 export default function CategoryForm() {
   const [nama, setNama] = useState('');
-  const [message, setMessage] = useState('');
   const [pending, start] = useTransition();
 
   return (
     <form
-      style={{ marginBottom: 16, display: 'flex', alignItems: 'center', gap: 8 }}
+      className="flex flex-wrap items-center gap-2"
       onSubmit={(e) => {
         e.preventDefault();
-        setMessage('');
         start(async () => {
           try {
             const fd = new FormData();
             fd.set('nama', nama);
             await createCategory(fd);
             setNama('');
+            toast.success('Kategori ditambahkan');
           } catch (err) {
-            setMessage(err.message);
+            toast.error(err.message);
           }
         });
       }}
     >
-      <input
-        className="form-input"
+      <Input
         placeholder="Nama kategori"
         value={nama}
-        onChange={(e) => {
-          setNama(e.target.value);
-          setMessage('');
-        }}
+        onChange={(e) => setNama(e.target.value)}
         required
-        style={{ height: '42px' }}
+        className="max-w-xs"
       />
-      <button className="btn mb-0" type="submit" disabled={pending}>
+      <Button type="submit" disabled={pending}>
         {pending ? 'Menyimpan...' : 'Tambah Kategori'}
-      </button>
-      {message && <span style={{ color: '#dc2626', fontSize: 14 }}>{message}</span>}
+      </Button>
     </form>
   );
 }

@@ -1,6 +1,15 @@
 'use client'
 import { useState, useEffect } from 'react'
+import { ArrowLeft } from 'lucide-react'
+import { toast } from 'sonner'
 import { supabase } from '../../../../../lib/supabase/client'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+
+const selectClass =
+  'flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring';
 
 export default function CreateKaryawan(){
   const [nama, setNama] = useState('')
@@ -9,36 +18,75 @@ export default function CreateKaryawan(){
   const [email, setEmail] = useState('')
   const [departemen, setDepartemen] = useState('')
   const [deps, setDeps] = useState([])
+  const [saving, setSaving] = useState(false)
 
   useEffect(()=>{ fetchDeps() },[])
   async function fetchDeps(){
-    const { data } = await supabase.from('departemen').select('*')
+    const { data } = await supabase.from('departemen').select('id,nama_departemen').order('nama_departemen')
     setDeps(data||[])
   }
 
   async function handleSubmit(e){
     e.preventDefault()
-    await supabase.from('karyawan').insert([{ departemen_id: departemen || null, nama, posisi, telp, email }])
-    window.location.href = '/hr/employees'
+    setSaving(true)
+    const { error } = await supabase.from('karyawan').insert([{ departemen_id: departemen || null, nama, posisi, telp, email }])
+    setSaving(false)
+    if (error) toast.error('Gagal simpan: ' + error.message)
+    else window.location.href = '/hr/employees'
   }
 
   return (
-    <div>
-      <h2>Tambah Karyawan</h2>
-      <form onSubmit={handleSubmit}>
-        <div><label>Nama</label><br/><input value={nama} onChange={e=>setNama(e.target.value)} required/></div>
-        <div><label>Posisi</label><br/><input value={posisi} onChange={e=>setPosisi(e.target.value)}/></div>
-        <div><label>Telp</label><br/><input value={telp} onChange={e=>setTelp(e.target.value)}/></div>
-        <div><label>Email</label><br/><input value={email} onChange={e=>setEmail(e.target.value)}/></div>
+    <div className="space-y-4">
+      <div className="flex items-center gap-2">
+        <Button variant="ghost" size="icon" asChild>
+          <a href="/hr/employees" aria-label="Kembali">
+            <ArrowLeft />
+          </a>
+        </Button>
         <div>
-          <label>Departemen</label><br/>
-          <select value={departemen} onChange={e=>setDepartemen(e.target.value)}>
-            <option value="">-- pilih --</option>
-            {deps.map(d=> <option key={d.id} value={d.id}>{d.nama_departemen}</option>)}
-          </select>
+          <h1 className="text-lg font-semibold">Tambah Karyawan</h1>
+          <p className="text-sm text-muted-foreground">Daftarkan personel baru beserta unitnya.</p>
         </div>
-        <div style={{marginTop:12}}><button className="btn">Simpan</button></div>
-      </form>
+      </div>
+      <Card className="max-w-xl">
+        <CardHeader>
+          <CardTitle className="text-base">Data karyawan</CardTitle>
+        </CardHeader>
+        <CardContent className="pt-0">
+          <form onSubmit={handleSubmit} className="grid gap-4">
+            <div className="grid gap-2">
+              <Label htmlFor="nama">Nama</Label>
+              <Input id="nama" value={nama} onChange={e=>setNama(e.target.value)} required />
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="grid gap-2">
+                <Label htmlFor="posisi">Posisi</Label>
+                <Input id="posisi" value={posisi} onChange={e=>setPosisi(e.target.value)} />
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="departemen">Departemen</Label>
+                <select id="departemen" className={selectClass} value={departemen} onChange={e=>setDepartemen(e.target.value)}>
+                  <option value="">-- pilih --</option>
+                  {deps.map(d=> <option key={d.id} value={d.id}>{d.nama_departemen}</option>)}
+                </select>
+              </div>
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="grid gap-2">
+                <Label htmlFor="telp">Telp</Label>
+                <Input id="telp" value={telp} onChange={e=>setTelp(e.target.value)} />
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="email">Email</Label>
+                <Input id="email" type="email" value={email} onChange={e=>setEmail(e.target.value)} />
+              </div>
+            </div>
+            <div>
+              <Button type="submit" disabled={saving}>{saving ? 'Menyimpan...' : 'Simpan'}</Button>
+            </div>
+          </form>
+        </CardContent>
+      </Card>
     </div>
   )
 }

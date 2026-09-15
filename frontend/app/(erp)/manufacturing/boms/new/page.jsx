@@ -1,14 +1,18 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { ArrowLeft, Plus, Trash2 } from "lucide-react";
+import { toast } from "sonner";
 import { supabase } from "../../../../../lib/supabase/client";
+import { formatRupiah } from "../../../../../lib/utils/format";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow, TableFooter } from "@/components/ui/table";
 
-const formatRupiah = (amount) =>
-  new Intl.NumberFormat("id-ID", {
-    style: "currency",
-    currency: "IDR",
-    minimumFractionDigits: 0,
-  }).format(amount || 0);
+const selectClass =
+  "flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring";
 
 export default function CreateBom() {
   const router = useRouter();
@@ -61,14 +65,10 @@ export default function CreateBom() {
     };
   });
 
-  const totalBiayaBahan = componentTotals.reduce(
-    (sum, item) => sum + item.subtotal,
-    0,
-  );
+  const totalBiayaBahan = componentTotals.reduce((sum, item) => sum + item.subtotal, 0);
   const selectedProduct = products.find((p) => p.id === produkId);
   const totalBiayaProduk = selectedProduct
-    ? parseFloat(selectedProduct.harga_produksi || 0) *
-      parseInt(jumlahProduk || "1", 10)
+    ? parseFloat(selectedProduct.harga_produksi || 0) * parseInt(jumlahProduk || "1", 10)
     : 0;
 
   async function handleSubmit(e) {
@@ -106,162 +106,153 @@ export default function CreateBom() {
       setMessage("Error: " + error.message);
       setLoading(false);
     } else {
+      toast.success("BOM dibuat");
       router.push("/manufacturing/boms");
     }
   }
 
   return (
-    <div>
-      <h2>Buat BOM</h2>
-      <form onSubmit={handleSubmit}>
-        {/* Info Produk */}
-        <div className="form-group">
-          <label>Produk</label>
-          <select
-            className="form-input"
-            value={produkId}
-            onChange={(e) => setProdukId(e.target.value)}
-            required
-          >
-            <option value="">-- pilih produk --</option>
-            {products.map((product) => (
-              <option key={product.id} value={product.id}>
-                {product.nama}
-              </option>
-            ))}
-          </select>
+    <div className="space-y-4">
+      <div className="flex items-center gap-2">
+        <Button variant="ghost" size="icon" asChild>
+          <a href="/manufacturing/boms" aria-label="Kembali">
+            <ArrowLeft />
+          </a>
+        </Button>
+        <div>
+          <h1 className="text-lg font-semibold">Buat BOM</h1>
+          <p className="text-sm text-muted-foreground">Susun komposisi bahan untuk satu produk.</p>
         </div>
-
-        <div className="form-group">
-          <label>Jumlah Produk</label>
-          <input
-            className="form-input"
-            type="number"
-            min="1"
-            value={jumlahProduk}
-            onChange={(e) => setJumlahProduk(e.target.value)}
-          />
-        </div>
-
-        <div className="form-group">
-          <label>Internal Referensi</label>
-          <input
-            className="form-input"
-            value={internalReferensi}
-            onChange={(e) => setInternalReferensi(e.target.value)}
-            placeholder="Opsional"
-          />
-        </div>
-
-        {/* Komponen Bahan */}
-        <h3 style={{ marginTop: 24 }}>Komponen Bahan</h3>
-        <table className="table-slate" style={{ marginBottom: 8 }}>
-          <thead>
-            <tr>
-              <th>Bahan</th>
-              <th>Jumlah</th>
-              <th>Biaya Satuan</th>
-              <th>Subtotal</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            {componentTotals.map((component, index) => (
-              <tr key={index}>
-                <td>
-                  <select
-                    value={component.bahanId}
-                    onChange={(e) =>
-                      updateComponent(index, "bahanId", e.target.value)
-                    }
-                    required
-                  >
-                    <option value="">-- pilih bahan --</option>
-                    {bahanList.map((bahan) => (
-                      <option key={bahan.id} value={bahan.id}>
-                        {bahan.nama}
-                      </option>
-                    ))}
-                  </select>
-                </td>
-                <td>
-                  <input
-                    type="number"
-                    min="1"
-                    value={component.jumlah}
-                    onChange={(e) =>
-                      updateComponent(index, "jumlah", e.target.value)
-                    }
-                    style={{ width: 80 }}
-                    required
-                  />
-                </td>
-                <td>{formatRupiah(component.biaya)}</td>
-                <td>{formatRupiah(component.subtotal)}</td>
-                <td>
-                  <button
-                    type="button"
-                    className="btn-danger"
-                    onClick={() => removeComponent(index)}
-                    disabled={components.length === 1}
-                  >
-                    Hapus
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-          <tfoot>
-            <tr>
-              <td
-                colSpan={3}
-                style={{ textAlign: "right", fontWeight: "bold" }}
+      </div>
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <Card className="max-w-2xl">
+          <CardHeader>
+            <CardTitle className="text-base">Info produk</CardTitle>
+          </CardHeader>
+          <CardContent className="grid gap-4 pt-0 sm:grid-cols-3">
+            <div className="grid gap-2">
+              <Label htmlFor="produk">Produk</Label>
+              <select
+                id="produk"
+                className={selectClass}
+                value={produkId}
+                onChange={(e) => setProdukId(e.target.value)}
+                required
               >
-                Total Biaya Bahan
-              </td>
-              <td style={{ fontWeight: "bold" }}>
-                {formatRupiah(totalBiayaBahan)}
-              </td>
-              <td />
-            </tr>
-          </tfoot>
-        </table>
-
-        <button
-          type="button"
-          className="btn-table-action"
-          onClick={addComponent}
-        >
-          + Tambah Bahan
-        </button>
-
-        {/* Summary */}
-        <div
-          style={{
-            marginTop: 24,
-            padding: "12px 16px",
-            background: "#f8fafc",
-            border: "1px solid #e2e8f0",
-            borderRadius: 8,
-            maxWidth: 360,
-          }}
-        >
-          <p style={{ margin: "4px 0" }}>
-            <strong>Total Biaya Bahan:</strong> {formatRupiah(totalBiayaBahan)}
-          </p>
-          <p style={{ margin: "4px 0" }}>
-            <strong>Total Biaya Produk:</strong>{" "}
-            {formatRupiah(totalBiayaProduk)}
-          </p>
-        </div>
-
-        <div style={{ marginTop: 16 }}>
-          <button className="btn" type="submit" disabled={loading}>
+                <option value="">-- pilih produk --</option>
+                {products.map((product) => (
+                  <option key={product.id} value={product.id}>
+                    {product.nama}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="jumlah">Jumlah Produk</Label>
+              <Input
+                id="jumlah"
+                type="number"
+                min="1"
+                value={jumlahProduk}
+                onChange={(e) => setJumlahProduk(e.target.value)}
+              />
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="ref">Internal Referensi</Label>
+              <Input
+                id="ref"
+                value={internalReferensi}
+                onChange={(e) => setInternalReferensi(e.target.value)}
+                placeholder="Opsional"
+              />
+            </div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-base">Komponen Bahan</CardTitle>
+          </CardHeader>
+          <CardContent className="p-0">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Bahan</TableHead>
+                  <TableHead className="w-24">Jumlah</TableHead>
+                  <TableHead className="text-right">Biaya Satuan</TableHead>
+                  <TableHead className="text-right">Subtotal</TableHead>
+                  <TableHead className="w-16" />
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {componentTotals.map((component, index) => (
+                  <TableRow key={index}>
+                    <TableCell>
+                      <select
+                        className={selectClass}
+                        value={component.bahanId}
+                        onChange={(e) => updateComponent(index, "bahanId", e.target.value)}
+                        required
+                      >
+                        <option value="">-- pilih bahan --</option>
+                        {bahanList.map((bahan) => (
+                          <option key={bahan.id} value={bahan.id}>
+                            {bahan.nama}
+                          </option>
+                        ))}
+                      </select>
+                    </TableCell>
+                    <TableCell>
+                      <Input
+                        type="number"
+                        min="1"
+                        value={component.jumlah}
+                        onChange={(e) => updateComponent(index, "jumlah", e.target.value)}
+                        required
+                      />
+                    </TableCell>
+                    <TableCell className="text-right tabular-nums">{formatRupiah(component.biaya)}</TableCell>
+                    <TableCell className="text-right tabular-nums">{formatRupiah(component.subtotal)}</TableCell>
+                    <TableCell>
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => removeComponent(index)}
+                        disabled={components.length === 1}
+                        aria-label="Hapus baris"
+                      >
+                        <Trash2 />
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+              <TableFooter>
+                <TableRow>
+                  <TableCell colSpan={3} className="text-right font-semibold">
+                    Total Biaya Bahan
+                  </TableCell>
+                  <TableCell className="text-right font-semibold tabular-nums">
+                    {formatRupiah(totalBiayaBahan)}
+                  </TableCell>
+                  <TableCell />
+                </TableRow>
+              </TableFooter>
+            </Table>
+          </CardContent>
+        </Card>
+        <div className="flex flex-wrap items-center gap-2">
+          <Button type="button" variant="outline" onClick={addComponent}>
+            <Plus />
+            Tambah Bahan
+          </Button>
+          <Button type="submit" disabled={loading}>
             {loading ? "Menyimpan..." : "Simpan"}
-          </button>
-          {message && (
-            <span style={{ marginLeft: 12, color: "red" }}>{message}</span>
-          )}
+          </Button>
+          {message && <span className="text-sm text-destructive">{message}</span>}
+          <span className="text-sm text-muted-foreground">
+            Total Biaya Produk: {formatRupiah(totalBiayaProduk)}
+          </span>
         </div>
       </form>
     </div>

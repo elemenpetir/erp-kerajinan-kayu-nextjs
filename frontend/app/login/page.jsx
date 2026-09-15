@@ -3,6 +3,9 @@
 import { Suspense, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { supabase } from '../../lib/supabase/client';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
 
 function LoginForm() {
   const router = useRouter();
@@ -50,41 +53,41 @@ function LoginForm() {
   const formValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) && password.length >= 6;
 
   return (
-    <div className="detail-card" style={{ width: 360, maxWidth: '100%' }}>
-      <h2>Masuk ERP</h2>
-      <p style={{ fontSize: 14, color: '#64748b', marginBottom: 16 }}>
-        Gunakan akun email yang terdaftar di Supabase Auth.
-      </p>
-      <div style={{ display: 'grid', gap: 12 }}>
-        <input
+    <Card style={{ width: 360, maxWidth: '100%' }}>
+      <CardHeader>
+        <CardTitle>Masuk ERP</CardTitle>
+        <CardDescription>Gunakan akun email yang terdaftar di Supabase Auth.</CardDescription>
+      </CardHeader>
+      <CardContent className="grid gap-3 pt-0">
+        <Input
           type="email"
           placeholder="Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
         />
-        <input
+        <Input
           type="password"
           placeholder="Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
         />
-        {message && <span style={{ color: '#dc2626', fontSize: 14 }}>{message}</span>}
-        <button className="btn mb-0" disabled={loading || !formValid} onClick={() => handleAuth('in')}>
+        {message && <span className="text-sm text-destructive">{message}</span>}
+        <Button disabled={loading || !formValid} onClick={() => handleAuth('in')}>
           {loading ? 'Memproses...' : 'Masuk'}
-        </button>
-        <button className="btn-outline mb-0" disabled={loading || !formValid} onClick={() => handleAuth('up')}>
+        </Button>
+        <Button variant="outline" disabled={loading || !formValid} onClick={() => handleAuth('up')}>
           Daftar akun baru
-        </button>
-      </div>
-    </div>
+        </Button>
+      </CardContent>
+    </Card>
   );
 }
 
 export default function LoginPage() {
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#f8fafc', padding: 16 }}>
+    <div className="flex min-h-screen items-center justify-center bg-background p-4">
       <Suspense>
         <LoginForm />
       </Suspense>

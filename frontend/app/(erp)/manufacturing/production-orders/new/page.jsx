@@ -1,7 +1,25 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { ArrowLeft, Plus, Trash2 } from "lucide-react";
+import { toast } from "sonner";
 import { supabase } from "../../../../../lib/supabase/client";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow, TableFooter } from "@/components/ui/table";
+
+const selectClass =
+  "flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring";
+
+const emptyItem = {
+  bahan_id: "",
+  nama_bahan: "",
+  jumlah: 1,
+  harga_satuan: 0,
+  subtotal: 0,
+};
 
 export default function CreateOrderProduksi() {
   const router = useRouter();
@@ -55,70 +73,84 @@ export default function CreateOrderProduksi() {
       setMessage("Error: " + error.message);
       setLoading(false);
     } else {
+      toast.success("Order produksi dibuat");
       router.push("/manufacturing/production-orders");
     }
   }
 
   return (
-    <div>
-      <h2>Buat Order Produksi</h2>
-      <form onSubmit={handleSubmit}>
-        <div className="form-group">
-          <label>Produk</label>
-          <select
-            className="form-input"
-            value={produkId}
-            onChange={(e) => setProdukId(e.target.value)}
-            required
-          >
-            <option value="">-- pilih produk --</option>
-            {products.map((product) => (
-              <option key={product.id} value={product.id}>
-                {product.nama}
-              </option>
-            ))}
-          </select>
+    <div className="space-y-4">
+      <div className="flex items-center gap-2">
+        <Button variant="ghost" size="icon" asChild>
+          <a href="/manufacturing/production-orders" aria-label="Kembali">
+            <ArrowLeft />
+          </a>
+        </Button>
+        <div>
+          <h1 className="text-lg font-semibold">Buat Order Produksi</h1>
+          <p className="text-sm text-muted-foreground">Rencanakan produksi dari BOM yang sudah ada.</p>
         </div>
-
-        <div className="form-group">
-          <label>BOM</label>
-          <select
-            className="form-input"
-            value={bomId}
-            onChange={(e) => setBomId(e.target.value)}
-            required
-          >
-            <option value="">-- pilih BOM --</option>
-            {boms.map((bom) => (
-              <option key={bom.id} value={bom.id}>
-                {bom.produk?.nama || bom.id} - {bom.internal_referensi || "BOM"}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        <div className="form-group">
-          <label>Jumlah Produksi</label>
-          <input
-            className="form-input"
-            type="number"
-            min="1"
-            value={jumlahProduk}
-            onChange={(e) => setJumlahProduk(e.target.value)}
-            required
-          />
-        </div>
-
-        {message && (
-          <p style={{ color: "#dc2626", fontSize: 14, marginBottom: 8 }}>
-            {message}
-          </p>
-        )}
-
-        <button className="btn mb-0" type="submit" disabled={loading}>
-          {loading ? "Menyimpan..." : "Simpan"}
-        </button>
-      </form>
+      </div>
+      <Card className="max-w-xl">
+        <CardHeader>
+          <CardTitle className="text-base">Data order</CardTitle>
+        </CardHeader>
+        <CardContent className="pt-0">
+          <form onSubmit={handleSubmit} className="grid gap-4">
+            <div className="grid gap-2">
+              <Label htmlFor="produk">Produk</Label>
+              <select
+                id="produk"
+                className={selectClass}
+                value={produkId}
+                onChange={(e) => setProdukId(e.target.value)}
+                required
+              >
+                <option value="">-- pilih produk --</option>
+                {products.map((product) => (
+                  <option key={product.id} value={product.id}>
+                    {product.nama}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="bom">BOM</Label>
+              <select
+                id="bom"
+                className={selectClass}
+                value={bomId}
+                onChange={(e) => setBomId(e.target.value)}
+                required
+              >
+                <option value="">-- pilih BOM --</option>
+                {boms.map((bom) => (
+                  <option key={bom.id} value={bom.id}>
+                    {bom.produk?.nama || bom.id} - {bom.internal_referensi || "BOM"}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="jumlah">Jumlah Produksi</Label>
+              <Input
+                id="jumlah"
+                type="number"
+                min="1"
+                value={jumlahProduk}
+                onChange={(e) => setJumlahProduk(e.target.value)}
+                required
+              />
+            </div>
+            <div className="flex items-center gap-3">
+              <Button type="submit" disabled={loading}>
+                {loading ? "Menyimpan..." : "Simpan"}
+              </Button>
+              {message && <span className="text-sm text-destructive">{message}</span>}
+            </div>
+          </form>
+        </CardContent>
+      </Card>
     </div>
   );
 }
