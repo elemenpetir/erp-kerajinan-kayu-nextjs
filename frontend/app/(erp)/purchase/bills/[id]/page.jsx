@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import { supabase } from "../../../../../lib/supabase/client";
 import { useRouter } from "next/navigation";
 import { formatRupiah } from "../../../../../lib/utils/format";
+import { confirmBill, deleteBill } from "../actions";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow, TableFooter } from "@/components/ui/table";
@@ -31,7 +32,7 @@ export default function BillDetail({ params }) {
 
   useEffect(() => {
     fetchBill();
-  }, []);
+  }, [id]);
 
   async function fetchBill() {
     const { data, error } = await supabase
@@ -69,9 +70,7 @@ export default function BillDetail({ params }) {
   }
 
   async function handleKonfirmasi() {
-    const { error } = await supabase.from("bills").update({ status: "Bill" }).eq("id", id);
-    if (error) throw new Error(error.message);
-    toast.success("Bill dikonfirmasi");
+    await confirmBill(id);
     fetchBill();
   }
 
@@ -83,8 +82,7 @@ export default function BillDetail({ params }) {
   }
 
   async function handleDelete() {
-    const { error } = await supabase.from("bills").delete().eq("id", id);
-    if (error) throw new Error(error.message);
+    await deleteBill(id);
     router.push("/purchase/bills");
   }
 

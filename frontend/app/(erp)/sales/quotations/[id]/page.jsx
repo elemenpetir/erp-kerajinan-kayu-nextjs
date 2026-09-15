@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "../../../../../lib/supabase/client";
+import { deleteQuotation } from "../actions";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow, TableFooter } from "@/components/ui/table";
@@ -43,8 +44,7 @@ export default function QuotationDetail({ params }) {
   }
 
   async function handleDelete() {
-    const { error } = await supabase.from("quotation").delete().eq("id", id);
-    if (error) throw new Error(error.message);
+    await deleteQuotation(id);
     router.push("/sales/quotations");
   }
 

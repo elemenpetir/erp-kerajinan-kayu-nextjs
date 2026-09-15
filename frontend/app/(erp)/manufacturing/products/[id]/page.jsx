@@ -1,7 +1,9 @@
 "use client";
 import { useEffect, useState, use } from "react";
 import { ArrowLeft, TriangleAlert } from "lucide-react";
+import { toast } from "sonner";
 import { supabase } from "../../../../../lib/supabase/client";
+import { deleteProduct } from "../actions";
 import { formatRupiah } from "../../../../../lib/utils/format";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -62,17 +64,21 @@ export default function ProdukDetail({ params }) {
 
   async function handleUpdateHarga(e) {
     e.preventDefault();
-    await supabase
+    const { error } = await supabase
       .from("produk")
       .update({ harga_produksi: parseFloat(harga || 0) })
       .eq("id", id);
+    if (error) {
+      toast.error("Gagal update harga: " + error.message);
+      return;
+    }
+    toast.success("Harga diperbarui");
     setEditingHarga(false);
     fetchProduk();
   }
 
   async function handleDelete() {
-    const { error } = await supabase.from("produk").delete().eq("id", id);
-    if (error) throw new Error(error.message);
+    await deleteProduct(id);
     window.location.href = "/manufacturing/products";
   }
 

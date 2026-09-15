@@ -10,7 +10,13 @@ import { Input } from '@/components/ui/input';
 function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const next = searchParams.get('next') || '/manufacturing/products';
+  // Same-origin only: reject absolute URLs and protocol-relative URLs
+  // to prevent trusted post-login redirect to phishing sites.
+  const rawNext = searchParams.get('next') || '';
+  const next =
+    rawNext.startsWith('/') && !rawNext.startsWith('//')
+      ? rawNext
+      : '/manufacturing/products';
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');

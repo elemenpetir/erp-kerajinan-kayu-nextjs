@@ -3,6 +3,7 @@ import { useEffect, useState, use } from "react";
 import { ArrowLeft, Check, Printer } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "../../../../../lib/supabase/client";
+import { markDelivered } from "../actions";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow, TableFooter } from "@/components/ui/table";
@@ -48,11 +49,7 @@ export default function SalesOrderDetail({ params }) {
   }
 
   async function handleMarkDelivered() {
-    const { error } = await supabase
-      .from("sales_order")
-      .update({ status_delivery: "Terkirim" })
-      .eq("id", id);
-    if (error) throw new Error(error.message);
+    await markDelivered(id);
     toast.success("Pengiriman ditandai Terkirim");
     fetchData();
   }

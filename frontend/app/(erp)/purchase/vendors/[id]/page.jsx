@@ -3,6 +3,7 @@ import { useEffect, useState, use } from "react";
 import { useRouter } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 import { supabase } from "../../../../../lib/supabase/client";
+import { deleteVendor } from "../actions";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -39,11 +40,7 @@ export default function VendorDetail({ params }) {
   }
 
   async function handleDelete() {
-    const { error } = await supabase
-      .from("vendor_individual")
-      .delete()
-      .eq("id", id);
-    if (error) throw new Error(error.message);
+    await deleteVendor(id);
     router.push("/purchase/vendors");
   }
 

@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "../../../../../lib/supabase/client";
+import { deleteCustomer } from "../actions";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -69,11 +70,7 @@ export default function CustomerDetail({ params }) {
   }
 
   async function handleDelete() {
-    const { error } = await supabase
-      .from("customer_individual")
-      .delete()
-      .eq("id", id);
-    if (error) throw new Error(error.message);
+    await deleteCustomer(id);
     router.push("/sales/customers");
   }
 

@@ -3,6 +3,7 @@ import { useEffect, useState, use } from "react";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "../../../../../lib/supabase/client";
+import { advanceProductionOrder } from "../actions";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -48,18 +49,17 @@ export default function OrderProduksiDetail({ params }) {
     if (!order) return;
     const currentIndex = statusFlow.indexOf(order.status);
     if (currentIndex === -1 || currentIndex === statusFlow.length - 1) return;
-    const nextStatus = statusFlow[currentIndex + 1];
     setUpdating(true);
-    const { error } = await supabase
-      .from("order_produksi")
-      .update({ status: nextStatus })
-      .eq("id", id);
-    if (error) toast.error("Gagal ubah status: " + error.message);
-    else {
-      toast.success(`Status menjadi ${nextStatus}`);
+    try {
+      await advanceProductionOrder(id, order.status);
+      toast.success(`Status menjadi ${statusFlow[currentIndex + 1]}`);
       fetchOrder();
+    } catch (e) {
+      toast.error(e.message);
+      fetchOrder();
+    } finally {
+      setUpdating(false);
     }
-    setUpdating(false);
   }
 
   if (loading) {

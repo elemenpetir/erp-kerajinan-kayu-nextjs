@@ -48,13 +48,22 @@ export default function CreateOrderProduksi() {
     setBoms(bomData || []);
   }
 
-  async function handleSubmit(e) {
-    e.preventDefault();
-    setLoading(true);
+  // BOM difilter per produk agar komponen selalu cocok dengan produk.
+  const filteredBoms = produkId ? boms.filter((bom) => bom.produk_id === produkId) : boms;
+
+  function handleProdukChange(value) {
+    setProdukId(value);
+    setBomId((prev) => (boms.some((bom) => bom.id === prev && bom.produk_id === value) ? prev : ""));
+  }
 
     const selectedBom = boms.find((bom) => bom.id === bomId);
     if (!produkId || !bomId || !selectedBom) {
       setMessage("Pilih produk dan BOM terlebih dahulu.");
+      setLoading(false);
+      return;
+    }
+    if (selectedBom.produk_id !== produkId) {
+      setMessage("BOM tersebut bukan milik produk yang dipilih.");
       setLoading(false);
       return;
     }
@@ -103,7 +112,7 @@ export default function CreateOrderProduksi() {
                 id="produk"
                 className={selectClass}
                 value={produkId}
-                onChange={(e) => setProdukId(e.target.value)}
+                onChange={(e) => handleProdukChange(e.target.value)}
                 required
               >
                 <option value="">-- pilih produk --</option>
@@ -124,7 +133,7 @@ export default function CreateOrderProduksi() {
                 required
               >
                 <option value="">-- pilih BOM --</option>
-                {boms.map((bom) => (
+                {filteredBoms.map((bom) => (
                   <option key={bom.id} value={bom.id}>
                     {bom.produk?.nama || bom.id} - {bom.internal_referensi || "BOM"}
                   </option>

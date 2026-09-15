@@ -3,6 +3,7 @@ import { useEffect, useState, use } from 'react'
 import { ArrowLeft } from 'lucide-react'
 import { toast } from 'sonner'
 import { supabase } from '../../../../../lib/supabase/client'
+import { deleteEmployee } from '../actions'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
@@ -50,8 +51,7 @@ export default function KaryawanDetail({ params }){
   }
 
   async function handleDelete(){
-    const { error } = await supabase.from('karyawan').delete().eq('id', id)
-    if (error) throw new Error(error.message)
+    await deleteEmployee(id)
     window.location.href = '/hr/employees'
   }
 
