@@ -27,7 +27,11 @@ const expectLoginRedirect = [
   '/accounting/vendor-bills',
 ];
 
-const expect404 = [
+const expect404 = []; // era guard: unknown paths → /login, never 404 for anon
+
+// Legacy URLs must NOT redirect to new paths anymore (transitions removed).
+// Anon hits the auth guard instead → 307 to /login.
+const expectLegacyGuarded = [
   '/manufaktur',
   '/manufaktur/bahan',
   '/manufaktur/bom',
@@ -77,23 +81,13 @@ async function checkLoginRedirect(path) {
   }
 }
 
-async function check404(path) {
-  try {
-    const res = await fetch(BASE + path, { redirect: 'manual' });
-    await res.text();
-    report(res.status === 404, `gone ${path}`, res.status);
-  } catch (e) {
-    report(false, `gone ${path}`, e.message);
-  }
-}
-
 (async () => {
   console.log(`Smoke vs ${BASE}\n--- public (200) ---`);
   for (const p of expect200) await check200(p);
   console.log('--- auth guard (→ /login) ---');
   for (const p of expectLoginRedirect) await checkLoginRedirect(p);
-  console.log('--- legacy gone (404) ---');
-  for (const p of expect404) await check404(p);
+  console.log('--- legacy guarded (→ /login, not new paths) ---');
+  for (const p of expectLegacyGuarded) await checkLoginRedirect(p);
   console.log(`\n${pass} pass, ${fail} fail`);
   if (fail) {
     console.log('Failures:\n- ' + failures.join('\n- '));
