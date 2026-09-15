@@ -1,7 +1,24 @@
 "use client";
 import { useEffect, useState, use } from "react";
 import { useRouter } from "next/navigation";
+import { ArrowLeft, ArrowRight } from "lucide-react";
+import { toast } from "sonner";
 import { supabase } from "../../../../../lib/supabase/client";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow, TableFooter } from "@/components/ui/table";
+import { Skeleton } from "@/components/ui/skeleton";
+import StatusBadge from "@/components/ui/StatusBadge";
+import ActionButton from "@/components/ui/ActionButton";
+
+function Def({ label, children }) {
+  return (
+    <div className="grid grid-cols-3 gap-2 py-2">
+      <dt className="text-sm text-muted-foreground">{label}</dt>
+      <dd className="col-span-2 text-sm font-medium">{children}</dd>
+    </div>
+  );
+}
 
 export default function QuotationDetail({ params }) {
   const { id } = use(params);
@@ -26,129 +43,138 @@ export default function QuotationDetail({ params }) {
   }
 
   async function handleDelete() {
-    if (!confirm("Hapus quotation ini?")) return;
     const { error } = await supabase.from("quotation").delete().eq("id", id);
-    if (error) alert("Gagal hapus: " + error.message);
-    else router.push("/sales/quotations");
+    if (error) throw new Error(error.message);
+    router.push("/sales/quotations");
   }
 
   async function handleConfirm() {
-    if (!confirm("Konfirmasi quotation ini menjadi Sales Order?")) return;
-
     const { error } = await supabase.rpc("confirm_quotation", { p_q_id: id });
-    if (error) return alert("Gagal konfirmasi: " + error.message);
-
-    alert("Berhasil! Sales Order telah dibuat.");
+    if (error) throw new Error(error.message);
+    toast.success("Berhasil! Sales Order telah dibuat.");
     fetchData();
   }
 
-  if (loading) return <p>Loading...</p>;
-  if (!q) return <p>Quotation tidak ditemukan</p>;
+  if (loading) {
+    return (
+      <div className="space-y-4">
+        <Skeleton className="h-8 w-56" />
+        <Card>
+          <CardContent className="space-y-2 pt-6">
+            <Skeleton className="h-5 w-full" />
+            <Skeleton className="h-5 w-2/3" />
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+  if (!q) return <p className="text-sm text-muted-foreground">Quotation tidak ditemukan</p>;
 
   const isDraft = q.status === "Quotation";
 
   return (
-    <div className="detail-card">
-      <h2>Detail Quotation</h2>
-      <div style={{ marginBottom: 16 }}>
-        <p>
-          <strong>Customer:</strong> {q.customer_snapshot?.nama || "-"}
-        </p>
-        <p>
-          <strong>Email:</strong> {q.customer_snapshot?.email || "-"}
-        </p>
-        <p>
-          <strong>Payment Terms:</strong> {q.payment_terms || "-"}
-        </p>
-        <p>
-          <strong>Expiration:</strong> {q.expiration || "-"}
-        </p>
-        <p>
-          <strong>Status:</strong> {q.status}
-        </p>
-        <p>
-          <strong>Tanggal:</strong>{" "}
-          {q.created_at
-            ? new Date(q.created_at).toLocaleDateString("id-ID")
-            : "-"}
-        </p>
-      </div>
-      <h3>Daftar Produk</h3>
-      <table className="table-slate">
-        <thead>
-          <tr>
-            <th>Produk</th>
-            <th>Jumlah</th>
-            <th>Harga Satuan</th>
-            <th>Subtotal</th>
-          </tr>
-        </thead>
-        <tbody>
-          {(q.items || []).length === 0 && (
-            <tr>
-              <td colSpan={4} style={{ textAlign: "center" }}>
-                Tidak ada item
-              </td>
-            </tr>
-          )}
-          {(q.items || []).map((it, idx) => (
-            <tr key={idx}>
-              <td>{it.nama_produk}</td>
-              <td>{it.jumlah}</td>
-              <td>Rp {Number(it.satuan_biaya || 0).toLocaleString("id-ID")}</td>
-              <td>Rp {Number(it.total_biaya || 0).toLocaleString("id-ID")}</td>
-            </tr>
-          ))}
-          <tr>
-            <td colSpan={3} style={{ textAlign: "right", fontWeight: "bold" }}>
-              Total
-            </td>
-            <td>
-              <strong>
-                Rp {Number(q.total_biaya || 0).toLocaleString("id-ID")}
-              </strong>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          marginTop: 24,
-        }}
-      >
-        <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
-          <a
-            className="btn-outline"
-            href="/sales/quotations"
-            style={{ marginBottom: 0 }}
-          >
-            ← Kembali
+    <div className="space-y-4">
+      <div className="flex items-center gap-2">
+        <Button variant="ghost" size="icon" asChild>
+          <a href="/sales/quotations" aria-label="Kembali">
+            <ArrowLeft />
           </a>
-          {isDraft && (
-            <button
-              className="btn-danger"
-              onClick={handleDelete}
-              style={{ marginBottom: 0 }}
-            >
-              Hapus
-            </button>
-          )}
-        </div>
+        </Button>
         <div>
-          {isDraft && (
-            <button
-              className="btn"
-              onClick={handleConfirm}
-              style={{ marginBottom: 0 }}
-            >
-              Konfirmasi → Sales Order
-            </button>
-          )}
+          <h1 className="text-lg font-semibold">Detail Quotation</h1>
+          <p className="text-sm text-muted-foreground">{q.customer_snapshot?.nama || "-"}</p>
         </div>
+      </div>
+      <Card>
+        <CardHeader className="flex flex-row items-start justify-between space-y-0">
+          <CardTitle className="text-base">Informasi</CardTitle>
+          <div className="flex gap-2">
+            {isDraft && (
+              <ActionButton
+                run={handleDelete}
+                confirmTitle="Hapus quotation?"
+                confirmText="Hapus quotation ini?"
+                label="Hapus"
+                variant="destructive"
+              />
+            )}
+            {isDraft && (
+              <ActionButton
+                run={handleConfirm}
+                confirmTitle="Konfirmasi quotation?"
+                confirmText="Konfirmasi quotation ini menjadi Sales Order?"
+                label="Konfirmasi Sales Order"
+              />
+            )}
+          </div>
+        </CardHeader>
+        <CardContent className="pt-0">
+          <dl className="divide-y">
+            <Def label="Customer">{q.customer_snapshot?.nama || "-"}</Def>
+            <Def label="Email">{q.customer_snapshot?.email || "-"}</Def>
+            <Def label="Payment Terms">{q.payment_terms || "-"}</Def>
+            <Def label="Expiration">{q.expiration || "-"}</Def>
+            <Def label="Status">
+              <StatusBadge status={q.status} />
+            </Def>
+            <Def label="Tanggal">
+              {q.created_at ? new Date(q.created_at).toLocaleDateString("id-ID") : "-"}
+            </Def>
+          </dl>
+        </CardContent>
+      </Card>
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-base">Daftar Produk</CardTitle>
+        </CardHeader>
+        <CardContent className="p-0">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Produk</TableHead>
+                <TableHead className="text-right">Jumlah</TableHead>
+                <TableHead className="text-right">Harga Satuan</TableHead>
+                <TableHead className="text-right">Subtotal</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {(q.items || []).length === 0 && (
+                <TableRow>
+                  <TableCell colSpan={4} className="text-center text-muted-foreground">
+                    Tidak ada item
+                  </TableCell>
+                </TableRow>
+              )}
+              {(q.items || []).map((it, idx) => (
+                <TableRow key={idx}>
+                  <TableCell className="font-medium">{it.nama_produk}</TableCell>
+                  <TableCell className="text-right tabular-nums">{it.jumlah}</TableCell>
+                  <TableCell className="text-right tabular-nums">
+                    Rp {Number(it.satuan_biaya || 0).toLocaleString("id-ID")}
+                  </TableCell>
+                  <TableCell className="text-right tabular-nums">
+                    Rp {Number(it.total_biaya || 0).toLocaleString("id-ID")}
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+            <TableFooter>
+              <TableRow>
+                <TableCell colSpan={3} className="text-right font-semibold">
+                  Total
+                </TableCell>
+                <TableCell className="text-right font-semibold tabular-nums">
+                  Rp {Number(q.total_biaya || 0).toLocaleString("id-ID")}
+                </TableCell>
+              </TableRow>
+            </TableFooter>
+          </Table>
+        </CardContent>
+      </Card>
+      <div className="flex items-center gap-2 text-sm text-muted-foreground">
+        Alur berikutnya
+        <ArrowRight className="h-4 w-4" />
+        {isDraft ? "konfirmasi untuk membuat Sales Order" : "sudah menjadi Sales Order"}
       </div>
     </div>
   );

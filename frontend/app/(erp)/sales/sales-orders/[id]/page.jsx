@@ -1,11 +1,26 @@
 "use client";
 import { useEffect, useState, use } from "react";
-import { useRouter } from "next/navigation";
+import { ArrowLeft, Check, Printer } from "lucide-react";
+import { toast } from "sonner";
 import { supabase } from "../../../../../lib/supabase/client";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow, TableFooter } from "@/components/ui/table";
+import { Skeleton } from "@/components/ui/skeleton";
+import StatusBadge from "@/components/ui/StatusBadge";
+import ActionButton from "@/components/ui/ActionButton";
+
+function Def({ label, children }) {
+  return (
+    <div className="grid grid-cols-3 gap-2 py-2">
+      <dt className="text-sm text-muted-foreground">{label}</dt>
+      <dd className="col-span-2 text-sm font-medium">{children}</dd>
+    </div>
+  );
+}
 
 export default function SalesOrderDetail({ params }) {
   const { id } = use(params);
-  const router = useRouter();
   const [order, setOrder] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -26,147 +41,157 @@ export default function SalesOrderDetail({ params }) {
   }
 
   async function handleCreateInvoice() {
-    if (!confirm("Buat invoice untuk Sales Order ini?")) return;
-
     const { error } = await supabase.rpc("invoice_sales_order", { p_so_id: id });
-    if (error) {
-      alert("Gagal buat invoice: " + error.message);
-      return;
-    }
-
-    alert("Invoice berhasil dibuat!");
+    if (error) throw new Error(error.message);
+    toast.success("Invoice berhasil dibuat!");
     fetchData();
   }
 
   async function handleMarkDelivered() {
-    if (!confirm("Tandai pengiriman sebagai Terkirim?")) return;
     const { error } = await supabase
       .from("sales_order")
       .update({ status_delivery: "Terkirim" })
       .eq("id", id);
-    if (error) alert("Gagal: " + error.message);
-    else fetchData();
+    if (error) throw new Error(error.message);
+    toast.success("Pengiriman ditandai Terkirim");
+    fetchData();
   }
 
-  if (loading) return <p>Loading...</p>;
-  if (!order) return <p>Sales Order tidak ditemukan</p>;
+  if (loading) {
+    return (
+      <div className="space-y-4">
+        <Skeleton className="h-8 w-56" />
+        <Card>
+          <CardContent className="space-y-2 pt-6">
+            <Skeleton className="h-5 w-full" />
+            <Skeleton className="h-5 w-2/3" />
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+  if (!order) return <p className="text-sm text-muted-foreground">Sales Order tidak ditemukan</p>;
 
   return (
-    <>
+    <div className="space-y-4">
       <style>{`
         @media print {
           nav, aside, .no-print { display: none !important; }
           body { background: white !important; }
-          .detail-card { box-shadow: none !important; border: 1px solid #ccc !important; }
           button, a { display: none !important; }
         }
       `}</style>
-      <div className="detail-card">
-        <h2>Detail Sales Order</h2>
-        <div style={{ marginBottom: 16 }}>
-          <p>
-            <strong>Customer:</strong> {order.customer_snapshot?.nama || "-"}
-          </p>
-          <p>
-            <strong>Email:</strong> {order.customer_snapshot?.email || "-"}
-          </p>
-          <p>
-            <strong>Payment Terms:</strong> {order.payment_terms || "-"}
-          </p>
-          <p>
-            <strong>Expiration:</strong> {order.expiration || "-"}
-          </p>
-          <p>
-            <strong>Status:</strong> {order.status}
-          </p>
-          <p>
-            <strong>Status Pengiriman:</strong> {order.status_delivery || "-"}
-          </p>
-          <p>
-            <strong>Tanggal:</strong>{" "}
-            {order.created_at
-              ? new Date(order.created_at).toLocaleDateString("id-ID")
-              : "-"}
-          </p>
-        </div>
-        <h3>Daftar Produk</h3>
-        <table className="table-slate">
-          <thead>
-            <tr>
-              <th>Produk</th>
-              <th>Jumlah</th>
-              <th>Harga Satuan</th>
-              <th>Subtotal</th>
-            </tr>
-          </thead>
-          <tbody>
-            {(order.items || []).length === 0 && (
-              <tr>
-                <td colSpan={4} style={{ textAlign: "center" }}>
-                  Tidak ada item
-                </td>
-              </tr>
-            )}
-            {(order.items || []).map((it, idx) => (
-              <tr key={idx}>
-                <td>{it.nama_produk}</td>
-                <td>{it.jumlah}</td>
-                <td>
-                  Rp {Number(it.satuan_biaya || 0).toLocaleString("id-ID")}
-                </td>
-                <td>
-                  Rp {Number(it.total_biaya || 0).toLocaleString("id-ID")}
-                </td>
-              </tr>
-            ))}
-            <tr>
-              <td
-                colSpan={3}
-                style={{ textAlign: "right", fontWeight: "bold" }}
-              >
-                Total
-              </td>
-              <td>
-                <strong>
-                  Rp {Number(order.total_biaya || 0).toLocaleString("id-ID")}
-                </strong>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            marginTop: 24,
-          }}
-        >
-          <a className="btn-outline no-print mb-0" href="/sales/sales-orders">
-            ← Kembali
+      <div className="flex items-center gap-2">
+        <Button variant="ghost" size="icon" asChild>
+          <a href="/sales/sales-orders" aria-label="Kembali">
+            <ArrowLeft />
           </a>
-          <div style={{ display: "flex", gap: 12 }} className="no-print">
-            {/* Tombol independen — cek status_delivery */}
-            {order.status_delivery === "Sedang Dikirim" && (
-              <button className="btn-outline mb-0" onClick={handleMarkDelivered}>
-                ✓ Tandai Terkirim
-              </button>
-            )}
-
-            {/* Tombol independen — cek status billing */}
-            {order.status === "To Invoice" && (
-              <button className="btn mb-0" onClick={handleCreateInvoice}>
-                Buat Invoice
-              </button>
-            )}
-
-            <button className="btn-outline mb-0" onClick={() => window.print()}>
-              🖨️ Print
-            </button>
-          </div>
+        </Button>
+        <div>
+          <h1 className="text-lg font-semibold">Detail Sales Order</h1>
+          <p className="text-sm text-muted-foreground">{order.customer_snapshot?.nama || "-"}</p>
         </div>
       </div>
-    </>
+      <Card>
+        <CardHeader className="flex flex-row items-start justify-between space-y-0">
+          <CardTitle className="text-base">Informasi</CardTitle>
+          <div className="no-print flex flex-wrap gap-2">
+            {order.status_delivery === "Sedang Dikirim" && (
+              <ActionButton
+                run={handleMarkDelivered}
+                confirmTitle="Tandai terkirim?"
+                confirmText="Tandai pengiriman sebagai Terkirim?"
+                label="Tandai Terkirim"
+                variant="secondary"
+              />
+            )}
+            {order.status === "To Invoice" && (
+              <ActionButton
+                run={handleCreateInvoice}
+                confirmTitle="Buat invoice?"
+                confirmText="Buat invoice untuk Sales Order ini?"
+                label="Buat Invoice"
+              />
+            )}
+            <Button variant="outline" size="sm" onClick={() => window.print()}>
+              <Printer />
+              Print
+            </Button>
+          </div>
+        </CardHeader>
+        <CardContent className="pt-0">
+          <dl className="divide-y">
+            <Def label="Customer">{order.customer_snapshot?.nama || "-"}</Def>
+            <Def label="Email">{order.customer_snapshot?.email || "-"}</Def>
+            <Def label="Payment Terms">{order.payment_terms || "-"}</Def>
+            <Def label="Expiration">{order.expiration || "-"}</Def>
+            <Def label="Status">
+              <StatusBadge status={order.status} />
+            </Def>
+            <Def label="Status Pengiriman">
+              {order.status_delivery === "Terkirim" ? (
+                <span className="inline-flex items-center gap-1 font-medium text-emerald-600">
+                  <Check className="h-4 w-4" />
+                  Terkirim
+                </span>
+              ) : (
+                order.status_delivery || "-"
+              )}
+            </Def>
+            <Def label="Tanggal">
+              {order.created_at ? new Date(order.created_at).toLocaleDateString("id-ID") : "-"}
+            </Def>
+          </dl>
+        </CardContent>
+      </Card>
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-base">Daftar Produk</CardTitle>
+        </CardHeader>
+        <CardContent className="p-0">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Produk</TableHead>
+                <TableHead className="text-right">Jumlah</TableHead>
+                <TableHead className="text-right">Harga Satuan</TableHead>
+                <TableHead className="text-right">Subtotal</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {(order.items || []).length === 0 && (
+                <TableRow>
+                  <TableCell colSpan={4} className="text-center text-muted-foreground">
+                    Tidak ada item
+                  </TableCell>
+                </TableRow>
+              )}
+              {(order.items || []).map((it, idx) => (
+                <TableRow key={idx}>
+                  <TableCell className="font-medium">{it.nama_produk}</TableCell>
+                  <TableCell className="text-right tabular-nums">{it.jumlah}</TableCell>
+                  <TableCell className="text-right tabular-nums">
+                    Rp {Number(it.satuan_biaya || 0).toLocaleString("id-ID")}
+                  </TableCell>
+                  <TableCell className="text-right tabular-nums">
+                    Rp {Number(it.total_biaya || 0).toLocaleString("id-ID")}
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+            <TableFooter>
+              <TableRow>
+                <TableCell colSpan={3} className="text-right font-semibold">
+                  Total
+                </TableCell>
+                <TableCell className="text-right font-semibold tabular-nums">
+                  Rp {Number(order.total_biaya || 0).toLocaleString("id-ID")}
+                </TableCell>
+              </TableRow>
+            </TableFooter>
+          </Table>
+        </CardContent>
+      </Card>
+    </div>
   );
 }
