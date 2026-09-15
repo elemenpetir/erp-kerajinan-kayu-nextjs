@@ -173,7 +173,7 @@ export default function ProdukDetail({ params }) {
         </CardContent>
       </Card>
       <div className="flex gap-2">
-        <Button variant="outline" asChild>
+        <Button variant="outline" size="sm" asChild>
           <a href={bom ? `/manufacturing/boms/${bom.id}` : `/manufacturing/boms/new?produk_id=${id}`}>
             {bom ? "Lihat BOM" : "+ Buat BOM"}
           </a>

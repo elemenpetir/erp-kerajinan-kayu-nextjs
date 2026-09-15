@@ -26,6 +26,7 @@ export default function ActionButton({
   label,
   className,
   variant,
+  size = 'sm',
 }) {
   const [open, setOpen] = useState(false);
   const [pending, start] = useTransition();
@@ -46,7 +47,7 @@ export default function ActionButton({
   const trigger = (
     <Button
       variant={variant || 'outline'}
-      size="sm"
+      size={size}
       className={className}
       disabled={pending}
       onClick={() => (confirmText ? setOpen(true) : execute())}
