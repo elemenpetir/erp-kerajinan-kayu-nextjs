@@ -24,7 +24,7 @@ function LoginForm() {
     return msg;
   }
 
-  async function handleAuth(mode) {
+  async function handleAuth() {
     setMessage('');
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       setMessage('Isi email yang valid.');
@@ -36,10 +36,8 @@ function LoginForm() {
     }
     setLoading(true);
     try {
-      const { error } =
-        mode === 'in'
-          ? await supabase.auth.signInWithPassword({ email, password })
-          : await supabase.auth.signUp({ email, password });
+      // Signup publik dimatikan (invite-only); hanya login + demo.
+      const { error } = await supabase.auth.signInWithPassword({ email, password });
       if (error) throw error;
       router.push(next);
       router.refresh();
@@ -51,6 +49,30 @@ function LoginForm() {
   }
 
   const formValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) && password.length >= 6;
+
+  // Demo account: public sacrificial credentials for portfolio visitors.
+  // Hidden automatically when env is not set. See README / docs.
+  const demoEmail = process.env.NEXT_PUBLIC_DEMO_EMAIL || '';
+  const demoPassword = process.env.NEXT_PUBLIC_DEMO_PASSWORD || '';
+  const demoEnabled = demoEmail.length > 0 && demoPassword.length >= 6;
+
+  async function handleDemo() {
+    setMessage('');
+    setLoading(true);
+    try {
+      const { error } = await supabase.auth.signInWithPassword({
+        email: demoEmail,
+        password: demoPassword,
+      });
+      if (error) throw error;
+      router.push(next);
+      router.refresh();
+    } catch (e) {
+      setMessage('Akun demo belum tersedia, hubungi admin.');
+    } finally {
+      setLoading(false);
+    }
+  }
 
   return (
     <Card style={{ width: 360, maxWidth: '100%' }}>
@@ -74,12 +96,14 @@ function LoginForm() {
           required
         />
         {message && <span className="text-sm text-destructive">{message}</span>}
-        <Button disabled={loading || !formValid} onClick={() => handleAuth('in')}>
+        <Button disabled={loading || !formValid} onClick={handleAuth}>
           {loading ? 'Memproses...' : 'Masuk'}
         </Button>
-        <Button variant="outline" disabled={loading || !formValid} onClick={() => handleAuth('up')}>
-          Daftar akun baru
-        </Button>
+        {demoEnabled && (
+          <Button variant="secondary" disabled={loading} onClick={handleDemo}>
+            Coba Demo Sekali Klik
+          </Button>
+        )}
       </CardContent>
     </Card>
   );
