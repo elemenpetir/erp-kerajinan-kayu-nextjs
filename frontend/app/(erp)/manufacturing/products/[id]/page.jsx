@@ -1,13 +1,22 @@
 "use client";
 import { useEffect, useState, use } from "react";
+import { ArrowLeft, TriangleAlert } from "lucide-react";
 import { supabase } from "../../../../../lib/supabase/client";
+import { formatRupiah } from "../../../../../lib/utils/format";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Skeleton } from "@/components/ui/skeleton";
+import ActionButton from "@/components/ui/ActionButton";
 
-const formatRupiah = (amount) =>
-  new Intl.NumberFormat("id-ID", {
-    style: "currency",
-    currency: "IDR",
-    minimumFractionDigits: 0,
-  }).format(amount || 0);
+function Def({ label, children }) {
+  return (
+    <div className="grid grid-cols-3 gap-2 py-2">
+      <dt className="text-sm text-muted-foreground">{label}</dt>
+      <dd className="col-span-2 text-sm font-medium">{children}</dd>
+    </div>
+  );
+}
 
 export default function ProdukDetail({ params }) {
   const { id } = use(params);
@@ -62,13 +71,26 @@ export default function ProdukDetail({ params }) {
   }
 
   async function handleDelete() {
-    if (!confirm("Hapus produk ini?")) return;
-    await supabase.from("produk").delete().eq("id", id);
+    const { error } = await supabase.from("produk").delete().eq("id", id);
+    if (error) throw new Error(error.message);
     window.location.href = "/manufacturing/products";
   }
 
-  if (loading) return <p>Loading...</p>;
-  if (!produk) return <p>Produk tidak ditemukan</p>;
+  if (loading) {
+    return (
+      <div className="space-y-4">
+        <Skeleton className="h-8 w-56" />
+        <Card>
+          <CardContent className="space-y-2 pt-6">
+            <Skeleton className="h-5 w-full" />
+            <Skeleton className="h-5 w-full" />
+            <Skeleton className="h-5 w-2/3" />
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+  if (!produk) return <p className="text-sm text-muted-foreground">Produk tidak ditemukan</p>;
 
   const hargaJual = parseFloat(produk.harga_produksi || 0);
   const biayaProduksi = bom ? parseFloat(bom.total_biaya_bahan || 0) : null;
@@ -76,102 +98,82 @@ export default function ProdukDetail({ params }) {
   const isRugi = margin !== null && margin < 0;
 
   return (
-    <div>
-      <h2>Detail Produk</h2>
-      <div className="detail-card">
-        {/* Nama */}
-        <p>
-          <strong>Nama:</strong> {produk.nama}
-        </p>
-
-        {/* Harga Jual — inline edit */}
-        <div style={{ marginBottom: 8 }}>
-          <strong>Harga Jual:</strong>{" "}
-          {editingHarga ? (
-            <form
-              onSubmit={handleUpdateHarga}
-              style={{ display: "inline-flex", gap: 8, alignItems: "center" }}
-            >
-              <input
-                type="number"
-                min="0"
-                value={harga}
-                onChange={(e) => setHarga(e.target.value)}
-                style={{ width: 160 }}
-                autoFocus
-              />
-              <button className="btn-table-action" type="submit">
-                Simpan
-              </button>
-              <button
-                className="btn-table-action"
-                type="button"
-                onClick={() => setEditingHarga(false)}
-              >
-                Batal
-              </button>
-            </form>
-          ) : (
-            <>
-              {formatRupiah(hargaJual)}{" "}
-              <button
-                className="btn-table-action"
-                style={{ marginLeft: 8 }}
-                onClick={() => setEditingHarga(true)}
-              >
-                Edit
-              </button>
-            </>
-          )}
+    <div className="space-y-4">
+      <div className="flex items-center gap-2">
+        <Button variant="ghost" size="icon" asChild>
+          <a href="/manufacturing/products" aria-label="Kembali">
+            <ArrowLeft />
+          </a>
+        </Button>
+        <div>
+          <h1 className="text-lg font-semibold">{produk.nama}</h1>
+          <p className="text-sm text-muted-foreground">Detail produk</p>
         </div>
-
-        {/* Biaya Produksi dari BOM */}
-        <p>
-          <strong>Biaya Produksi:</strong>{" "}
-          {biayaProduksi !== null ? (
-            formatRupiah(biayaProduksi)
-          ) : (
-            <span style={{ color: "#94a3b8" }}>Belum ada BOM</span>
-          )}
-        </p>
-
-        {/* Margin */}
-        {margin !== null && (
-          <div
-            style={{
-              marginTop: 8,
-              padding: "8px 16px",
-              borderRadius: 8,
-              background: isRugi ? "#fff1f2" : "#f0fdf4",
-              border: `1px solid ${isRugi ? "#fca5a5" : "#86efac"}`,
-              display: "inline-block",
-            }}
-          >
-            <strong>Margin:</strong>{" "}
-            <span
-              style={{ color: isRugi ? "#dc2626" : "#16a34a", fontWeight: 600 }}
-            >
-              {formatRupiah(margin)}
-            </span>
-            {isRugi && (
-              <span style={{ marginLeft: 8, color: "#dc2626" }}>
-                ⚠️ Harga jual lebih rendah dari biaya produksi!
+      </div>
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-base">Informasi</CardTitle>
+        </CardHeader>
+        <CardContent className="divide-y pt-0">
+          <Def label="Nama">{produk.nama}</Def>
+          <Def label="Harga Jual">
+            {editingHarga ? (
+              <form onSubmit={handleUpdateHarga} className="flex items-center gap-2">
+                <Input
+                  type="number"
+                  min="0"
+                  value={harga}
+                  onChange={(e) => setHarga(e.target.value)}
+                  className="w-40"
+                  autoFocus
+                />
+                <Button size="sm" type="submit">
+                  Simpan
+                </Button>
+                <Button size="sm" variant="outline" type="button" onClick={() => setEditingHarga(false)}>
+                  Batal
+                </Button>
+              </form>
+            ) : (
+              <span className="inline-flex items-center gap-2">
+                {formatRupiah(hargaJual)}
+                <Button size="sm" variant="outline" onClick={() => setEditingHarga(true)}>
+                  Edit
+                </Button>
               </span>
             )}
-          </div>
-        )}
-
-        <div className="detail-actions">
-          <a
-            className="btn-outline"
-            href={bom ? `/manufacturing/boms/${bom.id}` : `/manufacturing/boms/new?produk_id=${id}`}
-          >
+          </Def>
+          <Def label="Biaya Produksi">
+            {biayaProduksi !== null ? formatRupiah(biayaProduksi) : <span className="text-muted-foreground">Belum ada BOM</span>}
+          </Def>
+          {margin !== null && (
+            <Def label="Margin">
+              <span className={isRugi ? "font-semibold text-destructive" : "font-semibold text-emerald-600"}>
+                {formatRupiah(margin)}
+              </span>
+              {isRugi && (
+                <span className="ml-2 inline-flex items-center gap-1 text-sm text-destructive">
+                  <TriangleAlert className="h-4 w-4" />
+                  Harga jual lebih rendah dari biaya produksi!
+                </span>
+              )}
+            </Def>
+          )}
+        </CardContent>
+      </Card>
+      <div className="flex gap-2">
+        <Button variant="outline" asChild>
+          <a href={bom ? `/manufacturing/boms/${bom.id}` : `/manufacturing/boms/new?produk_id=${id}`}>
             {bom ? "Lihat BOM" : "+ Buat BOM"}
           </a>
-          <button className="btn-danger mb-0" onClick={handleDelete}>
-            Hapus Produk
-          </button>
-        </div>
+        </Button>
+        <ActionButton
+          run={handleDelete}
+          confirmTitle="Hapus produk?"
+          confirmText="Hapus produk ini? BOM terkait ikut terhapus."
+          label="Hapus Produk"
+          variant="destructive"
+        />
       </div>
     </div>
   );

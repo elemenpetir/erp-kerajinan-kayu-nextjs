@@ -22,6 +22,7 @@ export default function ActionButton({
   confirmTitle = 'Yakin?',
   confirmText,
   successText,
+  onSuccess,
   label,
   className,
   variant,
@@ -35,6 +36,7 @@ export default function ActionButton({
         await run();
         setOpen(false);
         if (successText) toast.success(successText);
+        if (onSuccess) onSuccess();
       } catch (e) {
         toast.error('Gagal: ' + e.message);
       }

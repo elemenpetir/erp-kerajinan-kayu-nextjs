@@ -1,6 +1,21 @@
 'use client'
 import { useEffect, useState, use } from 'react'
+import { ArrowLeft } from 'lucide-react'
 import { supabase } from '../../../../../lib/supabase/client'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import { Skeleton } from '@/components/ui/skeleton'
+import ActionButton from '@/components/ui/ActionButton'
+
+function Def({ label, children }) {
+  return (
+    <div className="grid grid-cols-3 gap-2 py-2">
+      <dt className="text-sm text-muted-foreground">{label}</dt>
+      <dd className="col-span-2 text-sm font-medium">{children}</dd>
+    </div>
+  )
+}
 
 export default function BomDetail({ params }) {
   const { id } = use(params)
@@ -24,48 +39,89 @@ export default function BomDetail({ params }) {
   }
 
   async function handleDelete() {
-    if (!confirm('Hapus BOM ini?')) return
-    await supabase.from('bom').delete().eq('id', id)
+    const { error } = await supabase.from('bom').delete().eq('id', id)
+    if (error) throw new Error(error.message)
     window.location.href = '/manufacturing/boms'
   }
 
-  if (loading) return <p>Loading...</p>
-  if (!bom) return <p>BOM tidak ditemukan</p>
+  if (loading) {
+    return (
+      <div className="space-y-4">
+        <Skeleton className="h-8 w-56" />
+        <Card>
+          <CardContent className="space-y-2 pt-6">
+            <Skeleton className="h-5 w-full" />
+            <Skeleton className="h-5 w-full" />
+          </CardContent>
+        </Card>
+      </div>
+    )
+  }
+  if (!bom) return <p className="text-sm text-muted-foreground">BOM tidak ditemukan</p>
 
   return (
-    <div className="detail-card">
-      <h2>BOM untuk: {bom.produk?.nama || 'Produk tidak diketahui'}</h2>
-      <p>Jumlah Produk: {bom.jumlah_produk}</p>
-      <p>Total Biaya Produk: {bom.total_biaya_produk}</p>
-      <p>Total Biaya Bahan: {bom.total_biaya_bahan}</p>
-      <p>Referensi: {bom.internal_referensi}</p>
-      <div className="detail-actions">
-        <button className="btn-danger" onClick={handleDelete}>
-          Hapus
-        </button>
+    <div className="space-y-4">
+      <div className="flex items-center gap-2">
+        <Button variant="ghost" size="icon" asChild>
+          <a href="/manufacturing/boms" aria-label="Kembali">
+            <ArrowLeft />
+          </a>
+        </Button>
+        <div>
+          <h1 className="text-lg font-semibold">BOM untuk: {bom.produk?.nama || 'Produk tidak diketahui'}</h1>
+          <p className="text-sm text-muted-foreground">Komposisi dan biaya</p>
+        </div>
       </div>
-      <div style={{ marginTop: 20 }}>
-        <h3>Komponen</h3>
-        <table className="table-slate">
-          <thead>
-            <tr>
-              <th>Nama Bahan</th>
-              <th>Jumlah</th>
-              <th>Harga Satuan</th>
-              <th>Subtotal</th>
-            </tr>
-          </thead>
-          <tbody>
-            {(bom.components || []).map((item, index) => (
-              <tr key={index}>
-                <td>{item.nama_bahan}</td>
-                <td>{item.jumlah}</td>
-                <td>{item.harga}</td>
-                <td>{item.harga * (item.jumlah || 0)}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-base">Informasi</CardTitle>
+        </CardHeader>
+        <CardContent className="pt-0">
+          <dl className="divide-y">
+            <Def label="Jumlah Produk">{bom.jumlah_produk}</Def>
+            <Def label="Total Biaya Produk">{Number(bom.total_biaya_produk || 0).toLocaleString('id-ID')}</Def>
+            <Def label="Total Biaya Bahan">{Number(bom.total_biaya_bahan || 0).toLocaleString('id-ID')}</Def>
+            <Def label="Referensi">{bom.internal_referensi || '-'}</Def>
+          </dl>
+        </CardContent>
+      </Card>
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-base">Komponen</CardTitle>
+        </CardHeader>
+        <CardContent className="p-0">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Nama Bahan</TableHead>
+                <TableHead className="text-right">Jumlah</TableHead>
+                <TableHead className="text-right">Harga Satuan</TableHead>
+                <TableHead className="text-right">Subtotal</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {(bom.components || []).map((item, index) => (
+                <TableRow key={index}>
+                  <TableCell className="font-medium">{item.nama_bahan}</TableCell>
+                  <TableCell className="text-right tabular-nums">{item.jumlah}</TableCell>
+                  <TableCell className="text-right tabular-nums">{Number(item.harga || 0).toLocaleString('id-ID')}</TableCell>
+                  <TableCell className="text-right tabular-nums">
+                    {Number((item.harga || 0) * (item.jumlah || 0)).toLocaleString('id-ID')}
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </CardContent>
+      </Card>
+      <div className="flex gap-2">
+        <ActionButton
+          run={handleDelete}
+          confirmTitle="Hapus BOM?"
+          confirmText="Hapus BOM ini?"
+          label="Hapus"
+          variant="destructive"
+        />
       </div>
     </div>
   )
