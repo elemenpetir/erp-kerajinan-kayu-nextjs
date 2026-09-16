@@ -1,6 +1,6 @@
 import { Landmark } from 'lucide-react';
 import { createClient } from '../../../../lib/supabase/server';
-import { getVendorBillsPage, PAGE_SIZE } from '../../../../lib/services/accounting';
+import { getVendorBillsPage, getVendorBillsTotal, PAGE_SIZE } from '../../../../lib/services/accounting';
 import { formatRupiah } from '../../../../lib/utils/format';
 import { Card, CardContent } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow, TableFooter } from '@/components/ui/table';
@@ -14,7 +14,7 @@ export default async function VendorBillsPage({ searchParams }) {
   const { page } = await searchParams;
   const supabase = await createClient();
   const { items, count, page: safePage } = await getVendorBillsPage(supabase, { page });
-  const pageTotal = items.reduce((s, b) => s + parseFloat(b.jumlah_pembayaran || 0), 0);
+  const grandTotal = await getVendorBillsTotal(supabase);
 
   return (
     <div className="space-y-4">
@@ -55,9 +55,9 @@ export default async function VendorBillsPage({ searchParams }) {
               <TableFooter>
                 <TableRow>
                   <TableCell colSpan={3} className="text-right font-semibold">
-                    Total halaman ini
+                    Total keseluruhan
                   </TableCell>
-                  <TableCell className="text-right font-semibold tabular-nums">{formatRupiah(pageTotal)}</TableCell>
+                  <TableCell className="text-right font-semibold tabular-nums">{formatRupiah(grandTotal)}</TableCell>
                   <TableCell colSpan={2} />
                 </TableRow>
               </TableFooter>
