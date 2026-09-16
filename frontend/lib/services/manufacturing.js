@@ -28,7 +28,7 @@ export async function getProductsPage(supabase, { page = 1, pageSize = PAGE_SIZE
   const { safePage, from, to } = rangeOf(page, pageSize);
   const { data, count, error } = await supabase
     .from('produk')
-    .select('id,kode,nama,harga_produksi,created_at', { count: 'exact' })
+    .select('id,kode,nama,harga_produksi,gambar_url,created_at', { count: 'exact' })
     .order('created_at', { ascending: false })
     .range(from, to);
   if (error) throw new Error(error.message);
@@ -50,7 +50,7 @@ export async function getMaterialsPage(supabase, { page = 1, pageSize = PAGE_SIZ
   const { safePage, from, to } = rangeOf(page, pageSize);
   const { data, count, error } = await supabase
     .from('bahan')
-    .select('id,kode,nama,biaya,harga,internal_referensi,created_at', { count: 'exact' })
+    .select('id,kode,nama,biaya,harga,internal_referensi,gambar_url,created_at', { count: 'exact' })
     .order('created_at', { ascending: false })
     .range(from, to);
   if (error) throw new Error(error.message);
