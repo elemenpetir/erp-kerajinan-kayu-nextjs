@@ -1,4 +1,5 @@
 "use client";
+import { Def } from '@/components/ui/DefinitionList';
 import { useEffect, useState, use } from "react";
 import { ArrowLeft, TriangleAlert } from "lucide-react";
 import { toast } from "sonner";
@@ -11,14 +12,6 @@ import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 import ActionButton from "@/components/ui/ActionButton";
 
-function Def({ label, children }) {
-  return (
-    <div className="grid grid-cols-3 gap-2 py-2">
-      <dt className="text-sm text-muted-foreground">{label}</dt>
-      <dd className="col-span-2 text-sm font-medium">{children}</dd>
-    </div>
-  );
-}
 
 export default function ProdukDetail({ params }) {
   const { id } = use(params);
