@@ -141,7 +141,8 @@ export default function ProdukDetail({ params }) {
             ) : (
               <span className="inline-flex items-center gap-2">
                 {formatRupiah(hargaJual)}
-                <Button size="sm" variant="outline" onClick={() => setEditingHarga(true)}>
+                {/* h-6 agar sejajar baris teks (24+16=40px) — jangan besarkan tanpa sesuaikan Def */}
+                <Button size="sm" variant="ghost" className="h-6 px-2 text-xs" onClick={() => setEditingHarga(true)}>
                   Edit
                 </Button>
               </span>
