@@ -1,4 +1,4 @@
-import { Landmark } from 'lucide-react';
+import { Receipt } from 'lucide-react';
 import { createClient } from '../../../../lib/supabase/server';
 import { getVendorBillsPage, getVendorBillsTotal, PAGE_SIZE } from '../../../../lib/services/accounting';
 import { formatRupiah } from '../../../../lib/utils/format';
@@ -64,7 +64,7 @@ export default async function VendorBillsPage({ searchParams }) {
             )}
           </Table>
           {items.length === 0 && (
-            <EmptyState icon={Landmark} title="Tidak ada data vendor bill." />
+            <EmptyState icon={Receipt} title="Tidak ada data vendor bill." />
           )}
         </CardContent>
       </Card>

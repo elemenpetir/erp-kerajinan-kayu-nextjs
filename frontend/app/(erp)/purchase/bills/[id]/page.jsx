@@ -7,7 +7,7 @@ import { toast } from "sonner";
 import { supabase } from "../../../../../lib/supabase/client";
 import { useRouter } from "next/navigation";
 import { formatRupiah } from "../../../../../lib/utils/format";
-import { confirmBill, deleteBill } from "../actions";
+import { confirmBill, deleteBill, payBill } from "../actions";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow, TableFooter } from "@/components/ui/table";
@@ -68,8 +68,7 @@ export default function BillDetail({ params }) {
   }
 
   async function handleBayar() {
-    const { error } = await supabase.rpc("pay_bill", { p_bill_id: id });
-    if (error) throw new Error(error.message);
+    await payBill(id);
     toast.success("Bill berhasil dibayar!");
     fetchBill();
   }

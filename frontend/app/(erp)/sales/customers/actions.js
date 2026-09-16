@@ -11,3 +11,21 @@ export async function deleteCustomer(id) {
   if (error) throw new Error(error.message);
   revalidatePath(PATH);
 }
+
+export async function updateCustomer(id, fields) {
+  const nama = String(fields.nama || '').trim();
+  if (!nama) throw new Error('Nama wajib diisi.');
+  const supabase = await createClient();
+  const { error } = await supabase
+    .from('customer_individual')
+    .update({
+      nama,
+      nama_perusahaan: String(fields.nama_perusahaan || '').trim() || null,
+      alamat: String(fields.alamat || '').trim() || null,
+      telp: String(fields.telp || '').trim() || null,
+      email: String(fields.email || '').trim() || null,
+    })
+    .eq('id', id);
+  if (error) throw new Error(error.message);
+  revalidatePath(PATH);
+}

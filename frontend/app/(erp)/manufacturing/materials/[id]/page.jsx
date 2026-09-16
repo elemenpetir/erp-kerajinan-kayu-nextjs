@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import { ArrowLeft } from 'lucide-react'
 import { toast } from 'sonner'
 import { supabase } from '../../../../../lib/supabase/client'
-import { deleteMaterial } from '../actions'
+import { deleteMaterial, updateMaterial } from '../actions'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
@@ -45,21 +45,14 @@ export default function BahanDetail({ params }) {
 
   async function handleUpdate(e) {
     e.preventDefault()
-    const { error } = await supabase
-      .from('bahan')
-      .update({
-        nama,
-        biaya: parseFloat(biaya || 0),
-        harga: parseFloat(harga || 0),
-        internal_referensi: internalReferensi || null,
-      })
-      .eq('id', id)
-    if (error) {
-      toast.error(error.code === '23505' ? 'Referensi sudah dipakai, gunakan yang lain.' : 'Gagal update: ' + error.message)
-      return
+    try {
+      await updateMaterial(id, { nama, biaya, harga, internal_referensi: internalReferensi })
+      toast.success('Bahan diperbarui')
+      setEditing(false)
+      fetchItem()
+    } catch (err) {
+      toast.error(err.message)
     }
-    setEditing(false)
-    fetchItem()
   }
 
   async function handleDelete() {

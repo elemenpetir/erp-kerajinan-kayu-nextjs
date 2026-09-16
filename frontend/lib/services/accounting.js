@@ -13,19 +13,18 @@ export async function getCustomerInvoicesPage(supabase, { page = 1, pageSize = P
   return { items: data || [], count: count || 0, page: safePage, pageSize };
 }
 
-// Grand total across ALL rows (narrow 1-column fetch; upgrade to SUM RPC
-// when invoice volume makes full-column transfer measurable).
-// ponytail: 1 kolom angka, bukan select *
+// Grand total via single-row RPC aggregate (no 1000-row PostgREST cap).
+// Requires migration 010 (falls back to throwing a clear error otherwise).
 export async function getCustomerInvoicesTotal(supabase) {
-  const { data, error } = await supabase.from('customer_invoice').select('jumlah_pembayaran');
+  const { data, error } = await supabase.rpc('get_customer_invoices_total');
   if (error) throw new Error(error.message);
-  return (data || []).reduce((s, r) => s + parseFloat(r.jumlah_pembayaran || 0), 0);
+  return Number(data || 0);
 }
 
 export async function getVendorBillsTotal(supabase) {
-  const { data, error } = await supabase.from('vendor_bill').select('jumlah_pembayaran');
+  const { data, error } = await supabase.rpc('get_vendor_bills_total');
   if (error) throw new Error(error.message);
-  return (data || []).reduce((s, r) => s + parseFloat(r.jumlah_pembayaran || 0), 0);
+  return Number(data || 0);
 }
 
 export async function getVendorBillsPage(supabase, { page = 1, pageSize = PAGE_SIZE } = {}) {

@@ -27,6 +27,9 @@ function LoginForm() {
     if (/invalid login credentials/i.test(msg)) return 'Email atau password salah.';
     if (/anonymous/i.test(msg)) return 'Isi email dan password terlebih dahulu.';
     if (/password.*(short|least|6)/i.test(msg)) return 'Password minimal 6 karakter.';
+    if (/email not confirmed/i.test(msg)) return 'Email belum dikonfirmasi, hubungi admin.';
+    if (/too many requests|rate limit|over_request/i.test(msg)) return 'Terlalu banyak percobaan, tunggu sebentar lalu coba lagi.';
+    if (/fetch failed|network|Failed to fetch/i.test(msg)) return 'Gagal terhubung ke server, periksa koneksi.';
     return msg;
   }
 

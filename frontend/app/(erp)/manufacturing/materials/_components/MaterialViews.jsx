@@ -88,7 +88,7 @@ function MaterialGrid({ items }) {
         <Card key={b.id} className="overflow-hidden">
           {b.gambar_url ? (
             // eslint-disable-next-line @next/next/no-img-element
-            <img src={b.gambar_url} alt={b.nama} className="aspect-square w-full object-cover" loading="lazy" />
+            <img src={b.gambar_url} alt={b.nama || 'Bahan'} className="aspect-square w-full object-cover" loading="lazy" />
           ) : (
             <div className="flex aspect-square w-full items-center justify-center bg-muted" aria-hidden="true">
               <span className="text-3xl font-semibold text-muted-foreground">{monogram(b.nama)}</span>

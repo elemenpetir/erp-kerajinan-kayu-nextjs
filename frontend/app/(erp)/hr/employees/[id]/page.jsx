@@ -4,7 +4,7 @@ import { useEffect, useState, use } from 'react'
 import { ArrowLeft } from 'lucide-react'
 import { toast } from 'sonner'
 import { supabase } from '../../../../../lib/supabase/client'
-import { deleteEmployee } from '../actions'
+import { deleteEmployee, updateEmployee } from '../actions'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
@@ -34,12 +34,13 @@ export default function KaryawanDetail({ params }){
 
   async function handleUpdate(e){
     e.preventDefault()
-    const { error } = await supabase.from('karyawan').update({ nama, posisi, telp, email }).eq('id', id)
-    if (error) toast.error('Gagal update: ' + error.message)
-    else {
+    try {
+      await updateEmployee(id, { nama, posisi, telp, email })
       toast.success('Karyawan diperbarui')
       setEditing(false)
       fetchItem()
+    } catch (err) {
+      toast.error(err.message)
     }
   }
 

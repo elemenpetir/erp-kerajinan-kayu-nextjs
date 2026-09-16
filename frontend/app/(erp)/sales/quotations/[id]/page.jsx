@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "../../../../../lib/supabase/client";
-import { deleteQuotation } from "../actions";
+import { deleteQuotation, confirmQuotation } from "../actions";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow, TableFooter } from "@/components/ui/table";
@@ -42,8 +42,7 @@ export default function QuotationDetail({ params }) {
   }
 
   async function handleConfirm() {
-    const { error } = await supabase.rpc("confirm_quotation", { p_q_id: id });
-    if (error) throw new Error(error.message);
+    await confirmQuotation(id);
     toast.success("Berhasil! Sales Order telah dibuat.");
     fetchData();
   }

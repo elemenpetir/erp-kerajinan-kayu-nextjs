@@ -14,14 +14,14 @@ BEGIN
   ]
   LOOP
     EXECUTE format(
-      'WITH ranked AS (
-         SELECT id, COALESCE(MAX(kode) OVER (), 0)
-           + ROW_NUMBER() OVER (ORDER BY created_at, id) AS new_kode
-         FROM %I WHERE kode IS NULL
+      'WITH m AS (SELECT COALESCE(MAX(kode), 0) AS mx FROM %I),
+       ranked AS (
+         SELECT x.id, m.mx + ROW_NUMBER() OVER (ORDER BY x.created_at, x.id) AS new_kode
+         FROM %I AS x CROSS JOIN m WHERE x.kode IS NULL
        )
-       UPDATE %I AS x SET kode = ranked.new_kode
-       FROM ranked WHERE x.id = ranked.id',
-      t, t);
+       UPDATE %I AS t SET kode = ranked.new_kode
+       FROM ranked WHERE t.id = ranked.id',
+      t, t, t);
   END LOOP;
 END $$;
 

@@ -134,7 +134,7 @@ export default function ProdukDetail({ params }) {
                 <Button size="sm" type="submit">
                   Simpan
                 </Button>
-                <Button size="sm" variant="outline" type="button" onClick={() => setEditingHarga(false)}>
+                <Button size="sm" variant="outline" type="button" onClick={() => { setHarga(produk.harga_produksi || ""); setEditingHarga(false); }}>
                   Batal
                 </Button>
               </form>

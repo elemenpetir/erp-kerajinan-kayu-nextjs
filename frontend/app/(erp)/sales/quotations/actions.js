@@ -14,3 +14,10 @@ export async function deleteQuotation(id) {
   if (error) throw new Error(error.message);
   revalidatePath(PATH);
 }
+
+export async function confirmQuotation(id) {
+  const supabase = await createClient();
+  const { error } = await supabase.rpc('confirm_quotation', { p_q_id: id });
+  if (error) throw new Error(error.message);
+  revalidatePath(PATH);
+}

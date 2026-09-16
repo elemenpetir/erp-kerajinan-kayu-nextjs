@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "../../../../../lib/supabase/client";
-import { deleteCustomer } from "../actions";
+import { deleteCustomer, updateCustomer } from "../actions";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -50,15 +50,13 @@ export default function CustomerDetail({ params }) {
 
   async function handleUpdate(e) {
     e.preventDefault();
-    const { error } = await supabase
-      .from("customer_individual")
-      .update({ nama, nama_perusahaan: namaPerusahaan, alamat, telp, email })
-      .eq("id", id);
-    if (error) toast.error("Gagal update: " + error.message);
-    else {
+    try {
+      await updateCustomer(id, { nama, nama_perusahaan: namaPerusahaan, alamat, telp, email });
       toast.success("Customer diperbarui");
       setEditing(false);
       fetchItem();
+    } catch (err) {
+      toast.error(err.message);
     }
   }
 
