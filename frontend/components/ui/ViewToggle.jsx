@@ -29,7 +29,7 @@ export default function ViewToggle({ value, onChange }) {
   return (
     <div className="inline-flex items-center rounded-md border bg-background p-0.5" role="group" aria-label="Tampilan">
       <Button
-        variant={value === 'list' ? 'secondary' : 'ghost'}
+        variant={value === 'list' ? 'default' : 'ghost'}
         size="sm"
         onClick={() => onChange('list')}
         aria-pressed={value === 'list'}
@@ -38,7 +38,7 @@ export default function ViewToggle({ value, onChange }) {
         <LayoutList />
       </Button>
       <Button
-        variant={value === 'grid' ? 'secondary' : 'ghost'}
+        variant={value === 'grid' ? 'default' : 'ghost'}
         size="sm"
         onClick={() => onChange('grid')}
         aria-pressed={value === 'grid'}
