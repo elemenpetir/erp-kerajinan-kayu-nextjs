@@ -45,12 +45,39 @@ const SEGMENT_LABELS = {
   new: 'Baru',
 }
 
+// Rute yang benar-benar ada (punya page.jsx). Segmen intermediate
+// (manufacturing, purchase, ...) BUKAN rute — tampil sebagai teks,
+// bukan link mati. Sinkron dengan app/(erp) + /login.
+const ROUTABLE_PREFIXES = [
+  '/',
+  '/login',
+  '/manufacturing/products',
+  '/manufacturing/materials',
+  '/manufacturing/boms',
+  '/manufacturing/categories',
+  '/manufacturing/production-orders',
+  '/purchase/vendors',
+  '/purchase/bills',
+  '/sales/customers',
+  '/sales/quotations',
+  '/sales/sales-orders',
+  '/accounting/customer-invoices',
+  '/accounting/vendor-bills',
+  '/hr/departments',
+  '/hr/employees',
+];
+
+function isRoutable(href) {
+  return ROUTABLE_PREFIXES.some((r) => href === r || href.startsWith(r + '/'));
+}
+
 function crumbs(pathname) {
   const segs = (pathname || '/').split('/').filter(Boolean)
   return segs.map((seg, i) => {
     const href = '/' + segs.slice(0, i + 1).join('/')
     const isId = /^[0-9a-fA-F-]{8,}$/.test(seg)
-    return { href, label: isId ? 'Detail' : SEGMENT_LABELS[seg] || seg, last: i === segs.length - 1 }
+    const linkable = !isId && isRoutable(href)
+    return { href, label: isId ? 'Detail' : SEGMENT_LABELS[seg] || seg, last: i === segs.length - 1, linkable }
   })
 }
 
@@ -84,8 +111,10 @@ export default function Header({ onMobileToggle }) {
                 <BreadcrumbItem>
                   {c.last ? (
                     <BreadcrumbPage>{c.label}</BreadcrumbPage>
-                  ) : (
+                  ) : c.linkable ? (
                     <BreadcrumbLink href={c.href}>{c.label}</BreadcrumbLink>
+                  ) : (
+                    <span className="text-muted-foreground">{c.label}</span>
                   )}
                 </BreadcrumbItem>
                 {!c.last && <BreadcrumbSeparator />}
