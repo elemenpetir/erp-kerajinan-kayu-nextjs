@@ -6,6 +6,8 @@ function Toaster({ ...props }) {
   return (
     <Sonner
       theme="light"
+      richColors
+      closeButton
       className="toaster group"
       toastOptions={{
         classNames: {
