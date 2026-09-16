@@ -117,7 +117,7 @@ export default function KaryawanDetail({ params }){
       </Card>
       {!editing && (
         <div className="flex gap-2">
-          <Button variant="outline" onClick={() => setEditing(true)}>Edit</Button>
+          <Button variant="outline" size="sm" onClick={() => setEditing(true)}>Edit</Button>
           <ActionButton
             run={handleDelete}
             confirmTitle="Hapus karyawan?"

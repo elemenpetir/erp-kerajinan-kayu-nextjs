@@ -143,7 +143,7 @@ export default function CustomerDetail({ params }) {
       </Card>
       {!editing && (
         <div className="flex gap-2">
-          <Button variant="outline" onClick={() => setEditing(true)}>
+          <Button variant="outline" size="sm" onClick={() => setEditing(true)}>
             Edit
           </Button>
           <ActionButton
