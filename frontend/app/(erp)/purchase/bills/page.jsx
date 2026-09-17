@@ -42,7 +42,7 @@ export default async function BillsList({ searchParams }) {
                 <TableHead>Deadline</TableHead>
                 <TableHead className="text-right">Total</TableHead>
                 <TableHead>Status</TableHead>
-                <TableHead className="w-48">Aksi</TableHead>
+                <TableHead className="w-64">Aksi</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -58,7 +58,7 @@ export default async function BillsList({ searchParams }) {
                     <StatusBadge status={b.status} />
                   </TableCell>
                   <TableCell>
-                    <div className="flex flex-wrap gap-1">
+                    <div className="flex items-center gap-1 whitespace-nowrap">
                       <Button variant="ghost" size="sm" asChild>
                         <a href={`/purchase/bills/${b.id}`}>Lihat</a>
                       </Button>
