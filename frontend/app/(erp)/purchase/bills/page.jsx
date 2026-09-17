@@ -86,7 +86,7 @@ export default async function BillsList({ searchParams }) {
                           confirmTitle="Hapus bill?"
                           confirmText="Hapus bill ini?"
                           label="Hapus"
-                          variant="destructive"
+                          variant="destructive-ghost"
                         />
                       )}
                     </div>
