@@ -11,7 +11,7 @@ export default function RootLayout({ children }) {
     <html lang="id">
       <body>
         {children}
-        <Toaster position="top-right" richColors={false} />
+        <Toaster position="top-right" />
       </body>
     </html>
   )
