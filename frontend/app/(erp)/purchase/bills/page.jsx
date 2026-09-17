@@ -69,6 +69,7 @@ export default async function BillsList({ searchParams }) {
                           confirmText="Bayar bill ini? Data akan masuk ke Vendor Bill Accounting."
                           successText="Bill berhasil dibayar!"
                           label="Bayar"
+                          variant="secondary"
                         />
                       )}
                       {b.status === 'Draft Bill' && (

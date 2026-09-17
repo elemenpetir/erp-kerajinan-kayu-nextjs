@@ -134,6 +134,7 @@ export default function BillDetail({ params }) {
                 confirmTitle="Bayar bill?"
                 confirmText="Bayar bill ini? Data akan masuk ke Vendor Bill Accounting."
                 label="Bayar"
+                variant="secondary"
               />
             )}
             <Button variant="outline" size="sm" onClick={() => window.print()}>
