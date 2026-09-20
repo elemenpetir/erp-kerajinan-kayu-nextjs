@@ -102,6 +102,9 @@ export default function BillDetail({ params }) {
           nav, aside, .no-print { display: none !important; }
           body { background: white !important; }
           button, a { display: none !important; }
+          main { overflow: visible !important; }
+          ::-webkit-scrollbar { display: none !important; }
+          * { scrollbar-width: none !important; }
         }
       `}</style>
       <div className="flex items-center gap-2">
