@@ -114,7 +114,7 @@ export default function BahanDetail({ params }) {
           ) : (
             <span className="text-sm text-muted-foreground">Belum ada foto</span>
           )}
-          <FilePicker onSelect={handleFoto} className="flex-1" />
+          <FilePicker onSelect={handleFoto} className="w-full max-w-xs" />
         </CardContent>
       </Card>
       <Card>
