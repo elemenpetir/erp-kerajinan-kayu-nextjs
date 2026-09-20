@@ -1,10 +1,9 @@
 'use client';
 
 import { useRef, useState } from 'react';
-import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils/cn';
 
-// File picker 2 kolom: tombol secondary + nama file.
+// File picker 1 field 2 warna: kiri fill secondary, kanan putih default.
 // Native input disembunyikan (tidak bisa di-grid dengan andal),
 // callback onSelect(file|null) ke pemanggil (upload tetap di sana).
 export default function FilePicker({
@@ -23,12 +22,27 @@ export default function FilePicker({
     if (onSelect) onSelect(f);
   }
 
+  function open() {
+    ref.current?.click();
+  }
+
   return (
-    <div className={cn('grid grid-cols-2 items-center gap-3', className)}>
-      <Button type="button" variant="secondary" onClick={() => ref.current?.click()}>
+    <div
+      role="button"
+      tabIndex={0}
+      onClick={open}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          open();
+        }
+      }}
+      className={cn('grid cursor-pointer grid-cols-2 overflow-hidden rounded-md border border-input text-sm', className)}
+    >
+      <span className="bg-secondary px-3 py-2 text-center font-medium text-secondary-foreground">
         {buttonLabel}
-      </Button>
-      <span className="truncate text-sm text-muted-foreground" title={name || emptyLabel}>
+      </span>
+      <span className="truncate px-3 py-2 text-muted-foreground" title={name || emptyLabel}>
         {name || emptyLabel}
       </span>
       <input ref={ref} type="file" accept={accept} onChange={handleChange} className="hidden" aria-label={buttonLabel} />
