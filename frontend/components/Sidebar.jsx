@@ -7,6 +7,7 @@ import {
   Calculator,
   ChevronDown,
   Factory,
+  FileText,
   Handshake,
   ShoppingCart,
   Users,
@@ -58,6 +59,13 @@ const navSections = [
     items: [
       { label: "Departemen", href: "/hr/departments" },
       { label: "Karyawan", href: "/hr/employees" },
+    ],
+  },
+  {
+    title: "Laporan",
+    icon: FileText,
+    items: [
+      { label: "Stok", href: "/reports/stock" },
     ],
   },
 ];
