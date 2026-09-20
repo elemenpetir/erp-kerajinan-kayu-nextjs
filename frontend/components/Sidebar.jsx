@@ -66,6 +66,7 @@ const navSections = [
     icon: FileText,
     items: [
       { label: "Stok", href: "/reports/stock" },
+      { label: "Penjualan", href: "/reports/sales" },
     ],
   },
 ];
