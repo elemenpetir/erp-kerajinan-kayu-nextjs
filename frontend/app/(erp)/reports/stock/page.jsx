@@ -84,18 +84,25 @@ export default async function StockReportPage({ searchParams }) {
         <PrintButton />
       </div>
       <div className="no-print flex flex-wrap items-center gap-2">
+        <span className="text-xs text-muted-foreground">Tampil:</span>
         <Button variant={tab === 'produk' ? 'secondary' : 'ghost'} size="sm" asChild>
-          <a href={href('produk', status, q)}>Produk</a>
+          <a href={href('produk', status, q)}>Produk ({produkRows.length})</a>
         </Button>
         <Button variant={tab === 'bahan' ? 'secondary' : 'ghost'} size="sm" asChild>
-          <a href={href('bahan', status, q)}>Bahan</a>
+          <a href={href('bahan', status, q)}>Bahan ({bahanRows.length})</a>
         </Button>
-        <span className="mx-1 h-4 w-px bg-border" aria-hidden="true" />
+        <span className="mx-2 h-6 w-px bg-border" aria-hidden="true" />
+        <span className="text-xs text-muted-foreground">Status:</span>
         <Button variant={status === 'semua' ? 'secondary' : 'ghost'} size="sm" asChild>
           <a href={href(tab, 'semua', q)}>Semua</a>
         </Button>
-        <Button variant={status === 'kritis' ? 'secondary' : 'ghost'} size="sm" asChild>
-          <a href={href(tab, 'kritis', q)}>Menipis/Habis</a>
+        <Button
+          variant={status === 'kritis' ? 'secondary' : 'ghost'}
+          size="sm"
+          asChild
+          className={status === 'kritis' ? 'bg-amber-100 text-amber-800 hover:bg-amber-200 hover:text-amber-900' : ''}
+        >
+          <a href={href(tab, 'kritis', q)}>Menipis/Habis ({kritis})</a>
         </Button>
         <form method="get" action="/reports/stock" className="flex items-center gap-2">
           <input type="hidden" name="tab" value={tab} />
