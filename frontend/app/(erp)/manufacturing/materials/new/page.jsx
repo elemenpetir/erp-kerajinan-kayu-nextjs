@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { uploadImage } from "@/lib/storage/upload";
 
 export default function CreateBahan() {
   const router = useRouter();
@@ -14,8 +15,16 @@ export default function CreateBahan() {
   const [biaya, setBiaya] = useState("");
   const [harga, setHarga] = useState("");
   const [internalReferensi, setInternalReferensi] = useState("");
+  const [file, setFile] = useState(null);
+  const [preview, setPreview] = useState(null);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
+
+  function handleFile(e) {
+    const f = e.target.files?.[0] || null;
+    setFile(f);
+    setPreview(f ? URL.createObjectURL(f) : null);
+  }
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -25,12 +34,21 @@ export default function CreateBahan() {
       return;
     }
     setLoading(true);
+    let gambar_url = null;
+    try {
+      if (file) gambar_url = await uploadImage("bahan-images", file);
+    } catch (err) {
+      setMessage("Error: " + err.message);
+      setLoading(false);
+      return;
+    }
     const { error } = await supabase.from("bahan").insert([
       {
         nama: cleanNama,
         biaya: parseFloat(biaya || 0),
         harga: parseFloat(harga || 0),
         internal_referensi: internalReferensi.trim() || null,
+        gambar_url,
       },
     ]);
     if (error) {
@@ -77,6 +95,13 @@ export default function CreateBahan() {
             <div className="grid gap-2">
               <Label htmlFor="ref">Internal Referensi</Label>
               <Input id="ref" value={internalReferensi} onChange={(e) => setInternalReferensi(e.target.value)} />
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="foto">Foto (maks 2MB, opsional)</Label>
+              <div className="flex items-center gap-3">
+                {preview && <img src={preview} alt="Pratinjau" className="h-16 w-16 rounded-md object-cover" />}
+                <Input id="foto" type="file" accept="image/*" onChange={handleFile} className="max-w-xs" />
+              </div>
             </div>
             <div className="flex items-center gap-3">
               <Button type="submit" disabled={loading}>

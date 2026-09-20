@@ -7,13 +7,22 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { uploadImage } from "@/lib/storage/upload";
 
 export default function CreateProduk() {
   const router = useRouter();
   const [nama, setNama] = useState("");
   const [harga, setHarga] = useState("");
+  const [file, setFile] = useState(null);
+  const [preview, setPreview] = useState(null);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
+
+  function handleFile(e) {
+    const f = e.target.files?.[0] || null;
+    setFile(f);
+    setPreview(f ? URL.createObjectURL(f) : null);
+  }
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -23,11 +32,20 @@ export default function CreateProduk() {
       return;
     }
     setLoading(true);
+    let gambar_url = null;
+    try {
+      if (file) gambar_url = await uploadImage("produk-images", file);
+    } catch (err) {
+      setMessage("Error: " + err.message);
+      setLoading(false);
+      return;
+    }
     const { error } = await supabase.from("produk").insert([
       {
         nama: cleanNama,
         harga_produksi: parseFloat(harga || 0),
         biaya_produksi: 0, // akan dihitung otomatis dari BOM
+        gambar_url,
       },
     ]);
     if (error) {
@@ -71,6 +89,13 @@ export default function CreateProduk() {
                 onChange={(e) => setHarga(e.target.value)}
                 placeholder="Rp 0"
               />
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="foto">Foto (maks 2MB, opsional)</Label>
+              <div className="flex items-center gap-3">
+                {preview && <img src={preview} alt="Pratinjau" className="h-16 w-16 rounded-md object-cover" />}
+                <Input id="foto" type="file" accept="image/*" onChange={handleFile} className="max-w-xs" />
+              </div>
             </div>
             <div className="flex items-center gap-3">
               <Button type="submit" disabled={loading}>

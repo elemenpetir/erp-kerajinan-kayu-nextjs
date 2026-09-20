@@ -11,6 +11,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 import ActionButton from "@/components/ui/ActionButton";
+import { uploadImage } from "@/lib/storage/upload";
 
 
 export default function ProdukDetail({ params }) {
@@ -80,11 +81,38 @@ export default function ProdukDetail({ params }) {
     window.location.href = "/manufacturing/products";
   }
 
+  async function handleFoto(e) {
+    const f = e.target.files?.[0];
+    if (!f) return;
+    try {
+      const url = await uploadImage("produk-images", f);
+      const { error } = await supabase.from("produk").update({ gambar_url: url }).eq("id", id);
+      if (error) throw new Error(error.message);
+      toast.success("Foto diperbarui");
+      fetchProduk();
+    } catch (err) {
+      toast.error(err.message);
+    }
+  }
+
   if (loading) {
     return (
       <div className="space-y-4">
         <Skeleton className="h-8 w-56" />
-        <Card>
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-base">Foto</CardTitle>
+        </CardHeader>
+        <CardContent className="flex items-center gap-4 pt-0">
+          {produk.gambar_url ? (
+            <img src={produk.gambar_url} alt={produk.nama} className="h-24 w-24 rounded-md object-cover" />
+          ) : (
+            <span className="text-sm text-muted-foreground">Belum ada foto</span>
+          )}
+          <Input type="file" accept="image/*" onChange={handleFoto} className="max-w-xs" aria-label="Ganti foto" />
+        </CardContent>
+      </Card>
+      <Card>
           <CardContent className="space-y-2 pt-6">
             <Skeleton className="h-5 w-full" />
             <Skeleton className="h-5 w-full" />
