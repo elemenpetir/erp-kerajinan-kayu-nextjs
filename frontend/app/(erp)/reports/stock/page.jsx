@@ -1,8 +1,9 @@
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Search } from 'lucide-react';
 import { createClient } from '../../../../lib/supabase/server';
 import { getProductStockMap, getMaterialStockMap } from '../../../../lib/services/manufacturing';
 import { docCode } from '../../../../lib/utils/format';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import PrintButton from '@/components/ui/PrintButton';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
@@ -22,7 +23,18 @@ function stokLabel(stok, ambang) {
   return 'Aman';
 }
 
-export default async function StockReportPage() {
+function href(tab, status, q) {
+  const p = new URLSearchParams({ tab, status });
+  if (q) p.set('q', q);
+  return `?${p.toString()}`;
+}
+
+export default async function StockReportPage({ searchParams }) {
+  const sp = await searchParams;
+  const tab = sp.tab === 'bahan' ? 'bahan' : 'produk';
+  const status = sp.status === 'kritis' ? 'kritis' : 'semua';
+  const q = String(sp.q || '').trim();
+
   const supabase = await createClient();
   const [{ data: produk }, { data: bahan }] = await Promise.all([
     supabase.from('produk').select('id,kode,nama').order('nama'),
@@ -37,6 +49,13 @@ export default async function StockReportPage() {
   const produkRows = produkList.map((p) => ({ ...p, _stok: stokP[p.id] ?? 0 }));
   const bahanRows = bahanList.map((b) => ({ ...b, _stok: stokB[b.id] ?? 0 }));
   const kritis = [...produkRows.filter((r) => r._stok <= 5), ...bahanRows.filter((r) => r._stok <= 10)].length;
+
+  // Filter tampil: tab aktif + status + cari nama (server-side, URL bisa di-bookmark).
+  const ambang = tab === 'produk' ? 5 : 10;
+  const prefix = tab === 'produk' ? 'PRD' : 'BHN';
+  const rows = (tab === 'produk' ? produkRows : bahanRows)
+    .filter((r) => (status === 'kritis' ? r._stok <= ambang : true))
+    .filter((r) => (q ? r.nama.toLowerCase().includes(q.toLowerCase()) : true));
 
   return (
     <div className="space-y-4">
@@ -64,13 +83,38 @@ export default async function StockReportPage() {
         </div>
         <PrintButton />
       </div>
+      <div className="no-print flex flex-wrap items-center gap-2">
+        <Button variant={tab === 'produk' ? 'secondary' : 'ghost'} size="sm" asChild>
+          <a href={href('produk', status, q)}>Produk</a>
+        </Button>
+        <Button variant={tab === 'bahan' ? 'secondary' : 'ghost'} size="sm" asChild>
+          <a href={href('bahan', status, q)}>Bahan</a>
+        </Button>
+        <span className="mx-1 h-4 w-px bg-border" aria-hidden="true" />
+        <Button variant={status === 'semua' ? 'secondary' : 'ghost'} size="sm" asChild>
+          <a href={href(tab, 'semua', q)}>Semua</a>
+        </Button>
+        <Button variant={status === 'kritis' ? 'secondary' : 'ghost'} size="sm" asChild>
+          <a href={href(tab, 'kritis', q)}>Menipis/Habis</a>
+        </Button>
+        <form method="get" action="/reports/stock" className="flex items-center gap-2">
+          <input type="hidden" name="tab" value={tab} />
+          <input type="hidden" name="status" value={status} />
+          <Input name="q" defaultValue={q} placeholder="Cari nama..." className="h-8 w-44" />
+          <Button type="submit" variant="outline" size="sm" aria-label="Cari">
+            <Search />
+          </Button>
+        </form>
+      </div>
       <Card>
         <CardHeader>
-          <CardTitle className="text-base">Stok Produk</CardTitle>
+          <CardTitle className="text-base">
+            Stok {tab === 'produk' ? 'Produk' : 'Bahan'} · {rows.length} baris
+          </CardTitle>
         </CardHeader>
         <CardContent className="p-0">
           <Table>
-            <TableHeader>
+            <TableHeader className="sticky top-0 bg-card">
               <TableRow>
                 <TableHead>Kode</TableHead>
                 <TableHead>Nama</TableHead>
@@ -79,43 +123,19 @@ export default async function StockReportPage() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {produkRows.map((p) => (
-                <TableRow key={p.id}>
-                  <TableCell className="font-mono text-xs">{docCode('PRD', p.kode, p.id)}</TableCell>
-                  <TableCell className="font-medium">{p.nama}</TableCell>
-                  <TableCell className={`text-right tabular-nums ${stokClass(p._stok, 5)}`}>{p._stok}</TableCell>
-                  <TableCell className={stokClass(p._stok, 5)}>{stokLabel(p._stok, 5)}</TableCell>
+              {rows.map((r) => (
+                <TableRow key={r.id}>
+                  <TableCell className="font-mono text-xs">{docCode(prefix, r.kode, r.id)}</TableCell>
+                  <TableCell className="font-medium">{r.nama}</TableCell>
+                  <TableCell className={`text-right tabular-nums ${stokClass(r._stok, ambang)}`}>{r._stok}</TableCell>
+                  <TableCell className={stokClass(r._stok, ambang)}>{stokLabel(r._stok, ambang)}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
           </Table>
-        </CardContent>
-      </Card>
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-base">Stok Bahan</CardTitle>
-        </CardHeader>
-        <CardContent className="p-0">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Kode</TableHead>
-                <TableHead>Nama</TableHead>
-                <TableHead className="text-right">Stok</TableHead>
-                <TableHead>Status</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {bahanRows.map((b) => (
-                <TableRow key={b.id}>
-                  <TableCell className="font-mono text-xs">{docCode('BHN', b.kode, b.id)}</TableCell>
-                  <TableCell className="font-medium">{b.nama}</TableCell>
-                  <TableCell className={`text-right tabular-nums ${stokClass(b._stok, 10)}`}>{b._stok}</TableCell>
-                  <TableCell className={stokClass(b._stok, 10)}>{stokLabel(b._stok, 10)}</TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+          {rows.length === 0 && (
+            <p className="px-4 py-6 text-sm text-muted-foreground">Tidak ada baris yang cocok dengan filter.</p>
+          )}
         </CardContent>
       </Card>
     </div>
