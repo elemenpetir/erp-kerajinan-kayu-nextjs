@@ -99,20 +99,7 @@ export default function ProdukDetail({ params }) {
     return (
       <div className="space-y-4">
         <Skeleton className="h-8 w-56" />
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-base">Foto</CardTitle>
-        </CardHeader>
-        <CardContent className="flex items-center gap-4 pt-0">
-          {produk.gambar_url ? (
-            <img src={produk.gambar_url} alt={produk.nama} className="h-24 w-24 rounded-md object-cover" />
-          ) : (
-            <span className="text-sm text-muted-foreground">Belum ada foto</span>
-          )}
-          <Input type="file" accept="image/*" onChange={handleFoto} className="max-w-xs" aria-label="Ganti foto" />
-        </CardContent>
-      </Card>
-      <Card>
+        <Card>
           <CardContent className="space-y-2 pt-6">
             <Skeleton className="h-5 w-full" />
             <Skeleton className="h-5 w-full" />
@@ -142,6 +129,19 @@ export default function ProdukDetail({ params }) {
           <p className="text-sm text-muted-foreground">Detail produk</p>
         </div>
       </div>
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-base">Foto</CardTitle>
+        </CardHeader>
+        <CardContent className="flex items-center gap-4 pt-0">
+          {produk.gambar_url ? (
+            <img src={produk.gambar_url} alt={produk.nama} className="h-24 w-24 rounded-md object-cover" />
+          ) : (
+            <span className="text-sm text-muted-foreground">Belum ada foto</span>
+          )}
+          <Input type="file" accept="image/*" onChange={handleFoto} className="max-w-xs" aria-label="Ganti foto" />
+        </CardContent>
+      </Card>
       <Card>
         <CardHeader>
           <CardTitle className="text-base">Informasi</CardTitle>
