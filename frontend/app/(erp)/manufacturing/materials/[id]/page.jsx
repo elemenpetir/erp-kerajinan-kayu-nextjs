@@ -12,6 +12,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Skeleton } from '@/components/ui/skeleton'
 import ActionButton from '@/components/ui/ActionButton'
+import FilePicker from '@/components/ui/FilePicker'
 import { uploadImage } from '@/lib/storage/upload'
 
 
@@ -62,8 +63,7 @@ export default function BahanDetail({ params }) {
     router.push('/manufacturing/materials')
   }
 
-  async function handleFoto(e) {
-    const f = e.target.files?.[0]
+  async function handleFoto(f) {
     if (!f) return
     try {
       const url = await uploadImage('bahan-images', f)
@@ -114,7 +114,7 @@ export default function BahanDetail({ params }) {
           ) : (
             <span className="text-sm text-muted-foreground">Belum ada foto</span>
           )}
-          <Input type="file" accept="image/*" onChange={handleFoto} className="max-w-xs" aria-label="Ganti foto" />
+          <FilePicker onSelect={handleFoto} className="flex-1" />
         </CardContent>
       </Card>
       <Card>

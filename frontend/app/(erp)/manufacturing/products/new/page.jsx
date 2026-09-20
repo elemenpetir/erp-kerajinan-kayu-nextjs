@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import FilePicker from "@/components/ui/FilePicker";
 import { uploadImage } from "@/lib/storage/upload";
 
 export default function CreateProduk() {
@@ -18,8 +19,7 @@ export default function CreateProduk() {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
 
-  function handleFile(e) {
-    const f = e.target.files?.[0] || null;
+  function handleFile(f) {
     setFile(f);
     setPreview(f ? URL.createObjectURL(f) : null);
   }
@@ -91,11 +91,9 @@ export default function CreateProduk() {
               />
             </div>
             <div className="grid gap-2">
-              <Label htmlFor="foto">Foto (maks 2MB, opsional)</Label>
-              <div className="flex items-center gap-3">
-                {preview && <img src={preview} alt="Pratinjau" className="h-16 w-16 rounded-md object-cover" />}
-                <Input id="foto" type="file" accept="image/*" onChange={handleFile} className="max-w-xs" />
-              </div>
+              <Label>Foto (maks 2MB, opsional)</Label>
+              {preview && <img src={preview} alt="Pratinjau" className="h-16 w-16 rounded-md object-cover" />}
+              <FilePicker onSelect={handleFile} />
             </div>
             <div className="flex items-center gap-3">
               <Button type="submit" disabled={loading}>

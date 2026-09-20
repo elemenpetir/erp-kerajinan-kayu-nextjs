@@ -11,6 +11,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 import ActionButton from "@/components/ui/ActionButton";
+import FilePicker from "@/components/ui/FilePicker";
 import { uploadImage } from "@/lib/storage/upload";
 
 
@@ -81,8 +82,7 @@ export default function ProdukDetail({ params }) {
     window.location.href = "/manufacturing/products";
   }
 
-  async function handleFoto(e) {
-    const f = e.target.files?.[0];
+  async function handleFoto(f) {
     if (!f) return;
     try {
       const url = await uploadImage("produk-images", f);
@@ -139,7 +139,7 @@ export default function ProdukDetail({ params }) {
           ) : (
             <span className="text-sm text-muted-foreground">Belum ada foto</span>
           )}
-          <Input type="file" accept="image/*" onChange={handleFoto} className="max-w-xs" aria-label="Ganti foto" />
+          <FilePicker onSelect={handleFoto} className="flex-1" />
         </CardContent>
       </Card>
       <Card>
