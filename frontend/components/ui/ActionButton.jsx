@@ -17,6 +17,8 @@ import {
 // Generic row action island: server action (optionally .bind with args)
 // is passed as `run` prop. Confirm via accessible dialog (no confirm()),
 // feedback via toast (no alert()).
+// Props open/onOpenChange/hideTrigger: mode controlled untuk dipicu dari
+// DropdownMenu (RowActions) — pemakaian langsung tidak berubah.
 export default function ActionButton({
   run,
   confirmTitle = 'Yakin?',
@@ -27,8 +29,13 @@ export default function ActionButton({
   className,
   variant,
   size = 'sm',
+  open: openProp,
+  onOpenChange,
+  hideTrigger = false,
 }) {
-  const [open, setOpen] = useState(false);
+  const [openState, setOpenState] = useState(false);
+  const open = openProp ?? openState;
+  const setOpen = onOpenChange ?? setOpenState;
   const [pending, start] = useTransition();
 
   function execute() {
@@ -44,7 +51,7 @@ export default function ActionButton({
     });
   }
 
-  const trigger = (
+  const trigger = hideTrigger ? null : (
     <Button
       variant={variant || 'outline'}
       size={size}
@@ -54,7 +61,7 @@ export default function ActionButton({
     >
       {pending ? 'Memproses...' : label}
     </Button>
-  );
+  ));
 
   if (!confirmText) return trigger;
 

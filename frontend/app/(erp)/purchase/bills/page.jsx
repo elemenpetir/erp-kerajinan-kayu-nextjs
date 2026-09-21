@@ -8,7 +8,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import EmptyState from '@/components/ui/EmptyState';
 import StatusBadge from '@/components/ui/StatusBadge';
 import Pagination from '../../../../components/ui/Pagination';
-import ActionButton from '../../../../components/ui/ActionButton';
+import RowActions from '@/components/ui/RowActions';
 import { deleteBill, confirmBill, payBill } from './actions';
 
 export const dynamic = 'force-dynamic';
@@ -42,7 +42,7 @@ export default async function BillsList({ searchParams }) {
                 <TableHead>Deadline</TableHead>
                 <TableHead className="text-right">Total</TableHead>
                 <TableHead>Status</TableHead>
-                <TableHead className="w-64">Aksi</TableHead>
+                <TableHead className="w-16">Aksi</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -58,39 +58,46 @@ export default async function BillsList({ searchParams }) {
                     <StatusBadge status={b.status} />
                   </TableCell>
                   <TableCell>
-                    <div className="flex items-center gap-1 whitespace-nowrap">
+                    {b.status === 'Paid' ? (
                       <Button variant="ghost" size="sm" asChild>
                         <a href={`/purchase/bills/${b.id}`}>Lihat</a>
                       </Button>
-                      {b.status === 'Bill' && (
-                        <ActionButton
-                          run={payBill.bind(null, b.id)}
-                          confirmTitle="Bayar bill?"
-                          confirmText="Bayar bill ini? Data akan masuk ke Vendor Bill Accounting."
-                          successText="Bill berhasil dibayar!"
-                          label="Bayar"
-                          variant="secondary"
-                        />
-                      )}
-                      {b.status === 'Draft Bill' && (
-                        <ActionButton
-                          run={confirmBill.bind(null, b.id)}
-                          confirmTitle="Konfirmasi bill?"
-                          confirmText="Konfirmasi bill ini?"
-                          label="Konfirmasi"
-                          variant="secondary"
-                        />
-                      )}
-                      {b.status === 'Draft Bill' && (
-                        <ActionButton
-                          run={deleteBill.bind(null, b.id)}
-                          confirmTitle="Hapus bill?"
-                          confirmText="Hapus bill ini?"
-                          label="Hapus"
-                          variant="destructive-ghost"
-                        />
-                      )}
-                    </div>
+                    ) : (
+                      <RowActions
+                        viewHref={`/purchase/bills/${b.id}`}
+                        actions={[
+                          ...(b.status === 'Bill'
+                            ? [
+                                {
+                                  label: 'Bayar',
+                                  run: payBill.bind(null, b.id),
+                                  confirmTitle: 'Bayar bill?',
+                                  confirmText: 'Bayar bill ini? Data akan masuk ke Vendor Bill Accounting.',
+                                  successText: 'Bill berhasil dibayar!',
+                                },
+                              ]
+                            : []),
+                          ...(b.status === 'Draft Bill'
+                            ? [
+                                {
+                                  label: 'Konfirmasi',
+                                  run: confirmBill.bind(null, b.id),
+                                  confirmTitle: 'Konfirmasi bill?',
+                                  confirmText: 'Konfirmasi bill ini?',
+                                  variant: 'secondary',
+                                },
+                                {
+                                  label: 'Hapus',
+                                  run: deleteBill.bind(null, b.id),
+                                  confirmTitle: 'Hapus bill?',
+                                  confirmText: 'Hapus bill ini?',
+                                  variant: 'destructive',
+                                },
+                              ]
+                            : []),
+                        ]}
+                      />
+                    )}
                   </TableCell>
                 </TableRow>
               ))}
