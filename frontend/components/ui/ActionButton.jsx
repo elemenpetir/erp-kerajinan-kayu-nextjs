@@ -61,7 +61,7 @@ export default function ActionButton({
     >
       {pending ? 'Memproses...' : label}
     </Button>
-  ));
+  );
 
   if (!confirmText) return trigger;
 
