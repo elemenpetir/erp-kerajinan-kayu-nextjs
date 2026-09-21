@@ -5,6 +5,7 @@ import { docCode } from '../../../../lib/utils/format';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import PrintButton from '@/components/ui/PrintButton';
+import StockTabs from './_components/StockTabs';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 
@@ -85,12 +86,13 @@ export default async function StockReportPage({ searchParams }) {
       </div>
       <div className="no-print flex flex-wrap items-center gap-2">
         <span className="text-xs text-muted-foreground">Tampil:</span>
-        <Button variant={tab === 'produk' ? 'secondary' : 'ghost'} size="sm" asChild>
-          <a href={href('produk', status, q)}>Produk ({produkRows.length})</a>
-        </Button>
-        <Button variant={tab === 'bahan' ? 'secondary' : 'ghost'} size="sm" asChild>
-          <a href={href('bahan', status, q)}>Bahan ({bahanRows.length})</a>
-        </Button>
+        <StockTabs
+          tab={tab}
+          status={status}
+          q={q}
+          produkCount={produkRows.length}
+          bahanCount={bahanRows.length}
+        />
         <span className="mx-2 h-6 w-px bg-border" aria-hidden="true" />
         <span className="text-xs text-muted-foreground">Status:</span>
         <Button variant={status === 'semua' ? 'secondary' : 'ghost'} size="sm" asChild>

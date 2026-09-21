@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { LayoutGrid, LayoutList } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 export function usePersistedView(key, initial = 'list') {
   const [view, setView] = useState(initial);
@@ -27,25 +27,15 @@ export function usePersistedView(key, initial = 'list') {
 
 export default function ViewToggle({ value, onChange }) {
   return (
-    <div className="inline-flex items-center rounded-md border bg-background p-0.5" role="group" aria-label="Tampilan">
-      <Button
-        variant={value === 'list' ? 'default' : 'ghost'}
-        size="sm"
-        onClick={() => onChange('list')}
-        aria-pressed={value === 'list'}
-        aria-label="Tampilan list"
-      >
-        <LayoutList />
-      </Button>
-      <Button
-        variant={value === 'grid' ? 'default' : 'ghost'}
-        size="sm"
-        onClick={() => onChange('grid')}
-        aria-pressed={value === 'grid'}
-        aria-label="Tampilan grid"
-      >
-        <LayoutGrid />
-      </Button>
-    </div>
+    <Tabs value={value} onValueChange={onChange} aria-label="Tampilan">
+      <TabsList>
+        <TabsTrigger value="list" aria-label="Tampilan list">
+          <LayoutList className="h-4 w-4" />
+        </TabsTrigger>
+        <TabsTrigger value="grid" aria-label="Tampilan grid">
+          <LayoutGrid className="h-4 w-4" />
+        </TabsTrigger>
+      </TabsList>
+    </Tabs>
   );
 }

@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import { supabase } from "../../../../../lib/supabase/client";
 import { advanceProductionOrder } from "../actions";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -105,17 +106,13 @@ export default function OrderProduksiDetail({ params }) {
           <div className="mt-2 flex items-center gap-2">
             {statusFlow.map((s, i) => (
               <span key={s} className="flex items-center gap-2">
-                <span
-                  className={`rounded-full px-2.5 py-0.5 text-xs font-medium ${
-                    i < currentIndex
-                      ? "bg-emerald-600 text-white"
-                      : i === currentIndex
-                        ? "bg-amber-500 text-white"
-                        : "bg-muted text-muted-foreground"
-                  }`}
+                <Badge
+                  variant={
+                    i < currentIndex ? "success" : i === currentIndex ? "warning" : "secondary"
+                  }
                 >
                   {s}
-                </span>
+                </Badge>
                 {i < statusFlow.length - 1 && <ArrowRight className="h-3 w-3 text-muted-foreground" />}
               </span>
             ))}

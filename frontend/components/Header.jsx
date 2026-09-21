@@ -5,6 +5,7 @@ import { usePathname, useRouter } from 'next/navigation'
 import { LogOut, Menu } from 'lucide-react'
 import { supabase } from '../lib/supabase/client'
 import { Button } from './ui/button'
+import { Avatar, AvatarFallback } from './ui/avatar'
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -126,9 +127,11 @@ export default function Header({ onMobileToggle }) {
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="outline" size="sm" className="min-w-0">
-            <span className="flex h-5 w-5 items-center justify-center rounded-full bg-primary text-[11px] font-semibold text-primary-foreground">
-              {(email || '?').charAt(0).toUpperCase()}
-            </span>
+            <Avatar className="h-5 w-5">
+              <AvatarFallback className="bg-primary text-[11px] font-semibold text-primary-foreground">
+                {(email || '?').charAt(0).toUpperCase()}
+              </AvatarFallback>
+            </Avatar>
             <span className="hidden max-w-40 truncate md:inline">{email || 'Akun'}</span>
           </Button>
         </DropdownMenuTrigger>
