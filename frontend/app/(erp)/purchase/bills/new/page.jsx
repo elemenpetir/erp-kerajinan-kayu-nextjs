@@ -9,10 +9,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { NativeSelect } from "@/components/ui/NativeSelect";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow, TableFooter } from "@/components/ui/table";
-
-const selectClass =
-  "flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring";
 
 const emptyItem = {
   bahan_id: "",
@@ -152,14 +150,14 @@ export default function CreateBill() {
           <CardContent className="grid gap-4 pt-0 sm:grid-cols-2">
             <div className="grid gap-2">
               <Label htmlFor="vendor">Vendor</Label>
-              <select id="vendor" className={selectClass} value={vendorId} onChange={(e) => setVendorId(e.target.value)} required>
+              <NativeSelect id="vendor"  value={vendorId} onChange={(e) => setVendorId(e.target.value)} required>
                 <option value="">-- pilih --</option>
                 {vendors.map((v) => (
                   <option key={v.id} value={v.id}>
                     {v.nama}
                   </option>
                 ))}
-              </select>
+              </NativeSelect>
             </div>
             <div className="grid gap-2">
               <Label htmlFor="referensi">Referensi Vendor</Label>
@@ -171,12 +169,12 @@ export default function CreateBill() {
             </div>
             <div className="grid gap-2">
               <Label htmlFor="jenis">Jenis Pembayaran</Label>
-              <select id="jenis" className={selectClass} value={jenisPembayaran} onChange={(e) => setJenisPembayaran(e.target.value)}>
+              <NativeSelect id="jenis"  value={jenisPembayaran} onChange={(e) => setJenisPembayaran(e.target.value)}>
                 <option value="">-- pilih --</option>
                 <option value="Pembayaran Langsung">Pembayaran Langsung</option>
                 <option value="Transfer Bank">Transfer Bank</option>
                 <option value="Tempo">Tempo</option>
-              </select>
+              </NativeSelect>
             </div>
           </CardContent>
         </Card>
@@ -199,8 +197,8 @@ export default function CreateBill() {
                 {items.map((item, index) => (
                   <TableRow key={index}>
                     <TableCell>
-                      <select
-                        className={selectClass}
+                      <NativeSelect
+                        
                         value={item.bahan_id}
                         onChange={(e) => handleItemChange(index, "bahan_id", e.target.value)}
                         required
@@ -211,7 +209,7 @@ export default function CreateBill() {
                             {b.nama}
                           </option>
                         ))}
-                      </select>
+                      </NativeSelect>
                     </TableCell>
                     <TableCell>
                       <Input

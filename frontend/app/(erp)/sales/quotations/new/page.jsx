@@ -8,10 +8,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { NativeSelect } from "@/components/ui/NativeSelect";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow, TableFooter } from "@/components/ui/table";
-
-const selectClass =
-  "flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring";
 
 const PAYMENT_TERMS = [
   "immediate payment",
@@ -140,9 +138,9 @@ export default function CreateQuotation() {
           <CardContent className="grid gap-4 pt-0 sm:grid-cols-3">
             <div className="grid gap-2">
               <Label htmlFor="customer">Customer</Label>
-              <select
+              <NativeSelect
                 id="customer"
-                className={selectClass}
+                
                 value={customerId}
                 onChange={(e) => setCustomerId(e.target.value)}
                 required
@@ -153,7 +151,7 @@ export default function CreateQuotation() {
                     {c.nama}
                   </option>
                 ))}
-              </select>
+              </NativeSelect>
             </div>
             <div className="grid gap-2">
               <Label htmlFor="expiration">Expiration Date</Label>
@@ -166,9 +164,9 @@ export default function CreateQuotation() {
             </div>
             <div className="grid gap-2">
               <Label htmlFor="terms">Payment Terms</Label>
-              <select
+              <NativeSelect
                 id="terms"
-                className={selectClass}
+                
                 value={paymentTerms}
                 onChange={(e) => setPaymentTerms(e.target.value)}
               >
@@ -178,13 +176,13 @@ export default function CreateQuotation() {
                     {pt}
                   </option>
                 ))}
-              </select>
+              </NativeSelect>
             </div>
             <div className="grid gap-2 sm:col-span-3">
               <Label htmlFor="add-produk">Tambah Produk</Label>
-              <select
+              <NativeSelect
                 id="add-produk"
-                className={selectClass}
+                
                 value=""
                 onChange={(e) => {
                   addItem(e.target.value);
@@ -197,7 +195,7 @@ export default function CreateQuotation() {
                     {p.nama} — Rp {p.harga_produksi?.toLocaleString("id-ID")}
                   </option>
                 ))}
-              </select>
+              </NativeSelect>
             </div>
           </CardContent>
         </Card>

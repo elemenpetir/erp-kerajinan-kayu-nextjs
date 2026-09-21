@@ -9,10 +9,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { NativeSelect } from "@/components/ui/NativeSelect";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow, TableFooter } from "@/components/ui/table";
-
-const selectClass =
-  "flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring";
 
 export default function CreateBom() {
   const router = useRouter();
@@ -132,9 +130,9 @@ export default function CreateBom() {
           <CardContent className="grid gap-4 pt-0 sm:grid-cols-3">
             <div className="grid gap-2">
               <Label htmlFor="produk">Produk</Label>
-              <select
+              <NativeSelect
                 id="produk"
-                className={selectClass}
+                
                 value={produkId}
                 onChange={(e) => setProdukId(e.target.value)}
                 required
@@ -145,7 +143,7 @@ export default function CreateBom() {
                     {product.nama}
                   </option>
                 ))}
-              </select>
+              </NativeSelect>
             </div>
             <div className="grid gap-2">
               <Label htmlFor="jumlah">Jumlah Produk</Label>
@@ -187,8 +185,8 @@ export default function CreateBom() {
                 {componentTotals.map((component, index) => (
                   <TableRow key={index}>
                     <TableCell>
-                      <select
-                        className={selectClass}
+                      <NativeSelect
+                        
                         value={component.bahanId}
                         onChange={(e) => updateComponent(index, "bahanId", e.target.value)}
                         required
@@ -199,7 +197,7 @@ export default function CreateBom() {
                             {bahan.nama}
                           </option>
                         ))}
-                      </select>
+                      </NativeSelect>
                     </TableCell>
                     <TableCell>
                       <Input

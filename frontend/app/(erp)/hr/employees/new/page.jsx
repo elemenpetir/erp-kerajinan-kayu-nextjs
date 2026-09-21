@@ -7,9 +7,7 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-
-const selectClass =
-  'flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring';
+import { NativeSelect } from '@/components/ui/NativeSelect'
 
 export default function CreateKaryawan(){
   const [nama, setNama] = useState('')
@@ -70,10 +68,10 @@ export default function CreateKaryawan(){
               </div>
               <div className="grid gap-2">
                 <Label htmlFor="departemen">Departemen</Label>
-                <select id="departemen" className={selectClass} value={departemen} onChange={e=>setDepartemen(e.target.value)}>
+                <NativeSelect id="departemen" value={departemen} onChange={e=>setDepartemen(e.target.value)}>
                   <option value="">-- pilih --</option>
                   {deps.map(d=> <option key={d.id} value={d.id}>{d.nama_departemen}</option>)}
-                </select>
+                </NativeSelect>
               </div>
             </div>
             <div className="grid grid-cols-2 gap-4">

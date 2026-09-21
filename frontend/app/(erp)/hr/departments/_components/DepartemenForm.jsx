@@ -5,10 +5,8 @@ import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import ActionButton from '@/components/ui/ActionButton';
+import { NativeSelect } from '@/components/ui/NativeSelect';
 import { createDepartment, updateDepartmentManager, deleteDepartment } from '../actions';
-
-const selectClass =
-  'flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring';
 
 export function CreateForm({ employees }) {
   const [pending, start] = useTransition();
@@ -29,14 +27,14 @@ export function CreateForm({ employees }) {
       }}
     >
       <Input name="nama_departemen" placeholder="Nama Departemen" required className="max-w-xs" />
-      <select name="manager" className={`${selectClass} max-w-xs`} defaultValue="">
+      <NativeSelect name="manager" className="max-w-xs" defaultValue="">
         <option value="">— Pilih Manager —</option>
         {employees.map((k) => (
           <option key={k.id} value={k.nama}>
             {k.nama}
           </option>
         ))}
-      </select>
+      </NativeSelect>
       <Button type="submit" disabled={pending}>
         {pending ? "Menyimpan..." : "Tambah"}
       </Button>
@@ -68,14 +66,14 @@ export function RowActions({ dept, employees }) {
 
   return (
     <div className="flex gap-1">
-      <select value={manager} onChange={(e) => setManager(e.target.value)} className={selectClass}>
+      <NativeSelect value={manager} onChange={(e) => setManager(e.target.value)}>
         <option value="">— Kosongkan —</option>
         {employees.map((k) => (
           <option key={k.id} value={k.nama}>
             {k.nama}
           </option>
         ))}
-      </select>
+      </NativeSelect>
       <Button
         variant="outline"
         size="sm"
