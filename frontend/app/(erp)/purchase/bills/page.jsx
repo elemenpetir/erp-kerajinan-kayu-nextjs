@@ -58,14 +58,9 @@ export default async function BillsList({ searchParams }) {
                     <StatusBadge status={b.status} />
                   </TableCell>
                   <TableCell>
-                    {b.status === 'Paid' ? (
-                      <Button variant="ghost" size="sm" asChild>
-                        <a href={`/purchase/bills/${b.id}`}>Lihat</a>
-                      </Button>
-                    ) : (
-                      <RowActions
-                        viewHref={`/purchase/bills/${b.id}`}
-                        actions={[
+                    <RowActions
+                      viewHref={`/purchase/bills/${b.id}`}
+                      actions={[
                           ...(b.status === 'Bill'
                             ? [
                                 {
@@ -96,8 +91,7 @@ export default async function BillsList({ searchParams }) {
                               ]
                             : []),
                         ]}
-                      />
-                    )}
+                    />
                   </TableCell>
                 </TableRow>
               ))}
