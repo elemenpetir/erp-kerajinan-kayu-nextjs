@@ -7,6 +7,8 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import EmptyState from '@/components/ui/EmptyState';
 import ViewToggle, { usePersistedView } from '@/components/ui/ViewToggle';
+import RowActions from '@/components/ui/RowActions';
+import { deleteMaterial } from '../actions';
 
 function monogram(nama) {
   const clean = String(nama || '').trim();
@@ -33,7 +35,7 @@ function MaterialTable({ items }) {
               <TableHead className="text-right">Harga</TableHead>
               <TableHead>Referensi</TableHead>
               <TableHead className="text-right">Stok</TableHead>
-              <TableHead className="w-24">Aksi</TableHead>
+              <TableHead className="w-16">Aksi</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -48,9 +50,18 @@ function MaterialTable({ items }) {
                   {b._stok ?? 0}
                 </TableCell>
                 <TableCell>
-                  <Button variant="ghost" size="sm" asChild>
-                    <a href={`/manufacturing/materials/${b.id}`}>Lihat</a>
-                  </Button>
+                  <RowActions
+                    viewHref={`/manufacturing/materials/${b.id}`}
+                    actions={[
+                      {
+                        label: 'Hapus',
+                        run: deleteMaterial.bind(null, b.id),
+                        confirmTitle: 'Hapus bahan?',
+                        confirmText: 'Hapus bahan ini?',
+                        variant: 'destructive',
+                      },
+                    ]}
+                  />
                 </TableCell>
               </TableRow>
             ))}

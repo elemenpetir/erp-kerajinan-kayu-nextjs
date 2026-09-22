@@ -7,7 +7,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import EmptyState from '@/components/ui/EmptyState';
 import Pagination from '../../../../components/ui/Pagination';
-import ActionButton from '../../../../components/ui/ActionButton';
+import RowActions from '@/components/ui/RowActions';
 import { deleteCustomer } from './actions';
 
 export const dynamic = 'force-dynamic';
@@ -41,7 +41,7 @@ export default async function CustomersList({ searchParams }) {
                 <TableHead>Perusahaan</TableHead>
                 <TableHead>Telp</TableHead>
                 <TableHead>Email</TableHead>
-                <TableHead className="w-36">Aksi</TableHead>
+                <TableHead className="w-16">Aksi</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -53,18 +53,18 @@ export default async function CustomersList({ searchParams }) {
                   <TableCell className="tabular-nums">{c.telp || '-'}</TableCell>
                   <TableCell className="text-muted-foreground">{c.email || '-'}</TableCell>
                   <TableCell>
-                    <div className="flex gap-1">
-                      <Button variant="ghost" size="sm" asChild>
-                        <a href={`/sales/customers/${c.id}`}>Lihat</a>
-                      </Button>
-                      <ActionButton
-                        run={deleteCustomer.bind(null, c.id)}
-                        confirmTitle="Hapus customer?"
-                        confirmText="Hapus customer ini?"
-                        label="Hapus"
-                        variant="destructive"
-                      />
-                    </div>
+                    <RowActions
+                      viewHref={`/sales/customers/${c.id}`}
+                      actions={[
+                        {
+                          label: 'Hapus',
+                          run: deleteCustomer.bind(null, c.id),
+                          confirmTitle: 'Hapus customer?',
+                          confirmText: 'Hapus customer ini?',
+                          variant: 'destructive',
+                        },
+                      ]}
+                    />
                   </TableCell>
                 </TableRow>
               ))}

@@ -5,7 +5,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import EmptyState from '@/components/ui/EmptyState';
 import Pagination from '../../../../components/ui/Pagination';
-import ActionButton from '../../../../components/ui/ActionButton';
+import RowActions from '@/components/ui/RowActions';
 import CategoryForm from './_components/CategoryForm';
 import { deleteCategory } from './actions';
 
@@ -29,7 +29,7 @@ export default async function CategoriesPage({ searchParams }) {
             <TableHeader>
               <TableRow>
                 <TableHead>Nama</TableHead>
-                <TableHead className="w-28">Aksi</TableHead>
+                <TableHead className="w-16">Aksi</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -37,12 +37,16 @@ export default async function CategoriesPage({ searchParams }) {
                 <TableRow key={kategori.id}>
                   <TableCell className="font-medium">{kategori.nama}</TableCell>
                   <TableCell>
-                    <ActionButton
-                      run={deleteCategory.bind(null, kategori.id)}
-                      confirmTitle="Hapus kategori?"
-                      confirmText="Hapus kategori ini? Produk yang memakai kategori ini tidak ikut terhapus."
-                      label="Hapus"
-                      variant="destructive"
+                    <RowActions
+                      actions={[
+                        {
+                          label: 'Hapus',
+                          run: deleteCategory.bind(null, kategori.id),
+                          confirmTitle: 'Hapus kategori?',
+                          confirmText: 'Hapus kategori ini? Produk yang memakai kategori ini tidak ikut terhapus.',
+                          variant: 'destructive',
+                        },
+                      ]}
                     />
                   </TableCell>
                 </TableRow>

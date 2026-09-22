@@ -8,7 +8,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import EmptyState from '@/components/ui/EmptyState';
 import StatusBadge from '@/components/ui/StatusBadge';
 import Pagination from '../../../../components/ui/Pagination';
-import ActionButton from '../../../../components/ui/ActionButton';
+import RowActions from '@/components/ui/RowActions';
 import { createInvoice } from './actions';
 
 export const dynamic = 'force-dynamic';
@@ -50,20 +50,22 @@ export default async function SalesOrdersPage({ searchParams }) {
                     <StatusBadge status={o.status} />
                   </TableCell>
                   <TableCell>
-                    <div className="flex gap-1">
-                      <Button variant="ghost" size="sm" asChild>
-                        <a href={`/sales/sales-orders/${o.id}`}>Lihat</a>
-                      </Button>
-                      {o.status === 'To Invoice' && (
-                        <ActionButton
-                          run={createInvoice.bind(null, o.id)}
-                          confirmTitle="Buat invoice?"
-                          confirmText="Buat invoice untuk Sales Order ini?"
-                          successText="Invoice berhasil dibuat."
-                          label="Buat Invoice"
-                        />
-                      )}
-                    </div>
+                    <RowActions
+                      viewHref={`/sales/sales-orders/${o.id}`}
+                      actions={[
+                        ...(o.status === 'To Invoice'
+                          ? [
+                              {
+                                label: 'Buat Invoice',
+                                run: createInvoice.bind(null, o.id),
+                                confirmTitle: 'Buat invoice?',
+                                confirmText: 'Buat invoice untuk Sales Order ini?',
+                                successText: 'Invoice berhasil dibuat.',
+                              },
+                            ]
+                          : []),
+                      ]}
+                    />
                   </TableCell>
                 </TableRow>
               ))}

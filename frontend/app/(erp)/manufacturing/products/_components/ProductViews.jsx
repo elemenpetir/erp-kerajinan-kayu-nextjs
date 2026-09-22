@@ -7,6 +7,8 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import EmptyState from '@/components/ui/EmptyState';
 import ViewToggle, { usePersistedView } from '@/components/ui/ViewToggle';
+import RowActions from '@/components/ui/RowActions';
+import { deleteProduct } from '../actions';
 
 function monogram(nama) {
   const clean = String(nama || '').trim();
@@ -32,7 +34,7 @@ function ProductTable({ items }) {
               <TableHead className="text-right">Harga Produksi</TableHead>
               <TableHead className="text-right">Biaya Produksi</TableHead>
               <TableHead className="text-right">Stok</TableHead>
-              <TableHead className="w-28">Aksi</TableHead>
+              <TableHead className="w-16">Aksi</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -50,9 +52,18 @@ function ProductTable({ items }) {
                   {p._stok ?? 0}
                 </TableCell>
                 <TableCell>
-                  <Button variant="ghost" size="sm" asChild>
-                    <a href={`/manufacturing/products/${p.id}`}>Lihat</a>
-                  </Button>
+                  <RowActions
+                    viewHref={`/manufacturing/products/${p.id}`}
+                    actions={[
+                      {
+                        label: 'Hapus',
+                        run: deleteProduct.bind(null, p.id),
+                        confirmTitle: 'Hapus produk?',
+                        confirmText: 'Hapus produk ini? BOM terkait ikut terhapus.',
+                        variant: 'destructive',
+                      },
+                    ]}
+                  />
                 </TableCell>
               </TableRow>
             ))}

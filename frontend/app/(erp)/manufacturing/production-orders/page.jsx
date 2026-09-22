@@ -8,7 +8,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import EmptyState from '@/components/ui/EmptyState';
 import StatusBadge from '@/components/ui/StatusBadge';
 import Pagination from '../../../../components/ui/Pagination';
-import ActionButton from '../../../../components/ui/ActionButton';
+import RowActions from '@/components/ui/RowActions';
 import { deleteProductionOrder } from './actions';
 
 export const dynamic = 'force-dynamic';
@@ -42,7 +42,7 @@ export default async function ProductionOrdersPage({ searchParams }) {
                 <TableHead className="text-right">Jumlah</TableHead>
                 <TableHead>Status</TableHead>
                 <TableHead>Tanggal</TableHead>
-                <TableHead className="w-36">Aksi</TableHead>
+                <TableHead className="w-16">Aksi</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -58,20 +58,22 @@ export default async function ProductionOrdersPage({ searchParams }) {
                     {new Date(order.created_at).toLocaleDateString('id-ID')}
                   </TableCell>
                   <TableCell>
-                    <div className="flex gap-1">
-                      <Button variant="ghost" size="sm" asChild>
-                        <a href={`/manufacturing/production-orders/${order.id}`}>Lihat</a>
-                      </Button>
-                      {order.status === 'Draft' && (
-                        <ActionButton
-                          run={deleteProductionOrder.bind(null, order.id)}
-                          confirmTitle="Hapus order?"
-                          confirmText="Hapus order produksi ini? Hanya order Draft yang bisa dihapus."
-                          label="Hapus"
-                          variant="destructive"
-                        />
-                      )}
-                    </div>
+                    <RowActions
+                      viewHref={`/manufacturing/production-orders/${order.id}`}
+                      actions={[
+                        ...(order.status === 'Draft'
+                          ? [
+                              {
+                                label: 'Hapus',
+                                run: deleteProductionOrder.bind(null, order.id),
+                                confirmTitle: 'Hapus order?',
+                                confirmText: 'Hapus order produksi ini? Hanya order Draft yang bisa dihapus.',
+                                variant: 'destructive',
+                              },
+                            ]
+                          : []),
+                      ]}
+                    />
                   </TableCell>
                 </TableRow>
               ))}

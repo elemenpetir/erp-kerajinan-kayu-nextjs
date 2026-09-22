@@ -8,7 +8,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import EmptyState from '@/components/ui/EmptyState';
 import StatusBadge from '@/components/ui/StatusBadge';
 import Pagination from '../../../../components/ui/Pagination';
-import ActionButton from '../../../../components/ui/ActionButton';
+import RowActions from '@/components/ui/RowActions';
 import { deleteQuotation } from './actions';
 
 export const dynamic = 'force-dynamic';
@@ -42,7 +42,7 @@ export default async function QuotationsPage({ searchParams }) {
                 <TableHead>Payment Terms</TableHead>
                 <TableHead className="text-right">Total</TableHead>
                 <TableHead>Status</TableHead>
-                <TableHead className="w-36">Aksi</TableHead>
+                <TableHead className="w-16">Aksi</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -58,20 +58,22 @@ export default async function QuotationsPage({ searchParams }) {
                     <StatusBadge status={q.status} />
                   </TableCell>
                   <TableCell>
-                    <div className="flex gap-1">
-                      <Button variant="ghost" size="sm" asChild>
-                        <a href={`/sales/quotations/${q.id}`}>Lihat</a>
-                      </Button>
-                      {q.status !== 'Sales Order' && (
-                        <ActionButton
-                          run={deleteQuotation.bind(null, q.id)}
-                          confirmTitle="Hapus quotation?"
-                          confirmText="Hapus quotation ini?"
-                          label="Hapus"
-                          variant="destructive"
-                        />
-                      )}
-                    </div>
+                    <RowActions
+                      viewHref={`/sales/quotations/${q.id}`}
+                      actions={[
+                        ...(q.status !== 'Sales Order'
+                          ? [
+                              {
+                                label: 'Hapus',
+                                run: deleteQuotation.bind(null, q.id),
+                                confirmTitle: 'Hapus quotation?',
+                                confirmText: 'Hapus quotation ini?',
+                                variant: 'destructive',
+                              },
+                            ]
+                          : []),
+                      ]}
+                    />
                   </TableCell>
                 </TableRow>
               ))}

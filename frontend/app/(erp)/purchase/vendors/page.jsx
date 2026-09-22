@@ -7,7 +7,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import EmptyState from '@/components/ui/EmptyState';
 import Pagination from '../../../../components/ui/Pagination';
-import ActionButton from '../../../../components/ui/ActionButton';
+import RowActions from '@/components/ui/RowActions';
 import { deleteVendor } from './actions';
 
 export const dynamic = 'force-dynamic';
@@ -41,7 +41,7 @@ export default async function VendorsList({ searchParams }) {
                 <TableHead>Perusahaan</TableHead>
                 <TableHead>Telp</TableHead>
                 <TableHead>Email</TableHead>
-                <TableHead className="w-36">Aksi</TableHead>
+                <TableHead className="w-16">Aksi</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -53,18 +53,18 @@ export default async function VendorsList({ searchParams }) {
                   <TableCell className="tabular-nums">{v.telp || '-'}</TableCell>
                   <TableCell className="text-muted-foreground">{v.email || '-'}</TableCell>
                   <TableCell>
-                    <div className="flex gap-1">
-                      <Button variant="ghost" size="sm" asChild>
-                        <a href={`/purchase/vendors/${v.id}`}>Lihat</a>
-                      </Button>
-                      <ActionButton
-                        run={deleteVendor.bind(null, v.id)}
-                        confirmTitle="Hapus vendor?"
-                        confirmText={`Hapus vendor "${v.nama}"?`}
-                        label="Hapus"
-                        variant="destructive"
-                      />
-                    </div>
+                    <RowActions
+                      viewHref={`/purchase/vendors/${v.id}`}
+                      actions={[
+                        {
+                          label: 'Hapus',
+                          run: deleteVendor.bind(null, v.id),
+                          confirmTitle: 'Hapus vendor?',
+                          confirmText: `Hapus vendor "${v.nama}"?`,
+                          variant: 'destructive',
+                        },
+                      ]}
+                    />
                   </TableCell>
                 </TableRow>
               ))}
