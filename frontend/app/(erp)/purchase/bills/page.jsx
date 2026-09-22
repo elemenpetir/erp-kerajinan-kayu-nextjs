@@ -1,7 +1,10 @@
+'use client';
+
+import { useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { Plus, Receipt } from 'lucide-react';
-import { createClient } from '../../../../lib/supabase/server';
-import { getBillsPage, PAGE_SIZE } from '../../../../lib/services/purchase';
-import { docCode } from '../../../../lib/utils/format';
+import { useBills } from '@/hooks/useBills';
+import { docCode } from '@/lib/utils/format';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
@@ -11,12 +14,63 @@ import Pagination from '../../../../components/ui/Pagination';
 import RowActions from '@/components/ui/RowActions';
 import { deleteBill, confirmBill, payBill } from './actions';
 
-export const dynamic = 'force-dynamic';
+const PAGE_SIZE = 20;
 
-export default async function BillsList({ searchParams }) {
-  const { page } = await searchParams;
-  const supabase = await createClient();
-  const { items, count, page: safePage } = await getBillsPage(supabase, { page });
+export default function BillsList() {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const page = parseInt(searchParams.get('page') || '1', 10);
+
+  const { data, error, isLoading } = useBills(page);
+
+  if (isLoading && !data) {
+    return (
+      <div className="space-y-4">
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-lg font-semibold">Bills</h1>
+            <p className="text-sm text-muted-foreground">Draft Bill → Bill → Paid.</p>
+          </div>
+          <Button asChild>
+            <a href="/purchase/bills/new">
+              <Plus />
+              Buat Bill
+            </a>
+          </Button>
+        </div>
+        <div className="space-y-3">
+          {[...Array(5)].map((_, i) => (
+            <div key={i} className="h-12 animate-pulse bg-muted rounded" />
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="space-y-4">
+        <p className="text-destructive">Gagal memuat data: {error.message}</p>
+        <Button onClick={() => router.refresh()}>Coba Lagi</Button>
+      </div>
+    );
+  }
+
+  const items = data?.items || [];
+  const count = data?.count || 0;
+  const safePage = data?.page || page;
+
+  // Handle pagination with pushState (no reload)
+  function goToPage(newPage) {
+    if (newPage < 1) return;
+    const totalPages = Math.max(1, Math.ceil((count || 0) / PAGE_SIZE));
+    if (newPage > totalPages) return;
+    const params = new URLSearchParams(searchParams.toString());
+    params.set('page', newPage.toString());
+    const newUrl = `${window.location.pathname}?${params.toString()}`;
+    window.history.pushState(null, '', newUrl);
+    router.refresh(); // triggers SWR re-fetch via key change
+  }
 
   return (
     <div className="space-y-4">
@@ -61,36 +115,36 @@ export default async function BillsList({ searchParams }) {
                     <RowActions
                       viewHref={`/purchase/bills/${b.id}`}
                       actions={[
-                          ...(b.status === 'Bill'
-                            ? [
-                                {
-                                  label: 'Bayar',
-                                  run: payBill.bind(null, b.id),
-                                  confirmTitle: 'Bayar bill?',
-                                  confirmText: 'Bayar bill ini? Data akan masuk ke Vendor Bill Accounting.',
-                                  successText: 'Bill berhasil dibayar!',
-                                },
-                              ]
-                            : []),
-                          ...(b.status === 'Draft Bill'
-                            ? [
-                                {
-                                  label: 'Konfirmasi',
-                                  run: confirmBill.bind(null, b.id),
-                                  confirmTitle: 'Konfirmasi bill?',
-                                  confirmText: 'Konfirmasi bill ini?',
-                                  variant: 'secondary',
-                                },
-                                {
-                                  label: 'Hapus',
-                                  run: deleteBill.bind(null, b.id),
-                                  confirmTitle: 'Hapus bill?',
-                                  confirmText: 'Hapus bill ini?',
-                                  variant: 'destructive',
-                                },
-                              ]
-                            : []),
-                        ]}
+                        ...(b.status === 'Bill'
+                          ? [
+                              {
+                                label: 'Bayar',
+                                run: payBill.bind(null, b.id),
+                                confirmTitle: 'Bayar bill?',
+                                confirmText: 'Bayar bill ini? Data akan masuk ke Vendor Bill Accounting.',
+                                successText: 'Bill berhasil dibayar!',
+                              },
+                            ]
+                          : []),
+                        ...(b.status === 'Draft Bill'
+                          ? [
+                              {
+                                label: 'Konfirmasi',
+                                run: confirmBill.bind(null, b.id),
+                                confirmTitle: 'Konfirmasi bill?',
+                                confirmText: 'Konfirmasi bill ini?',
+                                variant: 'secondary',
+                              },
+                              {
+                                label: 'Hapus',
+                                run: deleteBill.bind(null, b.id),
+                                confirmTitle: 'Hapus bill?',
+                                confirmText: 'Hapus bill ini?',
+                                variant: 'destructive',
+                              },
+                            ]
+                          : []),
+                      ]}
                     />
                   </TableCell>
                 </TableRow>
@@ -106,7 +160,13 @@ export default async function BillsList({ searchParams }) {
           )}
         </CardContent>
       </Card>
-      <Pagination page={safePage} pageSize={PAGE_SIZE} count={count} basePath="/purchase/bills" />
+      <Pagination
+        page={safePage}
+        pageSize={PAGE_SIZE}
+        count={count}
+        basePath="/purchase/bills"
+        onPageChange={goToPage}
+      />
     </div>
   );
 }

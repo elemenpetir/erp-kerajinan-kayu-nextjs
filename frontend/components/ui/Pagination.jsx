@@ -16,13 +16,14 @@ const PaginationItem = React.forwardRef(({ className, ...props }, ref) => (
 ));
 PaginationItem.displayName = 'PaginationItem';
 
-const PaginationLink = ({ className, isActive, size = 'icon', ...props }) => (
+const PaginationLink = ({ className, isActive, size = 'icon', onClick, ...props }) => (
   <a
     aria-current={isActive ? 'page' : undefined}
     className={cn(
       buttonVariants({ variant: isActive ? 'outline' : 'ghost', size }),
       className,
     )}
+    onClick={onClick}
     {...props}
   />
 );
@@ -65,18 +66,31 @@ function pageWindow(page, total) {
   return out;
 }
 
-export default function Pagination({ page, pageSize, count, basePath }) {
+export default function Pagination({ page, pageSize, count, basePath, onPageChange }) {
   const totalPages = Math.max(1, Math.ceil((count || 0) / pageSize));
   if (totalPages <= 1) return null;
   // Clamp: e.g. after deletes, ?page=5 of 2 → last page instead of empty table.
-  if (page > totalPages) redirect(`${basePath}?page=${totalPages}`);
+  if (page > totalPages) {
+    if (onPageChange) onPageChange(totalPages);
+    else redirect(`${basePath}?page=${totalPages}`);
+    return null;
+  }
+
+  const handlePageClick = (newPage) => {
+    if (onPageChange) onPageChange(newPage);
+    // else default <a href> behavior
+  };
+
   return (
     <div className="flex flex-wrap items-center gap-3">
       <nav role="navigation" aria-label="pagination">
         <PaginationContent>
           {page > 1 && (
             <PaginationItem>
-              <PaginationPrevious href={`${basePath}?page=${page - 1}`} />
+              <PaginationPrevious
+                onClick={() => handlePageClick(page - 1)}
+                href={onPageChange ? undefined : `${basePath}?page=${page - 1}`}
+              />
             </PaginationItem>
           )}
           {pageWindow(page, totalPages).map((n, i) =>
@@ -86,7 +100,11 @@ export default function Pagination({ page, pageSize, count, basePath }) {
               </PaginationItem>
             ) : (
               <PaginationItem key={n}>
-                <PaginationLink href={`${basePath}?page=${n}`} isActive={n === page}>
+                <PaginationLink
+                  onClick={() => handlePageClick(n)}
+                  href={onPageChange ? undefined : `${basePath}?page=${n}`}
+                  isActive={n === page}
+                >
                   {n}
                 </PaginationLink>
               </PaginationItem>
@@ -94,7 +112,10 @@ export default function Pagination({ page, pageSize, count, basePath }) {
           )}
           {page < totalPages && (
             <PaginationItem>
-              <PaginationNext href={`${basePath}?page=${page + 1}`} />
+              <PaginationNext
+                onClick={() => handlePageClick(page + 1)}
+                href={onPageChange ? undefined : `${basePath}?page=${page + 1}`}
+              />
             </PaginationItem>
           )}
         </PaginationContent>
