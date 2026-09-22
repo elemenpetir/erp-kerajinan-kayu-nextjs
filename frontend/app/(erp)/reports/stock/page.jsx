@@ -1,11 +1,15 @@
+'use client';
+
+import { useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
+import { Suspense } from 'react';
+import { useStock } from '@/hooks/useStock';
 import { ArrowLeft, Search } from 'lucide-react';
-import { createClient } from '../../../../lib/supabase/server';
-import { getProductStockMap, getMaterialStockMap } from '../../../../lib/services/manufacturing';
-import { docCode } from '../../../../lib/utils/format';
+import { docCode } from '@/lib/utils/format';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import PrintButton from '@/components/ui/PrintButton';
-import StockTabs from './_components/StockTabs';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 
@@ -24,39 +28,85 @@ function stokLabel(stok, ambang) {
   return 'Aman';
 }
 
-function href(tab, status, q) {
-  const p = new URLSearchParams({ tab, status });
-  if (q) p.set('q', q);
-  return `?${p.toString()}`;
+function prefixForTab(tab) {
+  return tab === 'produk' ? 'PRD' : 'BHN';
 }
 
-export default async function StockReportPage({ searchParams }) {
-  const sp = await searchParams;
-  const tab = sp.tab === 'bahan' ? 'bahan' : 'produk';
-  const status = sp.status === 'kritis' ? 'kritis' : 'semua';
-  const q = String(sp.q || '').trim();
+function StockReportContent() {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const tab = searchParams.get('tab') === 'bahan' ? 'bahan' : 'produk';
+  const status = searchParams.get('status') === 'kritis' ? 'kritis' : 'semua';
+  const q = (searchParams.get('q') || '').trim();
 
-  const supabase = await createClient();
-  const [{ data: produk }, { data: bahan }] = await Promise.all([
-    supabase.from('produk').select('id,kode,nama').order('nama'),
-    supabase.from('bahan').select('id,kode,nama').order('nama'),
-  ]);
-  const produkList = produk || [];
-  const bahanList = bahan || [];
-  const [stokP, stokB] = await Promise.all([
-    getProductStockMap(supabase, produkList.map((p) => p.id)),
-    getMaterialStockMap(supabase, bahanList.map((b) => b.id)),
-  ]);
-  const produkRows = produkList.map((p) => ({ ...p, _stok: stokP[p.id] ?? 0 }));
-  const bahanRows = bahanList.map((b) => ({ ...b, _stok: stokB[b.id] ?? 0 }));
-  const kritis = [...produkRows.filter((r) => r._stok <= 5), ...bahanRows.filter((r) => r._stok <= 10)].length;
+  const { data, error, isLoading, mutate } = useStock({ tab, status, q });
 
-  // Filter tampil: tab aktif + status + cari nama (server-side, URL bisa di-bookmark).
+  // Handle filter changes with pushState
+  function applyFilters(newParams) {
+    const params = new URLSearchParams(searchParams.toString());
+    Object.entries(newParams).forEach(([k, v]) => {
+      if (v) params.set(k, v);
+      else params.delete(k);
+    });
+    const newUrl = `${window.location.pathname}?${params.toString()}`;
+    window.history.pushState(null, '', newUrl);
+    router.refresh(); // triggers SWR re-fetch via key change
+    mutate(); // also trigger local re-fetch
+  }
+
+  function goToPage(newPage) {
+    // Not used for stock report (no pagination)
+  }
+
+  if (isLoading && !data) {
+    return (
+      <div className="space-y-4">
+        <style>{`
+          @media print {
+            nav, aside, .no-print { display: none !important; }
+            body { background: white !important; }
+            button, a { display: none !important; }
+            main { overflow: visible !important; }
+            ::-webkit-scrollbar { display: none !important; }
+            * { scrollbar-width: none !important; }
+          }
+        `}</style>
+        <div className="flex items-center gap-2">
+          <Button variant="ghost" size="icon" asChild className="no-print">
+            <a href="/" aria-label="Kembali">
+              <ArrowLeft />
+            </a>
+          </Button>
+          <div className="flex-1">
+            <h1 className="text-lg font-semibold">Laporan Stok</h1>
+            <p className="text-sm text-muted-foreground">Memuat...</p>
+          </div>
+          <PrintButton />
+        </div>
+        <div className="space-y-3">
+          {[...Array(5)].map((_, i) => (
+            <div key={i} className="h-12 animate-pulse bg-muted rounded" />
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="space-y-4">
+        <p className="text-destructive">Gagal memuat data: {error.message}</p>
+        <Button onClick={() => router.refresh()}>Coba Lagi</Button>
+      </div>
+    );
+  }
+
+  const items = data?.items || [];
+  const produkCount = data?.produkCount || 0;
+  const bahanCount = data?.bahanCount || 0;
+  const kritis = data?.kritis || 0;
   const ambang = tab === 'produk' ? 5 : 10;
-  const prefix = tab === 'produk' ? 'PRD' : 'BHN';
-  const rows = (tab === 'produk' ? produkRows : bahanRows)
-    .filter((r) => (status === 'kritis' ? r._stok <= ambang : true))
-    .filter((r) => (q ? r.nama.toLowerCase().includes(q.toLowerCase()) : true));
+  const prefix = prefixForTab(tab);
 
   return (
     <div className="space-y-4">
@@ -79,46 +129,49 @@ export default async function StockReportPage({ searchParams }) {
         <div className="flex-1">
           <h1 className="text-lg font-semibold">Laporan Stok</h1>
           <p className="text-sm text-muted-foreground">
-            {produkRows.length} produk · {bahanRows.length} bahan · {kritis} menipis/habis
+            {produkCount} produk · {bahanCount} bahan · {kritis} menipis/habis
           </p>
         </div>
         <PrintButton />
       </div>
       <div className="no-print flex flex-wrap items-center gap-2">
         <span className="text-xs text-muted-foreground">Tampil:</span>
-        <StockTabs
-          tab={tab}
-          status={status}
-          q={q}
-          produkCount={produkRows.length}
-          bahanCount={bahanRows.length}
-        />
+        <Tabs value={tab} onValueChange={(v) => applyFilters({ tab: v })} aria-label="Jenis stok">
+          <TabsList>
+            <TabsTrigger value="produk">Produk ({produkCount})</TabsTrigger>
+            <TabsTrigger value="bahan">Bahan ({bahanCount})</TabsTrigger>
+          </TabsList>
+        </Tabs>
         <span className="mx-2 h-6 w-px bg-border" aria-hidden="true" />
         <span className="text-xs text-muted-foreground">Status:</span>
-        <Button variant={status === 'semua' ? 'secondary' : 'ghost'} size="sm" asChild>
-          <a href={href(tab, 'semua', q)}>Semua</a>
-        </Button>
-        <Button
-          variant={status === 'kritis' ? 'secondary' : 'ghost'}
-          size="sm"
-          asChild
-          className={status === 'kritis' ? 'bg-amber-100 text-amber-800 hover:bg-amber-200 hover:text-amber-900' : ''}
+        <button
+          onClick={() => applyFilters({ status: 'semua' })}
+          className={`px-3 py-1.5 text-sm rounded-md border ${status === 'semua' ? 'bg-secondary text-secondary-foreground' : 'bg-transparent hover:bg-accent'}`}
         >
-          <a href={href(tab, 'kritis', q)}>Menipis/Habis ({kritis})</a>
-        </Button>
-        <form method="get" action="/reports/stock" className="flex items-center gap-2">
-          <input type="hidden" name="tab" value={tab} />
-          <input type="hidden" name="status" value={status} />
-          <Input name="q" defaultValue={q} placeholder="Cari nama..." className="h-8 w-44" />
+          Semua
+        </button>
+        <button
+          onClick={() => applyFilters({ status: 'kritis' })}
+          className={`px-3 py-1.5 text-sm rounded-md border ${status === 'kritis' ? 'bg-amber-100 text-amber-800 hover:bg-amber-200' : 'bg-transparent hover:bg-accent'}`}
+        >
+          Menipis/Habis ({kritis})
+        </button>
+        <form onSubmit={(e) => { e.preventDefault(); applyFilters({ q: e.currentTarget.q.value }); }} className="flex items-center gap-2">
+          <Input name="q" value={q} placeholder="Cari nama..." className="h-8 w-44" />
           <Button type="submit" variant="outline" size="sm" aria-label="Cari">
             <Search />
           </Button>
         </form>
+        {(status !== 'semua' || q) && (
+          <Button variant="ghost" size="sm" onClick={() => { applyFilters({ tab: 'produk', status: 'semua', q: '' }); }}>
+            Reset
+          </Button>
+        )}
       </div>
       <Card>
         <CardHeader>
           <CardTitle className="text-base">
-            Stok {tab === 'produk' ? 'Produk' : 'Bahan'} · {rows.length} baris
+            Stok {tab === 'produk' ? 'Produk' : 'Bahan'} · {items.length} baris
           </CardTitle>
         </CardHeader>
         <CardContent className="p-0">
@@ -132,7 +185,7 @@ export default async function StockReportPage({ searchParams }) {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {rows.map((r) => (
+              {items.map((r) => (
                 <TableRow key={r.id}>
                   <TableCell className="font-mono text-xs">{docCode(prefix, r.kode, r.id)}</TableCell>
                   <TableCell className="font-medium">{r.nama}</TableCell>
@@ -142,11 +195,35 @@ export default async function StockReportPage({ searchParams }) {
               ))}
             </TableBody>
           </Table>
-          {rows.length === 0 && (
+          {items.length === 0 && (
             <p className="px-4 py-6 text-sm text-muted-foreground">Tidak ada baris yang cocok dengan filter.</p>
           )}
         </CardContent>
       </Card>
     </div>
+  );
+}
+
+export default function StockReportPage() {
+  return (
+    <Suspense fallback={
+      <div className="space-y-4">
+        <div className="flex items-center gap-2">
+          <button className="p-2" disabled><ArrowLeft className="h-4 w-4" /></button>
+          <div className="flex-1">
+            <h1 className="text-lg font-semibold">Laporan Stok</h1>
+            <p className="text-sm text-muted-foreground">Memuat...</p>
+          </div>
+          <button className="px-3 py-1.5 text-sm" disabled><Search className="h-4 w-4" /> Print</button>
+        </div>
+        <div className="space-y-3">
+          {[...Array(5)].map((_, i) => (
+            <div key={i} className="h-12 animate-pulse bg-muted rounded" />
+          ))}
+        </div>
+      </div>
+    }>
+      <StockReportContent />
+    </Suspense>
   );
 }
