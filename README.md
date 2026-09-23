@@ -1,55 +1,68 @@
 # ERP Kerajinan Kayu
 
-Aplikasi ERP (Enterprise Resource Planning) untuk usaha kerajinan kayu, dibangun sebagai project portfolio menggunakan stack modern **Next.js 16 + Supabase**.
+An ERP application for a woodcraft business, built as a portfolio project using a modern Next.js 16 and Supabase stack.
 
 ---
 
 ## Tech Stack
 
-| Layer | Teknologi |
-| ---------- | ----------------------- |
-| Frontend | Next.js 16 (App Router) |
+| Layer | Technology |
+|-------|------------|
+| Frontend | Next.js 16 (App Router, JavaScript) |
 | Database | Supabase (PostgreSQL) |
 | Auth | Supabase Auth (Email) |
-| Styling | Tailwind CSS |
+| Storage | Supabase Storage |
+| UI | Tailwind CSS, shadcn/ui, Radix UI |
+| Icons | lucide-react |
+| Toast | sonner |
+| Data Fetching | SWR |
+| Fonts | Geist Sans, Geist Mono |
 | Deployment | Vercel |
 
 ---
 
-## Modul
+## Modules
 
-### Manufaktur
+### Manufacturing
 
-- **Produk**: CRUD produk dengan kalkulasi stok otomatis
-- **Bahan**: CRUD bahan baku dengan tracking stok
-- **Kategori**: Kategorisasi produk
-- **Bill of Materials (BOM)**: Daftar komponen per produk beserta total biaya
-- **Order Produksi**: Draft → Konfirmasi → Dalam Proses → Selesai
+- Products: CRUD with automatic stock calculation
+- Materials: CRUD with stock tracking
+- Categories: Product categorization
+- Bill of Materials (BOM): Component list per product with total cost
+- Production Orders: Draft to Confirmed to In Progress to Done
 
 ### Purchase
 
-- **Vendor**: CRUD data vendor
-- **Bills**: Pencatatan tagihan vendor dengan flow pembayaran
+- Vendors: CRUD vendor data
+- Bills: Vendor bill recording with payment flow
 
 ### Sales
 
-- **Customer**: CRUD data customer
-- **Quotation**: Pembuatan penawaran harga
-- **Sales Orders**: Konversi quotation → sales order → invoice
+- Customers: CRUD customer data
+- Quotations: Price quotation creation
+- Sales Orders: Convert quotation to sales order to invoice
+
+### Reports
+
+- Stock Report: Real-time stock for products and materials with filters and print
+- Sales Report: Revenue, invoices, and customer performance
+- Finance Report: Receivables, payables, and net position
 
 ### Accounting
 
-- **Customer Invoice**: Ringkasan invoice dari Sales Orders yang sudah Fully Invoice
-- **Vendor Bill**: Ringkasan tagihan dari Bills yang sudah Paid
+- Customer Invoices: Summary from fully invoiced Sales Orders
+- Vendor Bills: Summary from paid Bills
 
-### Employees
+### HR
 
-- **Departemen**: Manajemen departemen
-- **Karyawan**: CRUD data karyawan
+- Departments: Department management
+- Employees: CRUD employee data
+
+Note: Product and material photos are stored in Supabase Storage.
 
 ---
 
-## Setup Lokal
+## Local Setup
 
 ### 1. Clone Repository
 
@@ -66,48 +79,48 @@ npm install
 
 ### 3. Setup Environment Variables
 
-Salin file contoh dan isi dengan kredensial Supabase kamu:
+Copy the example file and fill in your Supabase credentials:
 
 ```bash
 cp .env.example .env.local
 ```
 
-Isi `.env.local`:
+Fill `.env.local`:
 
 ```env
 NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
 ```
 
-### 4. Jalankan Dev Server
+### 4. Run Dev Server
 
 ```bash
 npm run dev
 ```
 
-Buka [http://localhost:3000](http://localhost:3000)
+Open [http://localhost:3000](http://localhost:3000)
 
 ---
 
-## Setup Supabase
+## Supabase Setup
 
-### 1. Buat Project Supabase
+### 1. Create Supabase Project
 
-Daftar atau login di [supabase.com](https://supabase.com), buat project baru.
+Sign up or log in at supabase.com, create a new project.
 
-### 2. Aktifkan Extension
+### 2. Enable Extension
 
-Di Supabase SQL Editor, jalankan:
+In Supabase SQL Editor, run:
 
 ```sql
 CREATE EXTENSION IF NOT EXISTS pgcrypto;
 ```
 
-### 3. Jalankan Migration
+### 3. Run Migrations
 
-Salin isi file `supabase/migrations/001_create_schema.sql` dan jalankan di Supabase SQL Editor.
+Run migrations 001 through 011 in order from `supabase/migrations/` in the Supabase SQL Editor. Migration 011 creates the Storage bucket for product and material images.
 
-### 4. Jalankan Seed
+### 4. Run Seed
 
 ```bash
 export SUPABASE_URL=https://your-project.supabase.co
@@ -115,87 +128,86 @@ export SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
 node scripts/seed_supabase.js
 ```
 
-> **Catatan:** Script seed bersifat **wipe & reseed**. Setiap kali dijalankan, semua data tabel ERP akan dihapus lalu diisi ulang dengan dataset demo (6 kategori, 15 bahan, 16 produk, 16 BOM, 12 order produksi, 8 bills, 7 quotation, 5 sales order, 12 karyawan, dsb.) sehingga hasilnya selalu bersih dan konsisten untuk demo portofolio.
+Note: The seed script wipes and reseeds all ERP tables. Each run produces a clean, consistent demo dataset (categories, materials, products, BOMs, production orders, bills, quotations, sales orders, employees, etc.) suitable for portfolio demos.
 
 ---
 
 ## Demo Flow End-to-End
 
-### Flow Produksi
+### Production Flow
 
-1. Buat **Kategori** → Buat **Bahan** → Buat **Produk**
-2. Buat **BOM** untuk produk (daftar komponen + jumlah)
-3. Buat **Order Produksi** → Konfirmasi → Dalam Proses → Selesai
-4. Stok produk otomatis bertambah
+1. Create Category to Create Material to Create Product
+2. Create BOM for the product (components and quantities)
+3. Create Production Order to Confirmed to In Progress to Done
+4. Product stock increases automatically
 
-### Flow Pembelian
+### Purchase Flow
 
-1. Buat **Vendor** → Buat **Bill** dengan item bahan
-2. Proses pembayaran bill → Status **Paid**
-3. Stok bahan otomatis bertambah
+1. Create Vendor to Create Bill with material items
+2. Process bill payment to Paid status
+3. Material stock increases automatically
 
-### Flow Penjualan
+### Sales Flow
 
-1. Buat **Customer** → Buat **Quotation**
-2. Konfirmasi Quotation → otomatis jadi **Sales Order**
-3. Proses pembayaran → Status **Fully Invoice**
-4. Stok produk otomatis berkurang
+1. Create Customer to Create Quotation
+2. Confirm Quotation to auto-create Sales Order
+3. Process payment to Fully Invoiced status
+4. Product stock decreases automatically
 
 ---
 
 ## Screenshots
 
-### Dashboard Produk
+Manufacturing dashboard (placeholder)
 
-![Manufaktur](./docs/screenshots/manufaktur.png)
+BOM detail (placeholder)
 
-### BOM
+Production Order detail (placeholder)
 
-![Manufaktur](./docs/screenshots/detail-bom.png)
+Quotation (placeholder)
 
-### Order Produksi
+Sales Order detail (placeholder)
 
-![Manufaktur](./docs/screenshots/detail-order-produksi.png)
+---
 
-### Quotation
+## Architecture
 
-![Quotation](./docs/screenshots/quotation.png)
-
-### Sales Orders
-
-![Sales Orders](./docs/screenshots/detail-sales-order.png)
+Server Components are the default. Three high-density lists (Bills, Products, Stock) use Client Components with SWR for instant filtering and pagination. Mutations are handled via Server Actions with revalidatePath or router.refresh. Authentication uses @supabase/ssr with a proxy middleware. All row actions are unified behind the RowActions menu (three-dot dropdown).
 
 ---
 
 ## Known Limitations
 
-- Stok bahan bertambah saat Bill berstatus Paid (simplifikasi MVP; idealnya stok naik saat Goods Receipt setelah Purchase Order)
-- Tidak ada fitur pembatalan (Cancel) untuk Order Produksi dan Sales Order
-- Tampilan tabel belum optimal di layar mobile (< 768px); direkomendasikan akses via desktop atau tablet landscape
-- Modul Accounting menampilkan ringkasan data, belum ada implementasi jurnal ganda
-- Belum ada role-based access control (semua user authenticated memiliki akses penuh)
-- Pagination belum diimplementasikan (semua data ditampilkan sekaligus)
-- Stok produk dan bahan bisa bernilai minus jika order produksi atau penjualan melebihi stok yang tersedia; belum ada validasi stok minimum
-- BOM tidak memiliki fitur edit; jika harga bahan berubah, total biaya di BOM tidak otomatis terupdate (idealnya: tambah fitur edit BOM atau snapshot harga saat Order Produksi dibuat)
-- Tidak ada search/filter di halaman list
-- Tidak ada notifikasi stok menipis
+- No cancel flow for Production Orders or Sales Orders
+- Tables are not optimized for mobile screens (under 768px); desktop or tablet landscape recommended
+- Accounting module shows summaries only; no double-entry journal implementation
+- No role-based access control (all authenticated users have full access)
+- Product and material stock can go negative if orders exceed available stock; no minimum stock validation
+- BOMs cannot be edited; if material prices change, BOM totals do not auto-update
+- No PDF or CSV export
+- No search or filter on regular list pages (only available in the Stock Report)
+- No low-stock notifications
 
 ---
 
 ## Roadmap
 
-- [ ] Flow RFQ → Purchase Order → Goods Receipt → Bill → Paid
-- [ ] Fitur Cancel untuk Order Produksi & Sales Order
-- [ ] Pagination pada halaman list
-- [ ] Upload gambar produk & bahan via Supabase Storage
-- [ ] Row Level Security (RLS) Supabase
-- [ ] Laporan & rekap transaksi
-- [ ] Export PDF / CSV
+- [x] Pagination on list pages
+- [x] Product and material image upload via Supabase Storage
+- [x] Row Level Security (RLS) policies
+- [x] Reports and transaction summaries
+- [ ] RFQ to Purchase Order to Goods Receipt to Bill to Paid flow
+- [ ] Cancel feature for Production Orders and Sales Orders
+- [ ] PDF and CSV export
+- [ ] Search and filter on regular list pages
+- [ ] Low-stock notifications
+- [ ] Role-based access control
 
 ---
 
 ## Author
 
-**Mochammad Rafi**
+Mochammad Rafi
 Web Developer
-[GitHub](https://github.com/elemenpetir) | [LinkedIn](https://linkedin.com/in/mochammad-rafi)
+GitHub: https://github.com/elemenpetir
+LinkedIn: https://linkedin.com/in/mochammad-rafi
