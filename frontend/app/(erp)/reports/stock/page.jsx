@@ -39,7 +39,15 @@ function StockReportContent() {
   const status = searchParams.get('status') === 'kritis' ? 'kritis' : 'semua';
   const q = (searchParams.get('q') || '').trim();
 
-  const { data, error, isLoading, mutate } = useStock({ tab, status, q });
+  const {
+    data: items,
+    produkCount,
+    bahanCount,
+    kritis,
+    error,
+    isLoading,
+    mutate,
+  } = useStock({ tab, status, q });
 
   // Handle filter changes with pushState
   function applyFilters(newParams) {
@@ -58,7 +66,7 @@ function StockReportContent() {
     // Not used for stock report (no pagination)
   }
 
-  if (isLoading && !data) {
+  if (isLoading) {
     return (
       <div className="space-y-4">
         <style>{`
@@ -101,10 +109,6 @@ function StockReportContent() {
     );
   }
 
-  const items = data?.items || [];
-  const produkCount = data?.produkCount || 0;
-  const bahanCount = data?.bahanCount || 0;
-  const kritis = data?.kritis || 0;
   const ambang = tab === 'produk' ? 5 : 10;
   const prefix = prefixForTab(tab);
 
