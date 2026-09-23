@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
+import Link from 'next/link'
 import { LogOut, Menu } from 'lucide-react'
 import { supabase } from '../lib/supabase/client'
 import { Button } from './ui/button'
@@ -44,6 +45,10 @@ const SEGMENT_LABELS = {
   departments: 'Departemen',
   employees: 'Karyawan',
   new: 'Baru',
+  reports: 'Laporan',
+  stock: 'Stok',
+  sales: 'Penjualan',
+  finance: 'Keuangan',
 }
 
 // Rute yang benar-benar ada (punya page.jsx). Segmen intermediate
@@ -66,6 +71,9 @@ const ROUTABLE_PREFIXES = [
   '/accounting/vendor-bills',
   '/hr/departments',
   '/hr/employees',
+  '/reports/stock',
+  '/reports/sales',
+  '/reports/finance',
 ];
 
 function isRoutable(href) {
@@ -113,7 +121,9 @@ export default function Header({ onMobileToggle }) {
                   {c.last ? (
                     <BreadcrumbPage>{c.label}</BreadcrumbPage>
                   ) : c.linkable ? (
-                    <BreadcrumbLink href={c.href}>{c.label}</BreadcrumbLink>
+                    <BreadcrumbLink asChild>
+                      <Link href={c.href}>{c.label}</Link>
+                    </BreadcrumbLink>
                   ) : (
                     <span className="text-muted-foreground">{c.label}</span>
                   )}

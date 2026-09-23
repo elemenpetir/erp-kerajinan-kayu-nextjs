@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
   Boxes,
@@ -127,14 +128,14 @@ export default function Sidebar({ open, onClose }) {
         )}
       >
         <div className="flex h-14 items-center justify-between gap-2 border-b px-4">
-          <a href="/" className="flex min-w-0 items-center gap-2">
+          <Link href="/" className="flex min-w-0 items-center gap-2">
             <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-primary text-primary-foreground">
               <Boxes className="h-4 w-4" />
             </span>
             <span className="truncate text-sm font-semibold tracking-wide">
               ERP Kerajinan Kayu
             </span>
-          </a>
+          </Link>
           <Button variant="ghost" size="icon" className="lg:hidden" onClick={onClose} aria-label="Tutup navigasi">
             <X />
           </Button>
@@ -167,7 +168,7 @@ export default function Sidebar({ open, onClose }) {
                       const active = item.href === activeHref;
                       return (
                         <li key={item.href}>
-                          <a
+                          <Link
                             href={item.href}
                             aria-current={active ? "page" : undefined}
                             onClick={onClose}
@@ -177,7 +178,7 @@ export default function Sidebar({ open, onClose }) {
                             )}
                           >
                             {item.label}
-                          </a>
+                          </Link>
                         </li>
                       );
                     })}
