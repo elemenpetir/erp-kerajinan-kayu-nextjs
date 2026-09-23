@@ -19,6 +19,7 @@ export async function getProductionOrdersPage(supabase, { page = 1, pageSize = P
     .from('order_produksi')
     .select('id,kode,jumlah_produk,status,created_at,produk:produk_id(nama)', { count: 'exact' })
     .order('created_at', { ascending: false })
+    .order('id', { ascending: false })
     .range(from, to);
   if (error) throw new Error(error.message);
   return { items: data || [], count: count || 0, page: safePage, pageSize };
@@ -30,6 +31,7 @@ export async function getProductsPage(supabase, { page = 1, pageSize = PAGE_SIZE
     .from('produk')
     .select('id,kode,nama,harga_produksi,gambar_url,created_at', { count: 'exact' })
     .order('created_at', { ascending: false })
+    .order('id', { ascending: false })
     .range(from, to);
   if (error) throw new Error(error.message);
   return { items: data || [], count: count || 0, page: safePage, pageSize };
@@ -41,6 +43,7 @@ export async function getBomsPage(supabase, { page = 1, pageSize = PAGE_SIZE } =
     .from('bom')
     .select('id,kode,produk_id,total_biaya_produk,total_biaya_bahan,created_at,produk:produk_id(nama)', { count: 'exact' })
     .order('created_at', { ascending: false })
+    .order('id', { ascending: false })
     .range(from, to);
   if (error) throw new Error(error.message);
   return { items: data || [], count: count || 0, page: safePage, pageSize };
@@ -52,6 +55,7 @@ export async function getMaterialsPage(supabase, { page = 1, pageSize = PAGE_SIZ
     .from('bahan')
     .select('id,kode,nama,biaya,harga,internal_referensi,gambar_url,created_at', { count: 'exact' })
     .order('created_at', { ascending: false })
+    .order('id', { ascending: false })
     .range(from, to);
   if (error) throw new Error(error.message);
   return { items: data || [], count: count || 0, page: safePage, pageSize };

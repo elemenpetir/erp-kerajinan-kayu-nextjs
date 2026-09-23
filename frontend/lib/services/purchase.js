@@ -8,6 +8,7 @@ export async function getVendorsPage(supabase, { page = 1, pageSize = PAGE_SIZE 
     .from('vendor_individual')
     .select('id,kode,nama,nama_perusahaan,telp,email,created_at', { count: 'exact' })
     .order('created_at', { ascending: false })
+    .order('id', { ascending: false })
     .range(from, to);
   if (error) throw new Error(error.message);
   return { items: data || [], count: count || 0, page: safePage, pageSize };
@@ -19,6 +20,7 @@ export async function getBillsPage(supabase, { page = 1, pageSize = PAGE_SIZE } 
     .from('bills')
     .select('id,kode,referensi_vendor,deadline_order,total_biaya,status,created_at', { count: 'exact' })
     .order('created_at', { ascending: false })
+    .order('id', { ascending: false })
     .range(from, to);
   if (error) throw new Error(error.message);
   return { items: data || [], count: count || 0, page: safePage, pageSize };

@@ -8,6 +8,7 @@ export async function getCustomerInvoicesPage(supabase, { page = 1, pageSize = P
     .from('customer_invoice')
     .select('id,jumlah_pembayaran,payment_date,sales_order(customer_snapshot,status,id)', { count: 'exact' })
     .order('payment_date', { ascending: false })
+    .order('id', { ascending: false })
     .range(from, to);
   if (error) throw new Error(error.message);
   return { items: data || [], count: count || 0, page: safePage, pageSize };
@@ -33,6 +34,7 @@ export async function getVendorBillsPage(supabase, { page = 1, pageSize = PAGE_S
     .from('vendor_bill')
     .select('id,jumlah_pembayaran,payment_date,bills(referensi_vendor,status,vendor_id)', { count: 'exact' })
     .order('payment_date', { ascending: false })
+    .order('id', { ascending: false })
     .range(from, to);
   if (error) throw new Error(error.message);
 

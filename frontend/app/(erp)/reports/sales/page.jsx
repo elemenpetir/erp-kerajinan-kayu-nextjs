@@ -22,7 +22,8 @@ export default async function SalesReportPage({ searchParams }) {
   let query = supabase
     .from('sales_order')
     .select('id,kode,customer_snapshot,total_biaya,status,created_at')
-    .order('created_at', { ascending: false });
+    .order('created_at', { ascending: false })
+    .order('id', { ascending: false });
   if (from) query = query.gte('created_at', from);
   if (to) query = query.lte('created_at', `${to}T23:59:59`);
   const { data, error } = await query;

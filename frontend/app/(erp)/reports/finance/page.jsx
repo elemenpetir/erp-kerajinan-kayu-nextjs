@@ -20,12 +20,14 @@ export default async function FinanceReportPage() {
       .from('sales_order')
       .select('id,kode,customer_snapshot,total_biaya,status,created_at')
       .neq('status', 'Fully Invoice')
-      .order('created_at', { ascending: false }),
+      .order('created_at', { ascending: false })
+      .order('id', { ascending: false }),
     supabase
       .from('bills')
       .select('id,kode,referensi_vendor,deadline_order,total_biaya,status,created_at')
       .eq('status', 'Bill')
-      .order('deadline_order', { ascending: true }),
+      .order('deadline_order', { ascending: true })
+      .order('id', { ascending: false }),
     getCustomerInvoicesTotal(supabase),
     getVendorBillsTotal(supabase),
   ]);

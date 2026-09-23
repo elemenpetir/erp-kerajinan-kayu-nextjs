@@ -9,6 +9,7 @@ export async function getDepartmentsPage(supabase, { page = 1, pageSize = PAGE_S
     .from('departemen')
     .select('id,kode,nama_departemen,manager,created_at', { count: 'exact' })
     .order('created_at', { ascending: false })
+    .order('id', { ascending: false })
     .range(from, to);
 
   if (error) throw new Error(error.message);
@@ -33,6 +34,7 @@ export async function getEmployeesPage(supabase, { page = 1, pageSize = PAGE_SIZ
     .from('karyawan')
     .select('id,kode,nama,posisi,telp,email,created_at', { count: 'exact' })
     .order('created_at', { ascending: false })
+    .order('id', { ascending: false })
     .range(from, to);
   if (error) throw new Error(error.message);
   return { items: data || [], count: count || 0, page: safePage, pageSize };
