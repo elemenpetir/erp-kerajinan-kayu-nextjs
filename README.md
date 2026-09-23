@@ -158,15 +158,29 @@ Note: The seed script wipes and reseeds all ERP tables. Each run produces a clea
 
 ## Screenshots
 
-Manufacturing dashboard (placeholder)
+### Product Catalog (Grid View)
 
-BOM detail (placeholder)
+![Product Catalog (Grid View)](./docs/screenshots/produk-grid.png)
 
-Production Order detail (placeholder)
+### Bill of Materials Detail
 
-Quotation (placeholder)
+![Bill of Materials Detail](./docs/screenshots/detail-bom.png)
 
-Sales Order detail (placeholder)
+### Production Order Detail
+
+![Production Order Detail](./docs/screenshots/detail-order-produksi.png)
+
+### Quotation List
+
+![Quotation List](./docs/screenshots/quotation.png)
+
+### Sales Order Detail
+
+![Sales Order Detail](./docs/screenshots/detail-sales-order.png)
+
+### Stock Report
+
+![Stock Report](./docs/screenshots/laporan-stok.png)
 
 ---
 
