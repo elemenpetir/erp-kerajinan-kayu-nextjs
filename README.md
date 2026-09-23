@@ -207,10 +207,9 @@ Server Components are the default. Three high-density lists (Bills, Products, St
 
 ## Author
 
-Mochammad Rafi
-Web Developer
-GitHub: https://github.com/elemenpetir
-LinkedIn: https://linkedin.com/in/mochammad-rafi
+- Mochammad Rafi, Web Developer
+- GitHub: https://github.com/elemenpetir
+- LinkedIn: https://linkedin.com/in/mochammad-rafi
 
 ---
 
