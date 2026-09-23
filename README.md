@@ -211,3 +211,9 @@ Mochammad Rafi
 Web Developer
 GitHub: https://github.com/elemenpetir
 LinkedIn: https://linkedin.com/in/mochammad-rafi
+
+---
+
+## License
+
+MIT. See the [LICENSE](./LICENSE) file.
