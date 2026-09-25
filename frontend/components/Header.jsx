@@ -97,7 +97,7 @@ export default function Header({ onMobileToggle }) {
 
   useEffect(() => {
     supabase.auth.getUser().then(({ data }) => setEmail(data.user?.email || ''))
-  }, [pathname])
+  }, []) // email selama sesi tidak berubah — sekali cukup, jangan per pathname
 
   async function handleLogout() {
     await supabase.auth.signOut()
