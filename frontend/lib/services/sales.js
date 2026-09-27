@@ -37,3 +37,20 @@ export async function getSalesOrdersPage(supabase, { page = 1, pageSize = PAGE_S
   if (error) throw new Error(error.message);
   return { items: data || [], count: count || 0, page: safePage, pageSize };
 }
+
+// Laporan penjualan: filter periode + q customer, tanpa paginasi.
+export async function getSalesReport(supabase, { from = '', to = '', q = '' } = {}) {
+  let query = supabase
+    .from('sales_order')
+    .select('id,kode,customer_snapshot,total_biaya,status,created_at')
+    .order('created_at', { ascending: false })
+    .order('id', { ascending: false });
+  if (from) query = query.gte('created_at', from);
+  if (to) query = query.lte('created_at', `${to}T23:59:59`);
+  const { data, error } = await query;
+  if (error) throw new Error(error.message);
+  const rows = (data || []).filter((o) =>
+    q ? String(o.customer_snapshot?.nama || '').toLowerCase().includes(q.toLowerCase()) : true,
+  );
+  return { rows };
+}

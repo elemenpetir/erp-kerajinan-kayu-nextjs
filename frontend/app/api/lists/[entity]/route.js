@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
-import { getCustomersPage, getQuotationsPage, getSalesOrdersPage } from '@/lib/services/sales';
+import { getCustomersPage, getQuotationsPage, getSalesOrdersPage, getSalesReport } from '@/lib/services/sales';
 import { getVendorsPage } from '@/lib/services/purchase';
 import { getDepartmentsPage, getEmployeesPage, getEmployeeOptions } from '@/lib/services/hr';
 import {
@@ -32,6 +32,7 @@ const LISTS = {
   'production-orders': getProductionOrdersPage,
   'customer-invoices': getCustomerInvoicesPage,
   'vendor-bills': getVendorBillsPage,
+  'sales-report': getSalesReport,
 };
 
 // Halaman accounting menampilkan grand total di footer (query terpisah).
@@ -66,9 +67,12 @@ export async function GET(req, { params }) {
 
     const { searchParams } = new URL(req.url);
     const page = parseInt(searchParams.get('page') || '1', 10);
+    const from = searchParams.get('from') || '';
+    const to = searchParams.get('to') || '';
+    const q = (searchParams.get('q') || '').trim();
 
     const supabase = await createClient();
-    const result = await listFn(supabase, { page });
+    const result = await listFn(supabase, { page, from, to, q });
 
     const enrichFn = ENRICH[entity];
     if (enrichFn) {

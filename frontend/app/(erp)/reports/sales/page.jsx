@@ -1,6 +1,10 @@
+'use client';
+
+import { useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { ArrowLeft, Search } from 'lucide-react';
-import { createClient } from '../../../../lib/supabase/server';
-import { docCode, formatRupiah } from '../../../../lib/utils/format';
+import { useList } from '@/hooks/useList';
+import { docCode, formatRupiah } from '@/lib/utils/format';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -9,31 +13,64 @@ import StatusBadge from '@/components/ui/StatusBadge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 
-export const dynamic = 'force-dynamic';
-
 // Omzet = total_biaya sales_order (invoice/pembayaran masuk Batch 4 keuangan).
-export default async function SalesReportPage({ searchParams }) {
-  const sp = await searchParams;
-  const from = String(sp.from || '');
-  const to = String(sp.to || '');
-  const q = String(sp.q || '').trim();
+export default function SalesReportPage() {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const from = searchParams.get('from') || '';
+  const to = searchParams.get('to') || '';
+  const q = (searchParams.get('q') || '').trim();
 
-  const supabase = await createClient();
-  let query = supabase
-    .from('sales_order')
-    .select('id,kode,customer_snapshot,total_biaya,status,created_at')
-    .order('created_at', { ascending: false })
-    .order('id', { ascending: false });
-  if (from) query = query.gte('created_at', from);
-  if (to) query = query.lte('created_at', `${to}T23:59:59`);
-  const { data, error } = await query;
-  if (error) throw new Error(error.message);
+  const { data, error, isLoading, mutate } = useList('sales-report', { from, to, q });
 
-  const rows = (data || []).filter((o) =>
-    q ? String(o.customer_snapshot?.nama || '').toLowerCase().includes(q.toLowerCase()) : true,
-  );
+  function applyFilters(newParams) {
+    const params = new URLSearchParams(searchParams.toString());
+    Object.entries(newParams).forEach(([k, v]) => {
+      if (v) params.set(k, v);
+      else params.delete(k);
+    });
+    const newUrl = `${window.location.pathname}?${params.toString()}`;
+    window.history.pushState(null, '', newUrl);
+    router.refresh();
+    mutate();
+  }
+
+  const rows = data?.rows || [];
   const omzet = rows.reduce((s, o) => s + Number(o.total_biaya || 0), 0);
   const rata = rows.length ? omzet / rows.length : 0;
+
+  if (isLoading) {
+    return (
+      <div className="space-y-4">
+        <div className="flex items-center gap-2">
+          <Button variant="ghost" size="icon" asChild className="no-print">
+            <a href="/" aria-label="Kembali">
+              <ArrowLeft />
+            </a>
+          </Button>
+          <div className="flex-1">
+            <h1 className="text-lg font-semibold">Laporan Penjualan</h1>
+            <p className="text-sm text-muted-foreground">Memuat...</p>
+          </div>
+          <PrintButton />
+        </div>
+        <div className="space-y-3">
+          {[...Array(5)].map((_, i) => (
+            <div key={i} className="h-12 animate-pulse bg-muted rounded" />
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="space-y-4">
+        <p className="text-destructive">Gagal memuat data: {error.message}</p>
+        <Button onClick={() => router.refresh()}>Coba Lagi</Button>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-4">
@@ -61,7 +98,15 @@ export default async function SalesReportPage({ searchParams }) {
         </div>
         <PrintButton />
       </div>
-      <form method="get" action="/reports/sales" className="no-print flex flex-wrap items-end gap-2">
+      <form
+        key={`${from}|${to}|${q}`}
+        onSubmit={(e) => {
+          e.preventDefault();
+          const fd = new FormData(e.currentTarget);
+          applyFilters({ from: fd.get('from') || '', to: fd.get('to') || '', q: fd.get('q') || '' });
+        }}
+        className="no-print flex flex-wrap items-end gap-2"
+      >
         <div className="grid gap-1">
           <Label htmlFor="from">Dari</Label>
           <Input id="from" name="from" type="date" defaultValue={from} className="h-8" />
@@ -79,8 +124,8 @@ export default async function SalesReportPage({ searchParams }) {
           Terapkan
         </Button>
         {(from || to || q) && (
-          <Button variant="ghost" size="sm" asChild>
-            <a href="/reports/sales">Reset</a>
+          <Button variant="ghost" size="sm" onClick={() => applyFilters({ from: '', to: '', q: '' })}>
+            Reset
           </Button>
         )}
       </form>

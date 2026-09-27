@@ -1,20 +1,66 @@
+'use client';
+
+import { useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { Receipt } from 'lucide-react';
-import { createClient } from '../../../../lib/supabase/server';
-import { getVendorBillsPage, getVendorBillsTotal, PAGE_SIZE } from '../../../../lib/services/accounting';
-import { formatRupiah } from '../../../../lib/utils/format';
+import { useList } from '@/hooks/useList';
+import { formatRupiah } from '@/lib/utils/format';
+import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow, TableFooter } from '@/components/ui/table';
 import EmptyState from '@/components/ui/EmptyState';
 import StatusBadge from '@/components/ui/StatusBadge';
 import Pagination from '../../../../components/ui/Pagination';
 
-export const dynamic = 'force-dynamic';
+const PAGE_SIZE = 20;
 
-export default async function VendorBillsPage({ searchParams }) {
-  const { page } = await searchParams;
-  const supabase = await createClient();
-  const { items, count, page: safePage } = await getVendorBillsPage(supabase, { page });
-  const grandTotal = await getVendorBillsTotal(supabase);
+export default function VendorBillsPage() {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const page = parseInt(searchParams.get('page') || '1', 10);
+
+  const { data, error, isLoading } = useList('vendor-bills', { page });
+
+  if (isLoading && !data) {
+    return (
+      <div className="space-y-4">
+        <div>
+          <h1 className="text-lg font-semibold">Vendor Bills</h1>
+          <p className="text-sm text-muted-foreground">Ringkasan tagihan vendor yang sudah dibayar.</p>
+        </div>
+        <div className="space-y-3">
+          {[...Array(5)].map((_, i) => (
+            <div key={i} className="h-12 animate-pulse bg-muted rounded" />
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="space-y-4">
+        <p className="text-destructive">Gagal memuat data: {error.message}</p>
+        <Button onClick={() => router.refresh()}>Coba Lagi</Button>
+      </div>
+    );
+  }
+
+  const items = data?.items || [];
+  const count = data?.count || 0;
+  const safePage = data?.page || page;
+  const grandTotal = data?.grandTotal || 0;
+
+  function goToPage(newPage) {
+    if (newPage < 1) return;
+    const totalPages = Math.max(1, Math.ceil((count || 0) / PAGE_SIZE));
+    if (newPage > totalPages) return;
+    const params = new URLSearchParams(searchParams.toString());
+    params.set('page', newPage.toString());
+    const newUrl = `${window.location.pathname}?${params.toString()}`;
+    window.history.pushState(null, '', newUrl);
+    router.refresh();
+  }
 
   return (
     <div className="space-y-4">
@@ -68,7 +114,7 @@ export default async function VendorBillsPage({ searchParams }) {
           )}
         </CardContent>
       </Card>
-      <Pagination page={safePage} pageSize={PAGE_SIZE} count={count} basePath="/accounting/vendor-bills" />
+      <Pagination page={safePage} pageSize={PAGE_SIZE} count={count} basePath="/accounting/vendor-bills" onPageChange={goToPage} />
     </div>
   );
 }
