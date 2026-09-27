@@ -8,7 +8,7 @@ import ActionButton from '@/components/ui/ActionButton';
 import { NativeSelect } from '@/components/ui/NativeSelect';
 import { createDepartment, updateDepartmentManager, deleteDepartment } from '../actions';
 
-export function CreateForm({ employees }) {
+export function CreateForm({ employees, onSuccess = null }) {
   const [pending, start] = useTransition();
   return (
     <form
@@ -20,6 +20,7 @@ export function CreateForm({ employees }) {
             await createDepartment(new FormData(e.currentTarget));
             e.currentTarget.reset();
             toast.success("Departemen ditambahkan");
+            if (onSuccess) onSuccess();
           } catch (err) {
             toast.error(err.message);
           }
@@ -42,7 +43,7 @@ export function CreateForm({ employees }) {
   );
 }
 
-export function RowActions({ dept, employees }) {
+export function RowActions({ dept, employees, onSuccess = null }) {
   const [editing, setEditing] = useState(false);
   const [manager, setManager] = useState(dept.manager || '');
   const [pending, start] = useTransition();
@@ -59,6 +60,7 @@ export function RowActions({ dept, employees }) {
           confirmText="Hapus departemen ini?"
           label="Hapus"
           variant="destructive"
+          onSuccess={onSuccess}
         />
       </div>
     );
@@ -83,6 +85,7 @@ export function RowActions({ dept, employees }) {
             try {
               await updateDepartmentManager(dept.id, manager);
               setEditing(false);
+              if (onSuccess) onSuccess();
             } catch (e) {
               toast.error('Gagal update: ' + e.message);
             }

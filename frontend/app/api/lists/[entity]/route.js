@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 import { getCustomersPage, getQuotationsPage, getSalesOrdersPage } from '@/lib/services/sales';
 import { getVendorsPage } from '@/lib/services/purchase';
-import { getDepartmentsPage, getEmployeesPage } from '@/lib/services/hr';
+import { getDepartmentsPage, getEmployeesPage, getEmployeeOptions } from '@/lib/services/hr';
 import {
   getBomsPage,
   getMaterialsPage,
@@ -51,6 +51,13 @@ const ENRICH = {
   },
 };
 
+// Data pendamping untuk form (opsi dropdown) disertakan di respons list.
+const EXTRA = {
+  departments: async (supabase) => ({
+    employees: await getEmployeeOptions(supabase),
+  }),
+};
+
 export async function GET(req, { params }) {
   try {
     const { entity } = await params;
@@ -72,6 +79,11 @@ export async function GET(req, { params }) {
     if (totalFn) {
       const grandTotal = await totalFn(supabase);
       return NextResponse.json({ ...result, grandTotal });
+    }
+
+    const extraFn = EXTRA[entity];
+    if (extraFn) {
+      return NextResponse.json({ ...result, ...(await extraFn(supabase)) });
     }
     return NextResponse.json(result);
   } catch (err) {
