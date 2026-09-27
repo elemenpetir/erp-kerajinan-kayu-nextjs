@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 import { MoreHorizontal } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
@@ -15,7 +16,8 @@ import ActionButton from '@/components/ui/ActionButton';
 // Dialog konfirmasi tetap milik ActionButton (mode controlled) —
 // menu hanya pemicu, keputusan destructif tetap di dialog.
 // actions: [{ label, run, confirmTitle, confirmText, successText, variant }]
-export default function RowActions({ viewHref = null, viewLabel = 'Lihat', actions = [] }) {
+// onSuccess: dipanggil setelah aksi sukses (mis. mutate() SWR di list client)
+export default function RowActions({ viewHref = null, viewLabel = 'Lihat', actions = [], onSuccess = null }) {
   const [dlg, setDlg] = useState(null);
 
   return (
@@ -29,7 +31,7 @@ export default function RowActions({ viewHref = null, viewLabel = 'Lihat', actio
         <DropdownMenuContent align="end">
           {viewHref && (
             <DropdownMenuItem asChild>
-              <a href={viewHref}>{viewLabel}</a>
+              <Link href={viewHref}>{viewLabel}</Link>
             </DropdownMenuItem>
           )}
           {actions.map((a, i) => (
@@ -52,6 +54,7 @@ export default function RowActions({ viewHref = null, viewLabel = 'Lihat', actio
           successText={a.successText}
           label={a.label}
           variant={a.variant}
+          onSuccess={a.onSuccess ?? onSuccess ?? undefined}
           hideTrigger
           open={dlg === i}
           onOpenChange={(v) => setDlg(v ? i : null)}

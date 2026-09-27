@@ -21,7 +21,7 @@ export default function BillsList() {
   const router = useRouter();
   const page = parseInt(searchParams.get('page') || '1', 10);
 
-  const { data, error, isLoading } = useBills(page);
+  const { data, error, isLoading, mutate } = useBills(page);
 
   if (isLoading && !data) {
     return (
@@ -114,6 +114,7 @@ export default function BillsList() {
                   <TableCell>
                     <RowActions
                       viewHref={`/purchase/bills/${b.id}`}
+                      onSuccess={() => mutate()}
                       actions={[
                         ...(b.status === 'Bill'
                           ? [

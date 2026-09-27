@@ -1,6 +1,7 @@
 'use client';
 
 import { Package, Plus } from 'lucide-react';
+import Link from 'next/link';
 import { docCode } from '@/lib/utils/format';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -22,7 +23,7 @@ function stokClass(stok) {
   return 'font-semibold text-emerald-600';
 }
 
-function ProductTable({ items }) {
+function ProductTable({ items, onMutate }) {
   return (
     <Card>
       <CardContent className="p-0">
@@ -52,8 +53,9 @@ function ProductTable({ items }) {
                   {p._stok ?? 0}
                 </TableCell>
                 <TableCell>
-                  <RowActions
-                    viewHref={`/manufacturing/products/${p.id}`}
+                    <RowActions
+                      viewHref={`/manufacturing/products/${p.id}`}
+                      onSuccess={onMutate}
                     actions={[
                       {
                         label: 'Hapus',
@@ -118,7 +120,7 @@ function ProductGrid({ items }) {
             <div className="flex items-center justify-between pt-1">
               <span className={`text-sm tabular-nums ${stokClass(p._stok)}`}>Stok {p._stok ?? 0}</span>
               <Button variant="ghost" size="sm" asChild>
-                <a href={`/manufacturing/products/${p.id}`}>Lihat</a>
+                <Link href={`/manufacturing/products/${p.id}`}>Lihat</Link>
               </Button>
             </div>
           </CardContent>
@@ -128,7 +130,7 @@ function ProductGrid({ items }) {
   );
 }
 
-export default function ProductViews({ items }) {
+export default function ProductViews({ items, onMutate = null }) {
   const [view, setView] = usePersistedView('view:products', 'list');
   return (
     <div className="space-y-4">
@@ -146,7 +148,7 @@ export default function ProductViews({ items }) {
           </Button>
         </div>
       </div>
-      {view === 'grid' ? <ProductGrid items={items} /> : <ProductTable items={items} />}
+      {view === 'grid' ? <ProductGrid items={items} /> : <ProductTable items={items} onMutate={onMutate} />}
     </div>
   );
 }

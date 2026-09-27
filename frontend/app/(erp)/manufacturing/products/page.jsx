@@ -16,7 +16,7 @@ export default function ProductsPage() {
   const router = useRouter();
   const page = parseInt(searchParams.get('page') || '1', 10);
 
-  const { data, error, isLoading } = useProducts(page);
+  const { data, error, isLoading, mutate } = useProducts(page);
 
   if (isLoading && !data) {
     return (
@@ -65,7 +65,7 @@ export default function ProductsPage() {
         <h1 className="text-lg font-semibold">Produk</h1>
         <p className="text-sm text-muted-foreground">Kelola produk kerajinan kayu beserta stoknya.</p>
       </div>
-      <ProductViews items={items} />
+      <ProductViews items={items} onMutate={() => mutate()} />
       <Pagination
         page={safePage}
         pageSize={PAGE_SIZE}
