@@ -8,6 +8,7 @@ import {
   getMaterialsPage,
   getCategoriesPage,
   getProductionOrdersPage,
+  getMaterialStockMap,
 } from '@/lib/services/manufacturing';
 import {
   getCustomerInvoicesPage,
@@ -39,6 +40,17 @@ const WITH_TOTAL = {
   'vendor-bills': getVendorBillsTotal,
 };
 
+// Enrichment row (stok bahan) dilakukan di server agar tetap 1 query tambahan.
+const ENRICH = {
+  materials: async (supabase, items) => {
+    const stokMap = await getMaterialStockMap(
+      supabase,
+      items.map((b) => b.id),
+    );
+    return items.map((b) => ({ ...b, _stok: stokMap[b.id] }));
+  },
+};
+
 export async function GET(req, { params }) {
   try {
     const { entity } = await params;
@@ -50,6 +62,11 @@ export async function GET(req, { params }) {
 
     const supabase = await createClient();
     const result = await listFn(supabase, { page });
+
+    const enrichFn = ENRICH[entity];
+    if (enrichFn) {
+      result.items = await enrichFn(supabase, result.items);
+    }
 
     const totalFn = WITH_TOTAL[entity];
     if (totalFn) {

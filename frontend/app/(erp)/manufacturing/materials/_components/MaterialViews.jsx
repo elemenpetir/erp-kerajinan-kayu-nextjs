@@ -1,6 +1,7 @@
 'use client';
 
 import { Plus, TreePine } from 'lucide-react';
+import Link from 'next/link';
 import { docCode } from '@/lib/utils/format';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -22,7 +23,7 @@ function stokClass(stok) {
   return 'font-semibold text-emerald-600';
 }
 
-function MaterialTable({ items }) {
+function MaterialTable({ items, onMutate }) {
   return (
     <Card>
       <CardContent className="p-0">
@@ -49,10 +50,11 @@ function MaterialTable({ items }) {
                 <TableCell className={`text-right tabular-nums ${stokClass(b._stok)}`}>
                   {b._stok ?? 0}
                 </TableCell>
-                <TableCell>
-                  <RowActions
-                    viewHref={`/manufacturing/materials/${b.id}`}
-                    actions={[
+                  <TableCell>
+                    <RowActions
+                      viewHref={`/manufacturing/materials/${b.id}`}
+                      onSuccess={onMutate}
+                      actions={[
                       {
                         label: 'Hapus',
                         run: deleteMaterial.bind(null, b.id),
@@ -116,7 +118,7 @@ function MaterialGrid({ items }) {
             <div className="flex items-center justify-between pt-1">
               <span className={`text-sm tabular-nums ${stokClass(b._stok)}`}>Stok {b._stok ?? 0}</span>
               <Button variant="ghost" size="sm" asChild>
-                <a href={`/manufacturing/materials/${b.id}`}>Lihat</a>
+                <Link href={`/manufacturing/materials/${b.id}`}>Lihat</Link>
               </Button>
             </div>
           </CardContent>
@@ -126,7 +128,7 @@ function MaterialGrid({ items }) {
   );
 }
 
-export default function MaterialViews({ items }) {
+export default function MaterialViews({ items, onMutate = null }) {
   const [view, setView] = usePersistedView('view:materials', 'list');
   return (
     <div className="space-y-4">
@@ -137,14 +139,14 @@ export default function MaterialViews({ items }) {
         <div className="flex items-center gap-2">
           <ViewToggle value={view} onChange={setView} />
           <Button asChild>
-            <a href="/manufacturing/materials/new">
+            <Link href="/manufacturing/materials/new">
               <Plus />
               Tambah Bahan
-            </a>
+            </Link>
           </Button>
         </div>
       </div>
-      {view === 'grid' ? <MaterialGrid items={items} /> : <MaterialTable items={items} />}
+      {view === 'grid' ? <MaterialGrid items={items} /> : <MaterialTable items={items} onMutate={onMutate} />}
     </div>
   );
 }

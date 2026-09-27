@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { createCategory } from '../actions';
 
-export default function CategoryForm() {
+export default function CategoryForm({ onSuccess = null }) {
   const [nama, setNama] = useState('');
   const [pending, start] = useTransition();
 
@@ -22,6 +22,7 @@ export default function CategoryForm() {
             await createCategory(fd);
             setNama('');
             toast.success('Kategori ditambahkan');
+            if (onSuccess) onSuccess();
           } catch (err) {
             toast.error(err.message);
           }
