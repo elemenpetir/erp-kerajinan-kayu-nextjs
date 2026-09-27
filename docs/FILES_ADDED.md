@@ -23,10 +23,12 @@ Lihat `docs/PRD.md` dan `docs/ERD.md` untuk konteks produk.
 - `scripts/smoke.js` — smoke HTTP read-only: `node scripts/smoke.js [baseURL]` (38 cek: 200 + redirect).
 
 ## Frontend — fondasi
-- `frontend/proxy.js` — refresh session Supabase per-request (`@supabase/ssr`, konvensi `proxy` Next.js 16).
+- `frontend/proxy.js` — refresh session Supabase per-request (`@supabase/ssr`, konvensi `proxy` Next.js 16) + verifikasi JWT lokal via `jose`.
 - `frontend/next.config.js` — redirects URL lama → baru (masa transisi).
 - `frontend/lib/supabase/client.js` — browser client (`@supabase/ssr`).
 - `frontend/lib/supabase/server.js` — server client fresh per-request.
+- `frontend/hooks/{useList,useBills,useProducts,useStock}.js` — SWR hooks untuk list client.
+- `frontend/app/api/lists/[entity]/route.js` — endpoint tunggal semua list (allowlist entity → service; enrich stok bahan, opsi karyawan departemen, grandTotal accounting, filter sales-report).
 - `frontend/lib/supabaseClient.js` — re-export legacy (jangan dipakai di kode baru).
 - `frontend/lib/services/{pagination,manufacturing,purchase,sales,accounting,hr}.js` — query + `range/count`; sort `created_at DESC` + tiebreaker `id DESC`.
 - `frontend/lib/utils/format.js` — `formatRupiah`, `shortId`.
@@ -42,9 +44,10 @@ Lihat `docs/PRD.md` dan `docs/ERD.md` untuk konteks produk.
 - `reports/{stock,sales,finance}` — laporan dengan filter + Print.
 - `(erp)/layout.jsx` — sudah membungkus children dengan `<AppShell>` (shell tunggal).
 
-## Frontend — arsitektur hybrid
-- Default: Server Components + Server Actions (`revalidatePath` / `router.refresh`).
-- 3 pilot list = Client + SWR + API routes: Bills (`/api/bills`), Produk (`/api/products`), Stok (`/api/stock`) — filter instant tanpa reload.
+## Frontend — arsitektur list
+- Semua list halaman = Client Component + SWR (`useList`) → `/api/lists/[entity]`: customers, quotations, sales-orders, vendors, departments, employees, boms, materials, categories, production-orders, customer-invoices, vendor-bills, sales-report.
+- 3 pilot awal tetap sendiri (tak dikonversi): Bills (`/api/bills`), Produk (`/api/products`), Stok (`/api/stock`).
+- Detail/form tetap Server Components + Server Actions (`revalidatePath` / `router.refresh`).
 - Auth: `@supabase/ssr` via `proxy.js`.
 
 ## Catatan

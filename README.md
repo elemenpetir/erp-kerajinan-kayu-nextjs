@@ -186,7 +186,7 @@ Note: The seed script wipes and reseeds all ERP tables. Each run produces a clea
 
 ## Architecture
 
-Server Components are the default. Three high-density lists (Bills, Products, Stock) use Client Components with SWR for instant filtering and pagination. Mutations are handled via Server Actions with revalidatePath or router.refresh. Authentication uses @supabase/ssr with a proxy middleware. All row actions are unified behind the RowActions menu (three-dot dropdown).
+Lists are Client Components fetching from a shared `/api/lists/[entity]` endpoint with SWR, so pagination and report filters update instantly without a full reload. Detail and form pages remain Server Components, and mutations run via Server Actions with revalidatePath or router.refresh. Authentication uses @supabase/ssr with a proxy middleware. All row actions are unified behind the RowActions menu (three-dot dropdown).
 
 ---
 
@@ -199,7 +199,7 @@ Server Components are the default. Three high-density lists (Bills, Products, St
 - Product and material stock can go negative if orders exceed available stock; no minimum stock validation
 - BOMs cannot be edited; if material prices change, BOM totals do not auto-update
 - No PDF or CSV export
-- No search or filter on regular list pages (only available in the Stock Report)
+- No search or filter on regular list pages (only available in the Stock and Sales Reports)
 - No low-stock notifications
 
 ---
