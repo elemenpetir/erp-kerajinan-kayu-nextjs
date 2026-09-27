@@ -2,6 +2,7 @@
 
 import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { ArrowLeft, Search } from 'lucide-react';
 import { useList } from '@/hooks/useList';
 import { docCode, formatRupiah } from '@/lib/utils/format';
@@ -44,9 +45,9 @@ export default function SalesReportPage() {
       <div className="space-y-4">
         <div className="flex items-center gap-2">
           <Button variant="ghost" size="icon" asChild className="no-print">
-            <a href="/" aria-label="Kembali">
+            <Link href="/" aria-label="Kembali">
               <ArrowLeft />
-            </a>
+            </Link>
           </Button>
           <div className="flex-1">
             <h1 className="text-lg font-semibold">Laporan Penjualan</h1>
@@ -86,9 +87,9 @@ export default function SalesReportPage() {
       `}</style>
       <div className="flex items-center gap-2">
         <Button variant="ghost" size="icon" asChild className="no-print">
-          <a href="/" aria-label="Kembali">
+          <Link href="/" aria-label="Kembali">
             <ArrowLeft />
-          </a>
+          </Link>
         </Button>
         <div className="flex-1">
           <h1 className="text-lg font-semibold">Laporan Penjualan</h1>

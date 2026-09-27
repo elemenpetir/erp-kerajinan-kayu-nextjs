@@ -3,7 +3,8 @@
 import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/navigation';
 import { Suspense } from 'react';
-import { useStock } from '@/hooks/useStock';
+import Link from 'next/link';
+import { useList } from '@/hooks/useList';
 import { ArrowLeft, Search } from 'lucide-react';
 import { docCode } from '@/lib/utils/format';
 import { Button } from '@/components/ui/button';
@@ -12,8 +13,6 @@ import PrintButton from '@/components/ui/PrintButton';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-
-export const dynamic = 'force-dynamic';
 
 // Ambang "menipis" sama seperti grid (produk ≤5, bahan ≤10).
 function stokClass(stok, ambang) {
@@ -39,15 +38,11 @@ function StockReportContent() {
   const status = searchParams.get('status') === 'kritis' ? 'kritis' : 'semua';
   const q = (searchParams.get('q') || '').trim();
 
-  const {
-    data: items,
-    produkCount,
-    bahanCount,
-    kritis,
-    error,
-    isLoading,
-    mutate,
-  } = useStock({ tab, status, q });
+  const { data, error, isLoading, mutate } = useList('stock-report', { tab, status, q });
+  const items = data?.items || [];
+  const produkCount = data?.produkCount || 0;
+  const bahanCount = data?.bahanCount || 0;
+  const kritis = data?.kritis || 0;
 
   // Handle filter changes with pushState
   function applyFilters(newParams) {
@@ -81,9 +76,9 @@ function StockReportContent() {
         `}</style>
         <div className="flex items-center gap-2">
           <Button variant="ghost" size="icon" asChild className="no-print">
-            <a href="/" aria-label="Kembali">
+            <Link href="/" aria-label="Kembali">
               <ArrowLeft />
-            </a>
+            </Link>
           </Button>
           <div className="flex-1">
             <h1 className="text-lg font-semibold">Laporan Stok</h1>
@@ -126,9 +121,9 @@ function StockReportContent() {
       `}</style>
       <div className="flex items-center gap-2">
         <Button variant="ghost" size="icon" asChild className="no-print">
-          <a href="/" aria-label="Kembali">
+          <Link href="/" aria-label="Kembali">
             <ArrowLeft />
-          </a>
+          </Link>
         </Button>
         <div className="flex-1">
           <h1 className="text-lg font-semibold">Laporan Stok</h1>

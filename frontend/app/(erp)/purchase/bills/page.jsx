@@ -2,8 +2,9 @@
 
 import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { Plus, Receipt } from 'lucide-react';
-import { useBills } from '@/hooks/useBills';
+import { useList } from '@/hooks/useList';
 import { docCode } from '@/lib/utils/format';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -21,7 +22,7 @@ export default function BillsList() {
   const router = useRouter();
   const page = parseInt(searchParams.get('page') || '1', 10);
 
-  const { data, error, isLoading, mutate } = useBills(page);
+  const { data, error, isLoading, mutate } = useList('bills', { page });
 
   if (isLoading && !data) {
     return (
@@ -32,10 +33,10 @@ export default function BillsList() {
             <p className="text-sm text-muted-foreground">Draft Bill → Bill → Paid.</p>
           </div>
           <Button asChild>
-            <a href="/purchase/bills/new">
+            <Link href="/purchase/bills/new">
               <Plus />
               Buat Bill
-            </a>
+            </Link>
           </Button>
         </div>
         <div className="space-y-3">
@@ -80,10 +81,10 @@ export default function BillsList() {
           <p className="text-sm text-muted-foreground">Draft Bill → Bill → Paid.</p>
         </div>
         <Button asChild>
-          <a href="/purchase/bills/new">
+          <Link href="/purchase/bills/new">
             <Plus />
             Buat Bill
-          </a>
+          </Link>
         </Button>
       </div>
       <Card>

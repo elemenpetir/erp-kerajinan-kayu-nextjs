@@ -27,8 +27,8 @@ Lihat `docs/PRD.md` dan `docs/ERD.md` untuk konteks produk.
 - `frontend/next.config.js` — redirects URL lama → baru (masa transisi).
 - `frontend/lib/supabase/client.js` — browser client (`@supabase/ssr`).
 - `frontend/lib/supabase/server.js` — server client fresh per-request.
-- `frontend/hooks/{useList,useBills,useProducts,useStock}.js` — SWR hooks untuk list client.
-- `frontend/app/api/lists/[entity]/route.js` — endpoint tunggal semua list (allowlist entity → service; enrich stok bahan, opsi karyawan departemen, grandTotal accounting, filter sales-report).
+- `frontend/hooks/useList.js` — satu-satunya SWR hook list client (key dari entity + params).
+- `frontend/app/api/lists/[entity]/route.js` — endpoint tunggal semua list (allowlist entity → service; enrich stok bahan + stok/bom produk, opsi karyawan departemen, grandTotal accounting, filter sales-report & stock-report).
 - `frontend/lib/supabaseClient.js` — re-export legacy (jangan dipakai di kode baru).
 - `frontend/lib/services/{pagination,manufacturing,purchase,sales,accounting,hr}.js` — query + `range/count`; sort `created_at DESC` + tiebreaker `id DESC`.
 - `frontend/lib/utils/format.js` — `formatRupiah`, `shortId`.
@@ -45,9 +45,9 @@ Lihat `docs/PRD.md` dan `docs/ERD.md` untuk konteks produk.
 - `(erp)/layout.jsx` — sudah membungkus children dengan `<AppShell>` (shell tunggal).
 
 ## Frontend — arsitektur list
-- Semua list halaman = Client Component + SWR (`useList`) → `/api/lists/[entity]`: customers, quotations, sales-orders, vendors, departments, employees, boms, materials, categories, production-orders, customer-invoices, vendor-bills, sales-report.
-- 3 pilot awal tetap sendiri (tak dikonversi): Bills (`/api/bills`), Produk (`/api/products`), Stok (`/api/stock`).
+- Semua list halaman = Client Component + SWR (`useList`) → `/api/lists/[entity]`: customers, quotations, sales-orders, vendors, departments, employees, boms, materials, categories, production-orders, customer-invoices, vendor-bills, bills, products, sales-report, stock-report.
 - Detail/form tetap Server Components + Server Actions (`revalidatePath` / `router.refresh`).
+- Laporan Keuangan tetap Server Component (snapshot print, tanpa filter); landing `/` statis.
 - Auth: `@supabase/ssr` via `proxy.js`.
 
 ## Catatan

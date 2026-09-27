@@ -2,7 +2,7 @@
 
 import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/navigation';
-import { useProducts } from '@/hooks/useProducts';
+import { useList } from '@/hooks/useList';
 import { Plus, Package } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -16,7 +16,7 @@ export default function ProductsPage() {
   const router = useRouter();
   const page = parseInt(searchParams.get('page') || '1', 10);
 
-  const { data, error, isLoading, mutate } = useProducts(page);
+  const { data, error, isLoading, mutate } = useList('products', { page });
 
   if (isLoading && !data) {
     return (
