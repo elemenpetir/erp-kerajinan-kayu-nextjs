@@ -3,6 +3,8 @@
 import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/navigation';
 import { useList } from '@/hooks/useList';
+import { useRole } from '@/hooks/useRole';
+import { can } from '@/lib/permissions';
 import { Layers } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -19,6 +21,7 @@ export default function CategoriesPage() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const page = parseInt(searchParams.get('page') || '1', 10);
+  const { role } = useRole();
 
   const { data, error, isLoading, mutate } = useList('categories', { page });
 
@@ -68,7 +71,7 @@ export default function CategoriesPage() {
         <h1 className="text-lg font-semibold">Kategori</h1>
         <p className="text-sm text-muted-foreground">Kelompok produk untuk katalog dan laporan.</p>
       </div>
-      <CategoryForm onSuccess={() => mutate()} />
+      {can(role, 'create', 'categories') && <CategoryForm onSuccess={() => mutate()} />}
       <Card>
         <CardContent className="p-0">
           <Table>
@@ -83,7 +86,7 @@ export default function CategoriesPage() {
                 <TableRow key={kategori.id}>
                   <TableCell className="font-medium">{kategori.nama}</TableCell>
                   <TableCell>
-                    <RowActions
+                    <RowActions entity="categories"
                       onSuccess={() => mutate()}
                       actions={[
                         {

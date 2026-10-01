@@ -32,16 +32,16 @@ function readSessionCookie(request) {
   return chunks.map((c) => c.value).join('');
 }
 
-// true = signature valid + belum expired. false = gagal (expired/forged/rusak)
+// Payload JWT bila signature valid + belum expired, else null.
 // → jalur fallback getUser() di bawah yang menentukan nasibnya.
-async function verifySessionLocally(rawSession) {
+async function verifySessionPayload(rawSession) {
   try {
     const session = JSON.parse(rawSession);
-    if (!session?.access_token) return false;
-    await jwtVerify(session.access_token, await getJwks());
-    return true;
+    if (!session?.access_token) return null;
+    const { payload } = await jwtVerify(session.access_token, await getJwks());
+    return payload;
   } catch {
-    return false;
+    return null;
   }
 }
 
@@ -59,33 +59,39 @@ export default async function proxy(request) {
   const isPublic = PUBLIC_PATHS.includes(path);
 
   let user = null;
+  let role = 'staff';
   const rawSession = readSessionCookie(request);
 
   if (!rawSession) {
     // Tanpa cookie → anon, tanpa network.
     user = null;
-  } else if (await verifySessionLocally(rawSession)) {
-    // JWT valid (signature JWKS + expiry) → lolos gerbang tanpa network.
-    user = true;
   } else {
-    // Expired/forged/rusak → jalur lama: validasi + auto-refresh di server Supabase.
-    const supabase = createServerClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
-      cookies: {
-        getAll() {
-          return request.cookies.getAll();
+    const claims = await verifySessionPayload(rawSession);
+    if (claims) {
+      // JWT valid (signature JWKS + expiry) → lolos gerbang tanpa network.
+      user = true;
+      role = claims?.app_metadata?.role || 'staff';
+    } else {
+      // Expired/forged/rusak → jalur lama: validasi + auto-refresh di server Supabase.
+      const supabase = createServerClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+        cookies: {
+          getAll() {
+            return request.cookies.getAll();
+          },
+          setAll(cookiesToSet) {
+            cookiesToSet.forEach(({ name, value, options }) =>
+              response.cookies.set(name, value, options),
+            );
+          },
         },
-        setAll(cookiesToSet) {
-          cookiesToSet.forEach(({ name, value, options }) =>
-            response.cookies.set(name, value, options),
-          );
-        },
-      },
-    });
-    try {
-      const { data } = await supabase.auth.getUser();
-      user = data.user;
-    } catch {
-      user = null; // Auth outage → diperlakukan sebagai anon (fail-closed di bawah)
+      });
+      try {
+        const { data } = await supabase.auth.getUser();
+        user = data.user;
+        role = user?.app_metadata?.role || 'staff';
+      } catch {
+        user = null; // Auth outage → diperlakukan sebagai anon (fail-closed di bawah)
+      }
     }
   }
 
@@ -101,6 +107,21 @@ export default async function proxy(request) {
     home.pathname = '/';
     home.searchParams.delete('next');
     return NextResponse.redirect(home);
+  }
+
+  // RBAC UX gate (enforcement riil di RLS): staff tanpa laporan keuangan,
+  // manager tanpa form */new (9 halaman).
+  if (user) {
+    if (role === 'staff' && path === '/reports/finance') {
+      const home = request.nextUrl.clone();
+      home.pathname = '/';
+      return NextResponse.redirect(home);
+    }
+    if (role === 'manager' && path.endsWith('/new')) {
+      const home = request.nextUrl.clone();
+      home.pathname = '/';
+      return NextResponse.redirect(home);
+    }
   }
 
   return response;

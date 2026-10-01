@@ -9,6 +9,8 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import EmptyState from '@/components/ui/EmptyState';
 import ViewToggle, { usePersistedView } from '@/components/ui/ViewToggle';
 import RowActions from '@/components/ui/RowActions';
+import { useRole } from '@/hooks/useRole';
+import { can } from '@/lib/permissions';
 import { deleteProduct } from '../actions';
 
 function monogram(nama) {
@@ -53,7 +55,7 @@ function ProductTable({ items, onMutate }) {
                   {p._stok ?? 0}
                 </TableCell>
                 <TableCell>
-                    <RowActions
+                    <RowActions entity="products"
                       viewHref={`/manufacturing/products/${p.id}`}
                       onSuccess={onMutate}
                     actions={[
@@ -131,6 +133,7 @@ function ProductGrid({ items }) {
 }
 
 export default function ProductViews({ items, onMutate = null }) {
+  const { role } = useRole();
   const [view, setView] = usePersistedView('view:products', 'list');
   return (
     <div className="space-y-4">
@@ -140,12 +143,14 @@ export default function ProductViews({ items, onMutate = null }) {
         </p>
         <div className="flex items-center gap-2">
           <ViewToggle value={view} onChange={setView} />
-          <Button asChild>
-            <a href="/manufacturing/products/new">
-              <Plus />
-              Buat Produk
-            </a>
-          </Button>
+          {can(role, 'create', 'products') && (
+            <Button asChild>
+              <Link href="/manufacturing/products/new">
+                <Plus />
+                Tambah Produk
+              </Link>
+            </Button>
+          )}
         </div>
       </div>
       {view === 'grid' ? <ProductGrid items={items} /> : <ProductTable items={items} onMutate={onMutate} />}

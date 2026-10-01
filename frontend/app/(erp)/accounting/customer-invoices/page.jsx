@@ -2,8 +2,10 @@
 
 import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/navigation';
-import { Landmark } from 'lucide-react';
+import { Landmark, Lock } from 'lucide-react';
 import { useList } from '@/hooks/useList';
+import { useRole } from '@/hooks/useRole';
+import { can } from '@/lib/permissions';
 import { formatRupiah } from '@/lib/utils/format';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -20,6 +22,24 @@ export default function CustomerInvoicesPage() {
   const page = parseInt(searchParams.get('page') || '1', 10);
 
   const { data, error, isLoading } = useList('customer-invoices', { page });
+  const { role } = useRole();
+
+  if (!can(role, 'read', 'customer-invoices')) {
+    return (
+      <div className="space-y-4">
+        <div>
+          <h1 className="text-lg font-semibold">Customer Invoices</h1>
+          <p className="text-sm text-muted-foreground">Ringkasan invoice dari sales order yang sudah terbayar penuh.</p>
+        </div>
+        <Card>
+          <CardContent className="flex items-center gap-3 py-8">
+            <Lock className="h-5 w-5 text-muted-foreground" />
+            <p className="text-sm text-muted-foreground">Akses ditolak. Halaman ini hanya untuk Admin dan Manager.</p>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
 
   if (isLoading && !data) {
     return (

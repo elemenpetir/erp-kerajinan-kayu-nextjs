@@ -5,6 +5,8 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Factory, Plus } from 'lucide-react';
 import { useList } from '@/hooks/useList';
+import { useRole } from '@/hooks/useRole';
+import { can } from '@/lib/permissions';
 import { docCode } from '@/lib/utils/format';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -21,6 +23,7 @@ export default function ProductionOrdersPage() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const page = parseInt(searchParams.get('page') || '1', 10);
+  const { role } = useRole();
 
   const { data, error, isLoading, mutate } = useList('production-orders', { page });
 
@@ -32,12 +35,14 @@ export default function ProductionOrdersPage() {
             <h1 className="text-lg font-semibold">Order Produksi</h1>
             <p className="text-sm text-muted-foreground">Draft → Konfirmasi → Dalam Proses → Selesai.</p>
           </div>
-          <Button asChild>
-            <Link href="/manufacturing/production-orders/new">
-              <Plus />
-              Buat Order
-            </Link>
-          </Button>
+          {can(role, 'create', 'production-orders') && (
+            <Button asChild>
+              <Link href="/manufacturing/production-orders/new">
+                <Plus />
+                Buat Order
+              </Link>
+            </Button>
+          )}
         </div>
         <div className="space-y-3">
           {[...Array(5)].map((_, i) => (
@@ -79,12 +84,14 @@ export default function ProductionOrdersPage() {
           <h1 className="text-lg font-semibold">Order Produksi</h1>
           <p className="text-sm text-muted-foreground">Draft → Konfirmasi → Dalam Proses → Selesai.</p>
         </div>
-        <Button asChild>
-          <Link href="/manufacturing/production-orders/new">
-            <Plus />
-            Buat Order
-          </Link>
-        </Button>
+        {can(role, 'create', 'production-orders') && (
+          <Button asChild>
+            <Link href="/manufacturing/production-orders/new">
+              <Plus />
+              Buat Order
+            </Link>
+          </Button>
+        )}
       </div>
       <Card>
         <CardContent className="p-0">
@@ -112,7 +119,7 @@ export default function ProductionOrdersPage() {
                     {new Date(order.created_at).toLocaleDateString('id-ID')}
                   </TableCell>
                   <TableCell>
-                    <RowActions
+                    <RowActions entity="production-orders"
                       viewHref={`/manufacturing/production-orders/${order.id}`}
                       onSuccess={() => mutate()}
                       actions={[

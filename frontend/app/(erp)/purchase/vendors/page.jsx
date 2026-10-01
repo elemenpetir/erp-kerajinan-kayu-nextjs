@@ -5,6 +5,8 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Plus, Store } from 'lucide-react';
 import { useList } from '@/hooks/useList';
+import { useRole } from '@/hooks/useRole';
+import { can } from '@/lib/permissions';
 import { docCode } from '@/lib/utils/format';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -20,6 +22,7 @@ export default function VendorsList() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const page = parseInt(searchParams.get('page') || '1', 10);
+  const { role } = useRole();
 
   const { data, error, isLoading, mutate } = useList('vendors', { page });
 
@@ -31,12 +34,14 @@ export default function VendorsList() {
             <h1 className="text-lg font-semibold">Vendor</h1>
             <p className="text-sm text-muted-foreground">Daftar pemasok bahan baku.</p>
           </div>
-          <Button asChild>
-            <Link href="/purchase/vendors/new">
-              <Plus />
-              Tambah Vendor
-            </Link>
-          </Button>
+          {can(role, 'create', 'vendors') && (
+            <Button asChild>
+              <Link href="/purchase/vendors/new">
+                <Plus />
+                Tambah Vendor
+              </Link>
+            </Button>
+          )}
         </div>
         <div className="space-y-3">
           {[...Array(5)].map((_, i) => (
@@ -78,12 +83,14 @@ export default function VendorsList() {
           <h1 className="text-lg font-semibold">Vendor</h1>
           <p className="text-sm text-muted-foreground">Daftar pemasok bahan baku.</p>
         </div>
-        <Button asChild>
-          <Link href="/purchase/vendors/new">
-            <Plus />
-            Tambah Vendor
-          </Link>
-        </Button>
+        {can(role, 'create', 'vendors') && (
+          <Button asChild>
+            <Link href="/purchase/vendors/new">
+              <Plus />
+              Tambah Vendor
+            </Link>
+          </Button>
+        )}
       </div>
       <Card>
         <CardContent className="p-0">
@@ -107,7 +114,7 @@ export default function VendorsList() {
                   <TableCell className="tabular-nums">{v.telp || '-'}</TableCell>
                   <TableCell className="text-muted-foreground">{v.email || '-'}</TableCell>
                   <TableCell>
-                    <RowActions
+                    <RowActions entity="vendors"
                       viewHref={`/purchase/vendors/${v.id}`}
                       onSuccess={() => mutate()}
                       actions={[

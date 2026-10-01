@@ -5,6 +5,8 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Plus, UserRound } from 'lucide-react';
 import { useList } from '@/hooks/useList';
+import { useRole } from '@/hooks/useRole';
+import { can } from '@/lib/permissions';
 import { docCode } from '@/lib/utils/format';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -18,6 +20,7 @@ export default function EmployeesPage() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const page = parseInt(searchParams.get('page') || '1', 10);
+  const { role } = useRole();
 
   const { data, error, isLoading } = useList('employees', { page });
 
@@ -29,12 +32,14 @@ export default function EmployeesPage() {
             <h1 className="text-lg font-semibold">Karyawan</h1>
             <p className="text-sm text-muted-foreground">Data personel beserta unit kerjanya.</p>
           </div>
-          <Button asChild>
-            <Link href="/hr/employees/new">
-              <Plus />
-              Tambah Karyawan
-            </Link>
-          </Button>
+          {can(role, 'create', 'employees') && (
+            <Button asChild>
+              <Link href="/hr/employees/new">
+                <Plus />
+                Tambah Karyawan
+              </Link>
+            </Button>
+          )}
         </div>
         <div className="space-y-3">
           {[...Array(5)].map((_, i) => (
@@ -76,12 +81,14 @@ export default function EmployeesPage() {
           <h1 className="text-lg font-semibold">Karyawan</h1>
           <p className="text-sm text-muted-foreground">Data personel beserta unit kerjanya.</p>
         </div>
-        <Button asChild>
-          <Link href="/hr/employees/new">
-            <Plus />
-            Tambah Karyawan
-          </Link>
-        </Button>
+        {can(role, 'create', 'employees') && (
+          <Button asChild>
+            <Link href="/hr/employees/new">
+              <Plus />
+              Tambah Karyawan
+            </Link>
+          </Button>
+        )}
       </div>
       <Card>
         <CardContent className="p-0">

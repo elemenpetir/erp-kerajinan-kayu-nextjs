@@ -1,4 +1,5 @@
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Lock } from 'lucide-react';
+import Link from 'next/link';
 import { createClient } from '../../../../lib/supabase/server';
 import { getCustomerInvoicesTotal, getVendorBillsTotal } from '../../../../lib/services/accounting';
 import { docCode, formatRupiah } from '../../../../lib/utils/format';
@@ -15,6 +16,29 @@ export const dynamic = 'force-dynamic';
 // diterima/dibayar = agregat RPC (aktual kas masuk/keluar).
 export default async function FinanceReportPage() {
   const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if ((user?.app_metadata?.role || 'staff') === 'staff') {
+    return (
+      <div className="space-y-4">
+        <div className="flex items-center gap-2">
+          <Button variant="ghost" size="icon" asChild className="no-print">
+            <Link href="/" aria-label="Kembali">
+              <ArrowLeft />
+            </Link>
+          </Button>
+          <div className="flex-1">
+            <h1 className="text-lg font-semibold">Laporan Keuangan</h1>
+          </div>
+        </div>
+        <Card>
+          <CardContent className="flex items-center gap-3 py-8">
+            <Lock className="h-5 w-5 text-muted-foreground" />
+            <p className="text-sm text-muted-foreground">Akses ditolak. Halaman ini hanya untuk Admin dan Manager.</p>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
   const [{ data: so }, { data: bills }, diterima, dibayar] = await Promise.all([
     supabase
       .from('sales_order')

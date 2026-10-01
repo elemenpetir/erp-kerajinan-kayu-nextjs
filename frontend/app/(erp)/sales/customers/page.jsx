@@ -5,6 +5,8 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Handshake, Plus } from 'lucide-react';
 import { useList } from '@/hooks/useList';
+import { useRole } from '@/hooks/useRole';
+import { can } from '@/lib/permissions';
 import { docCode } from '@/lib/utils/format';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -20,6 +22,7 @@ export default function CustomersList() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const page = parseInt(searchParams.get('page') || '1', 10);
+  const { role } = useRole();
 
   const { data, error, isLoading, mutate } = useList('customers', { page });
 
@@ -31,12 +34,14 @@ export default function CustomersList() {
             <h1 className="text-lg font-semibold">Customer</h1>
             <p className="text-sm text-muted-foreground">Daftar pelanggan dan prospek.</p>
           </div>
-          <Button asChild>
-            <Link href="/sales/customers/new">
-              <Plus />
-              Tambah Customer
-            </Link>
-          </Button>
+          {can(role, 'create', 'customers') && (
+            <Button asChild>
+              <Link href="/sales/customers/new">
+                <Plus />
+                Tambah Customer
+              </Link>
+            </Button>
+          )}
         </div>
         <div className="space-y-3">
           {[...Array(5)].map((_, i) => (
@@ -78,12 +83,14 @@ export default function CustomersList() {
           <h1 className="text-lg font-semibold">Customer</h1>
           <p className="text-sm text-muted-foreground">Daftar pelanggan dan prospek.</p>
         </div>
-        <Button asChild>
-          <Link href="/sales/customers/new">
-            <Plus />
-            Tambah Customer
-          </Link>
-        </Button>
+        {can(role, 'create', 'customers') && (
+          <Button asChild>
+            <Link href="/sales/customers/new">
+              <Plus />
+              Tambah Customer
+            </Link>
+          </Button>
+        )}
       </div>
       <Card>
         <CardContent className="p-0">
@@ -107,7 +114,7 @@ export default function CustomersList() {
                   <TableCell className="tabular-nums">{c.telp || '-'}</TableCell>
                   <TableCell className="text-muted-foreground">{c.email || '-'}</TableCell>
                   <TableCell>
-                    <RowActions
+                    <RowActions entity="customers"
                       viewHref={`/sales/customers/${c.id}`}
                       onSuccess={() => mutate()}
                       actions={[

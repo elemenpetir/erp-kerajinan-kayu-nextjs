@@ -5,6 +5,8 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { FileText, Plus } from 'lucide-react';
 import { useList } from '@/hooks/useList';
+import { useRole } from '@/hooks/useRole';
+import { can } from '@/lib/permissions';
 import { docCode } from '@/lib/utils/format';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -21,6 +23,7 @@ export default function QuotationsPage() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const page = parseInt(searchParams.get('page') || '1', 10);
+  const { role } = useRole();
 
   const { data, error, isLoading, mutate } = useList('quotations', { page });
 
@@ -32,12 +35,14 @@ export default function QuotationsPage() {
             <h1 className="text-lg font-semibold">Quotation</h1>
             <p className="text-sm text-muted-foreground">Penawaran harga, konfirmasi menjadi sales order.</p>
           </div>
-          <Button asChild>
-            <Link href="/sales/quotations/new">
-              <Plus />
-              Buat Quotation
-            </Link>
-          </Button>
+          {can(role, 'create', 'quotations') && (
+            <Button asChild>
+              <Link href="/sales/quotations/new">
+                <Plus />
+                Buat Quotation
+              </Link>
+            </Button>
+          )}
         </div>
         <div className="space-y-3">
           {[...Array(5)].map((_, i) => (
@@ -79,12 +84,14 @@ export default function QuotationsPage() {
           <h1 className="text-lg font-semibold">Quotation</h1>
           <p className="text-sm text-muted-foreground">Penawaran harga, konfirmasi menjadi sales order.</p>
         </div>
-        <Button asChild>
-          <Link href="/sales/quotations/new">
-            <Plus />
-            Buat Quotation
-          </Link>
-        </Button>
+        {can(role, 'create', 'quotations') && (
+          <Button asChild>
+            <Link href="/sales/quotations/new">
+              <Plus />
+              Buat Quotation
+            </Link>
+          </Button>
+        )}
       </div>
       <Card>
         <CardContent className="p-0">
@@ -112,7 +119,7 @@ export default function QuotationsPage() {
                     <StatusBadge status={q.status} />
                   </TableCell>
                   <TableCell>
-                    <RowActions
+                    <RowActions entity="quotations"
                       viewHref={`/sales/quotations/${q.id}`}
                       onSuccess={() => mutate()}
                       actions={[

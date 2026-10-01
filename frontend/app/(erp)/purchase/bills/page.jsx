@@ -5,6 +5,8 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Plus, Receipt } from 'lucide-react';
 import { useList } from '@/hooks/useList';
+import { useRole } from '@/hooks/useRole';
+import { can } from '@/lib/permissions';
 import { docCode } from '@/lib/utils/format';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -21,6 +23,7 @@ export default function BillsList() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const page = parseInt(searchParams.get('page') || '1', 10);
+  const { role } = useRole();
 
   const { data, error, isLoading, mutate } = useList('bills', { page });
 
@@ -32,12 +35,14 @@ export default function BillsList() {
             <h1 className="text-lg font-semibold">Bills</h1>
             <p className="text-sm text-muted-foreground">Draft Bill → Bill → Paid.</p>
           </div>
+        {can(role, 'create', 'bills') && (
           <Button asChild>
             <Link href="/purchase/bills/new">
               <Plus />
               Buat Bill
             </Link>
           </Button>
+        )}
         </div>
         <div className="space-y-3">
           {[...Array(5)].map((_, i) => (
@@ -80,12 +85,14 @@ export default function BillsList() {
           <h1 className="text-lg font-semibold">Bills</h1>
           <p className="text-sm text-muted-foreground">Draft Bill → Bill → Paid.</p>
         </div>
-        <Button asChild>
-          <Link href="/purchase/bills/new">
-            <Plus />
-            Buat Bill
-          </Link>
-        </Button>
+        {can(role, 'create', 'bills') && (
+          <Button asChild>
+            <Link href="/purchase/bills/new">
+              <Plus />
+              Buat Bill
+            </Link>
+          </Button>
+        )}
       </div>
       <Card>
         <CardContent className="p-0">
@@ -113,7 +120,7 @@ export default function BillsList() {
                     <StatusBadge status={b.status} />
                   </TableCell>
                   <TableCell>
-                    <RowActions
+                    <RowActions entity="bills"
                       viewHref={`/purchase/bills/${b.id}`}
                       onSuccess={() => mutate()}
                       actions={[

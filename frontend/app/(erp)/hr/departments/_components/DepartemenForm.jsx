@@ -7,6 +7,8 @@ import { Input } from '@/components/ui/input';
 import ActionButton from '@/components/ui/ActionButton';
 import { NativeSelect } from '@/components/ui/NativeSelect';
 import { createDepartment, updateDepartmentManager, deleteDepartment } from '../actions';
+import { useRole } from '@/hooks/useRole';
+import { can } from '@/lib/permissions';
 
 export function CreateForm({ employees, onSuccess = null }) {
   const [pending, start] = useTransition();
@@ -44,9 +46,12 @@ export function CreateForm({ employees, onSuccess = null }) {
 }
 
 export function RowActions({ dept, employees, onSuccess = null }) {
+  const { role } = useRole();
   const [editing, setEditing] = useState(false);
   const [manager, setManager] = useState(dept.manager || '');
   const [pending, start] = useTransition();
+
+  if (!can(role, 'update', 'departments')) return null;
 
   if (!editing) {
     return (
@@ -54,14 +59,16 @@ export function RowActions({ dept, employees, onSuccess = null }) {
         <Button variant="outline" size="sm" onClick={() => setEditing(true)}>
           Edit Manager
         </Button>
-        <ActionButton
-          run={deleteDepartment.bind(null, dept.id)}
-          confirmTitle="Hapus departemen?"
-          confirmText="Hapus departemen ini?"
-          label="Hapus"
-          variant="destructive"
-          onSuccess={onSuccess}
-        />
+        {can(role, 'delete', 'departments') && (
+          <ActionButton
+            run={deleteDepartment.bind(null, dept.id)}
+            confirmTitle="Hapus departemen?"
+            confirmText="Hapus departemen ini?"
+            label="Hapus"
+            variant="destructive"
+            onSuccess={onSuccess}
+          />
+        )}
       </div>
     );
   }

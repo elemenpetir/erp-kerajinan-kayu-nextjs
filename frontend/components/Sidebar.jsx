@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils/cn";
 import { Button } from "@/components/ui/button";
+import { useRole } from "@/hooks/useRole";
 
 const navSections = [
   {
@@ -113,6 +114,17 @@ export default function Sidebar({ open, onClose }) {
     setOpenSections((prev) => ({ ...prev, [title]: !prev[title] }));
   };
 
+  const { role } = useRole();
+  // Staff tak melihat modul finansial (enforcement riil tetap di RLS + proxy).
+  const visibleSections = navSections
+    .map((s) => ({
+      ...s,
+      items: s.items.filter(
+        (item) => role !== 'staff' || (s.title !== 'Accounting' && item.href !== '/reports/finance'),
+      ),
+    }))
+    .filter((s) => s.items.length > 0);
+
   return (
     <>
       {open && (
@@ -143,7 +155,7 @@ export default function Sidebar({ open, onClose }) {
         </div>
 
         <nav className="flex-1 space-y-2 overflow-y-auto p-3 sidebar-scroll">
-          {navSections.map((section) => {
+          {visibleSections.map((section) => {
             const sectionActive = section.items.some((item) => item.href === activeHref);
             const Icon = section.icon;
             return (

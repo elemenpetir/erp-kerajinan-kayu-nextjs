@@ -11,14 +11,27 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import ActionButton from '@/components/ui/ActionButton';
+import { useRole } from '@/hooks/useRole';
+import { can } from '@/lib/permissions';
 
 // Aksi baris pola shadcn (trigger ⋯ + DropdownMenu).
 // Dialog konfirmasi tetap milik ActionButton (mode controlled) —
 // menu hanya pemicu, keputusan destructif tetap di dialog.
 // actions: [{ label, run, confirmTitle, confirmText, successText, variant }]
 // onSuccess: dipanggil setelah aksi sukses (mis. mutate() SWR di list client)
-export default function RowActions({ viewHref = null, viewLabel = 'Lihat', actions = [], onSuccess = null }) {
+// entity: kunci halaman untuk matriks izin; manager = hanya Lihat,
+//   staff di entitas master/finance = tanpa Hapus (enforcement riil tetap di RLS).
+export default function RowActions({ viewHref = null, viewLabel = 'Lihat', actions = [], onSuccess = null, entity = null }) {
   const [dlg, setDlg] = useState(null);
+  const { role } = useRole();
+
+  const visible = actions.filter((a) => {
+    if (!can(role, 'update', entity)) return false;
+    if (a.label === 'Hapus' && !can(role, 'delete', entity)) return false;
+    return true;
+  });
+
+  if (!viewHref && visible.length === 0) return null;
 
   return (
     <>
@@ -34,7 +47,7 @@ export default function RowActions({ viewHref = null, viewLabel = 'Lihat', actio
               <Link href={viewHref}>{viewLabel}</Link>
             </DropdownMenuItem>
           )}
-          {actions.map((a, i) => (
+          {visible.map((a, i) => (
             <DropdownMenuItem
               key={a.label}
               onSelect={() => setDlg(i)}
@@ -45,7 +58,7 @@ export default function RowActions({ viewHref = null, viewLabel = 'Lihat', actio
           ))}
         </DropdownMenuContent>
       </DropdownMenu>
-      {actions.map((a, i) => (
+      {visible.map((a, i) => (
         <ActionButton
           key={a.label}
           run={a.run}

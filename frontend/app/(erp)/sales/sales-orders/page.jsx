@@ -95,7 +95,7 @@ export default function SalesOrdersPage() {
                     <StatusBadge status={o.status} />
                   </TableCell>
                   <TableCell>
-                    <RowActions
+                    <RowActions entity="sales-orders"
                       viewHref={`/sales/sales-orders/${o.id}`}
                       onSuccess={() => mutate()}
                       actions={[

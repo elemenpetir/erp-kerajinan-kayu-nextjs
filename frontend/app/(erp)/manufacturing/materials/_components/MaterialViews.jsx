@@ -9,6 +9,8 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import EmptyState from '@/components/ui/EmptyState';
 import ViewToggle, { usePersistedView } from '@/components/ui/ViewToggle';
 import RowActions from '@/components/ui/RowActions';
+import { useRole } from '@/hooks/useRole';
+import { can } from '@/lib/permissions';
 import { deleteMaterial } from '../actions';
 
 function monogram(nama) {
@@ -51,7 +53,7 @@ function MaterialTable({ items, onMutate }) {
                   {b._stok ?? 0}
                 </TableCell>
                   <TableCell>
-                    <RowActions
+                    <RowActions entity="materials"
                       viewHref={`/manufacturing/materials/${b.id}`}
                       onSuccess={onMutate}
                       actions={[
@@ -129,6 +131,7 @@ function MaterialGrid({ items }) {
 }
 
 export default function MaterialViews({ items, onMutate = null }) {
+  const { role } = useRole();
   const [view, setView] = usePersistedView('view:materials', 'list');
   return (
     <div className="space-y-4">
@@ -138,12 +141,14 @@ export default function MaterialViews({ items, onMutate = null }) {
         </p>
         <div className="flex items-center gap-2">
           <ViewToggle value={view} onChange={setView} />
-          <Button asChild>
-            <Link href="/manufacturing/materials/new">
-              <Plus />
-              Tambah Bahan
-            </Link>
-          </Button>
+          {can(role, 'create', 'materials') && (
+            <Button asChild>
+              <Link href="/manufacturing/materials/new">
+                <Plus />
+                Tambah Bahan
+              </Link>
+            </Button>
+          )}
         </div>
       </div>
       {view === 'grid' ? <MaterialGrid items={items} /> : <MaterialTable items={items} onMutate={onMutate} />}

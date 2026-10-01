@@ -4,6 +4,8 @@ import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/navigation';
 import { Building2 } from 'lucide-react';
 import { useList } from '@/hooks/useList';
+import { useRole } from '@/hooks/useRole';
+import { can } from '@/lib/permissions';
 import { docCode } from '@/lib/utils/format';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -18,6 +20,7 @@ export default function DepartmentsPage() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const page = parseInt(searchParams.get('page') || '1', 10);
+  const { role } = useRole();
 
   const { data, error, isLoading, mutate } = useList('departments', { page });
 
@@ -70,7 +73,9 @@ export default function DepartmentsPage() {
       </div>
       <Card>
         <CardContent className="pt-6">
-          <CreateForm employees={employees} onSuccess={() => mutate()} />
+          {can(role, 'create', 'departments') && (
+            <CreateForm employees={employees} onSuccess={() => mutate()} />
+          )}
         </CardContent>
       </Card>
       <Card>
