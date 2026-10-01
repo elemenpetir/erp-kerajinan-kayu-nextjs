@@ -69,6 +69,7 @@ const navSections = [
       { label: "Stok", href: "/reports/stock" },
       { label: "Penjualan", href: "/reports/sales" },
       { label: "Keuangan", href: "/reports/finance" },
+      { label: "Aktivitas", href: "/reports/activity" },
     ],
   },
 ];

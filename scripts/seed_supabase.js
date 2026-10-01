@@ -607,6 +607,10 @@ async function seed() {
     }
   }
 
+  // Bersihkan jejak audit dari proses seed (trigger mencatat semua insert service-role).
+  const { error: auditWipeError } = await supabase.from('audit_log').delete().neq('id', 0);
+  console.log(auditWipeError ? `  audit_log: skipped (${auditWipeError.message})` : '  audit_log: ok (dikosongkan)');
+
   console.log('\nSeeding complete');
   process.exit(0);
 }

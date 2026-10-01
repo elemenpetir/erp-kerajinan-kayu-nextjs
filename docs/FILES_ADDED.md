@@ -15,8 +15,9 @@ Lihat `docs/PRD.md` dan `docs/ERD.md` untuk konteks produk.
 - `009_stock_views_rls.sql` — perbaikan view stok agar kompatibel RLS.
 - `010_repairs.sql` — perbaikan data/skema pasca deployment.
 - `011_storage_images.sql` — bucket Storage `produk-images` / `bahan-images` + policy upload.
+- `012_audit_log.sql` — tabel `audit_log` + trigger `log_audit()` (SECURITY DEFINER) di 19 tabel bisnis; RLS SELECT-only. Aktor dari JWT (null = service role/seed).
 
-> Migrasi `002–011` dijalankan manual sekali via Supabase SQL Editor (tidak ikut deploy).
+> Migrasi `002–012` dijalankan manual sekali via Supabase SQL Editor (tidak ikut deploy).
 
 ## Scripts — root
 - `scripts/seed_supabase.js` — wipe & reseed dummy data (16 produk, 15 bahan, 12 order produksi, 8 bills, 7 quotation, 5 sales order, 5 karyawan). Baca env dari `frontend/.env.local`, map `NEXT_PUBLIC_SUPABASE_URL` → `SUPABASE_URL`.
@@ -42,10 +43,11 @@ Lihat `docs/PRD.md` dan `docs/ERD.md` untuk konteks produk.
 - `manufacturing/{products,materials,boms,categories,production-orders}` — `page.jsx` + `[id]` + `new/` + `_components/` + `actions.js`.
 - `purchase/{vendors,bills}`, `sales/{customers,quotations,sales-orders}`, `accounting/{customer-invoices,vendor-bills}`, `hr/{departments,employees}` — pola sama.
 - `reports/{stock,sales,finance}` — laporan dengan filter + Print.
+- `reports/activity` — viewer jejak audit (`audit_log`): Waktu/Aktor/Aksi/Entitas + `<details>` field berubah.
 - `(erp)/layout.jsx` — sudah membungkus children dengan `<AppShell>` (shell tunggal).
 
 ## Frontend — arsitektur list
-- Semua list halaman = Client Component + SWR (`useList`) → `/api/lists/[entity]`: customers, quotations, sales-orders, vendors, departments, employees, boms, materials, categories, production-orders, customer-invoices, vendor-bills, bills, products, sales-report, stock-report.
+- Semua list halaman = Client Component + SWR (`useList`) → `/api/lists/[entity]`: customers, quotations, sales-orders, vendors, departments, employees, boms, materials, categories, production-orders, customer-invoices, vendor-bills, bills, products, sales-report, stock-report, audit-log.
 - Detail/form tetap Server Components + Server Actions (`revalidatePath` / `router.refresh`).
 - Laporan Keuangan tetap Server Component (snapshot print, tanpa filter); landing `/` statis.
 - Auth: `@supabase/ssr` via `proxy.js`.

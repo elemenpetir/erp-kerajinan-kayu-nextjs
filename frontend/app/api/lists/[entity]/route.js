@@ -20,6 +20,7 @@ import {
   getVendorBillsPage,
   getVendorBillsTotal,
 } from '@/lib/services/accounting';
+import { getAuditLogPage } from '@/lib/services/audit';
 
 // ponytail: allowlist entity → service; 404 di luar daftar. Satu route untuk
 // semua list, bukan file API identik per halaman.
@@ -40,6 +41,7 @@ const LISTS = {
   bills: getBillsPage,
   products: getProductsPage,
   'stock-report': getStockReport,
+  'audit-log': getAuditLogPage,
 };
 
 // Halaman accounting menampilkan grand total di footer (query terpisah).
