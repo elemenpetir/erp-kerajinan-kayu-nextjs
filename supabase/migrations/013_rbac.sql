@@ -3,7 +3,7 @@
 -- Dijalankan manual sekali via Supabase SQL Editor (seperti 002-012).
 
 -- 1. Helper role: default 'staff' bila tanpa claim; service_role dianggap admin.
-CREATE OR REPLACE FUNCTION current_role()
+CREATE OR REPLACE FUNCTION app_role()
 RETURNS text LANGUAGE sql STABLE AS $$
   SELECT CASE
     WHEN coalesce(auth.jwt()->>'role', '') = 'service_role' THEN 'admin'
@@ -34,7 +34,7 @@ BEGIN
     IF t IN ('customer_invoice', 'vendor_bill') THEN
       EXECUTE format(
         'CREATE POLICY rbac_select ON %I FOR SELECT TO authenticated ' ||
-        'USING (current_role() IN (''admin'', ''manager''))', t);
+        'USING (app_role() IN (''admin'', ''manager''))', t);
     ELSE
       EXECUTE format(
         'CREATE POLICY rbac_select ON %I FOR SELECT TO authenticated USING (true)', t);
@@ -44,28 +44,28 @@ BEGIN
     IF t IN ('customer_invoice', 'vendor_bill', 'pembayaran_bill', 'pembayaran_sales_order') THEN
       EXECUTE format(
         'CREATE POLICY rbac_insert ON %I FOR INSERT TO authenticated ' ||
-        'WITH CHECK (current_role() = ''admin'')', t);
+        'WITH CHECK (app_role() = ''admin'')', t);
       EXECUTE format(
         'CREATE POLICY rbac_update ON %I FOR UPDATE TO authenticated ' ||
-        'USING (current_role() = ''admin'') WITH CHECK (current_role() = ''admin'')', t);
+        'USING (app_role() = ''admin'') WITH CHECK (app_role() = ''admin'')', t);
     ELSE
       EXECUTE format(
         'CREATE POLICY rbac_insert ON %I FOR INSERT TO authenticated ' ||
-        'WITH CHECK (current_role() IN (''admin'', ''staff''))', t);
+        'WITH CHECK (app_role() IN (''admin'', ''staff''))', t);
       EXECUTE format(
         'CREATE POLICY rbac_update ON %I FOR UPDATE TO authenticated ' ||
-        'USING (current_role() IN (''admin'', ''staff'')) ' ||
-        'WITH CHECK (current_role() IN (''admin'', ''staff''))', t);
+        'USING (app_role() IN (''admin'', ''staff'')) ' ||
+        'WITH CHECK (app_role() IN (''admin'', ''staff''))', t);
     END IF;
 
     -- DELETE: admin di semua tabel; staff hanya operasional non-master.
     EXECUTE format(
       'CREATE POLICY rbac_delete_admin ON %I FOR DELETE TO authenticated ' ||
-      'USING (current_role() = ''admin'')', t);
+      'USING (app_role() = ''admin'')', t);
     IF t IN ('produk','bahan','bom','order_produksi','bills','quotation','sales_order') THEN
       EXECUTE format(
         'CREATE POLICY rbac_delete_staff ON %I FOR DELETE TO authenticated ' ||
-        'USING (current_role() = ''staff'')', t);
+        'USING (app_role() = ''staff'')', t);
     END IF;
   END LOOP;
 END $$;
@@ -77,7 +77,7 @@ DECLARE
   v_total numeric;
   v_status text;
 BEGIN
-  IF current_role() = 'manager' THEN RAISE EXCEPTION 'Akses ditolak (read-only)'; END IF;
+  IF app_role() = 'manager' THEN RAISE EXCEPTION 'Akses ditolak (read-only)'; END IF;
   SELECT total_biaya, status INTO v_total, v_status
   FROM bills WHERE id = p_bill_id FOR UPDATE;
   IF NOT FOUND THEN RAISE EXCEPTION 'Bill tidak ditemukan'; END IF;
@@ -95,7 +95,7 @@ DECLARE
   v_total numeric;
   v_status text;
 BEGIN
-  IF current_role() = 'manager' THEN RAISE EXCEPTION 'Akses ditolak (read-only)'; END IF;
+  IF app_role() = 'manager' THEN RAISE EXCEPTION 'Akses ditolak (read-only)'; END IF;
   SELECT total_biaya, status INTO v_total, v_status
   FROM sales_order WHERE id = p_so_id FOR UPDATE;
   IF NOT FOUND THEN RAISE EXCEPTION 'Sales Order tidak ditemukan'; END IF;
@@ -113,7 +113,7 @@ DECLARE
   v_q quotation%ROWTYPE;
   v_so_id uuid;
 BEGIN
-  IF current_role() = 'manager' THEN RAISE EXCEPTION 'Akses ditolak (read-only)'; END IF;
+  IF app_role() = 'manager' THEN RAISE EXCEPTION 'Akses ditolak (read-only)'; END IF;
   SELECT * INTO v_q FROM quotation WHERE id = p_q_id FOR UPDATE;
   IF NOT FOUND THEN RAISE EXCEPTION 'Quotation tidak ditemukan'; END IF;
 

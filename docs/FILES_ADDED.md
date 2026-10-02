@@ -16,7 +16,7 @@ Lihat `docs/PRD.md` dan `docs/ERD.md` untuk konteks produk.
 - `010_repairs.sql` — perbaikan data/skema pasca deployment.
 - `011_storage_images.sql` — bucket Storage `produk-images` / `bahan-images` + policy upload.
 - `012_audit_log.sql` — tabel `audit_log` + trigger `log_audit()` (SECURITY DEFINER) di 19 tabel bisnis; RLS SELECT-only. Aktor dari JWT (null = service role/seed).
-- `013_rbac.sql` — RBAC 3 role (`current_role()` dari JWT **app_metadata**): ganti `authenticated_all` → `rbac_select/insert/update/delete_admin/delete_staff` di 19 tabel; guard manager di 3 RPC; syarat `!= manager` di policy tulis Storage.
+- `013_rbac.sql` — RBAC 3 role (`app_role()` dari JWT **app_metadata**): ganti `authenticated_all` → `rbac_select/insert/update/delete_admin/delete_staff` di 19 tabel; guard manager di 3 RPC; syarat `!= manager` di policy tulis Storage.
 
 > Migrasi `002–013` dijalankan manual sekali via Supabase SQL Editor (tidak ikut deploy).
 
@@ -51,8 +51,8 @@ Lihat `docs/PRD.md` dan `docs/ERD.md` untuk konteks produk.
 - Semua list halaman = Client Component + SWR (`useList`) → `/api/lists/[entity]`: customers, quotations, sales-orders, vendors, departments, employees, boms, materials, categories, production-orders, customer-invoices, vendor-bills, bills, products, sales-report, stock-report, audit-log.
 - Detail/form tetap Server Components + Server Actions (`revalidatePath` / `router.refresh`).
 - RBAC: `admin` penuh; `manager` read-only; `staff` operasional tanpa baca finansial + tanpa hapus master.
-  Role di JWT `app_metadata` (set via Admin API/SQL, cth. demo user → admin); frontend baca via
-  `hooks/useRole.js` (nol request) + `lib/permissions.js`; `RowActions` filter aksi per `entity`;
+  Role di JWT `app_metadata` (set via Admin API/SQL, cth. demo user → admin); helper SQL `app_role()`.
+  Frontend baca via `hooks/useRole.js` (nol request) + `lib/permissions.js`; `RowActions` filter aksi per `entity`;
   proxy redirect staff dari `/reports/finance` + manager dari `*/new`. Enforcement riil = RLS.
 - Laporan Keuangan tetap Server Component (snapshot print, tanpa filter); landing `/` statis.
 - Auth: `@supabase/ssr` via `proxy.js`.
