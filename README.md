@@ -47,6 +47,7 @@ An ERP application for a woodcraft business, built as a portfolio project using 
 - Stock Report: Real-time stock for products and materials with filters and print
 - Sales Report: Revenue, invoices, and customer performance
 - Finance Report: Receivables, payables, and net position
+- Activity Report: Audit trail of creates, updates, and deletes across all modules
 
 ### Accounting
 
@@ -118,7 +119,13 @@ CREATE EXTENSION IF NOT EXISTS pgcrypto;
 
 ### 3. Run Migrations
 
-Run migrations 001 through 011 in order from `supabase/migrations/` in the Supabase SQL Editor. Migration 011 creates the Storage bucket for product and material images.
+Run migrations 001 through 013 in order from `supabase/migrations/` in the Supabase SQL Editor. Migration 011 creates the Storage bucket for product and material images, 012 adds the audit log, and 013 adds role-based access control. After 013, grant the demo user the admin role so the demo flows keep working:
+
+```sql
+UPDATE auth.users
+SET raw_app_meta_data = coalesce(raw_app_meta_data, '{}'::jsonb) || '{"role":"admin"}'
+WHERE email = 'demo@erp.example';
+```
 
 ### 4. Run Seed
 
@@ -186,7 +193,7 @@ Note: The seed script wipes and reseeds all ERP tables. Each run produces a clea
 
 ## Architecture
 
-Lists are Client Components fetching from a shared `/api/lists/[entity]` endpoint with SWR, so pagination and report filters update instantly without a full reload. Detail and form pages remain Server Components, and mutations run via Server Actions with revalidatePath or router.refresh. Authentication uses @supabase/ssr with a proxy middleware. All row actions are unified behind the RowActions menu (three-dot dropdown).
+Lists are Client Components fetching from a shared `/api/lists/[entity]` endpoint with SWR, so pagination and report filters update instantly without a full reload. Detail and form pages remain Server Components, and mutations run via Server Actions with revalidatePath or router.refresh. Every write to the 19 business tables is recorded by a database trigger into an append-only audit log with the actor taken from the caller's JWT, viewable on the Activity report. Access control has three roles (admin with full access, read-only manager, operational staff without finance read access or master deletes), enforced by Row Level Security policies with the role read from the JWT app metadata. Authentication uses @supabase/ssr with a proxy middleware. All row actions are unified behind the RowActions menu (three-dot dropdown).
 
 ---
 
@@ -195,7 +202,7 @@ Lists are Client Components fetching from a shared `/api/lists/[entity]` endpoin
 - No cancel flow for Production Orders or Sales Orders
 - Tables are not optimized for mobile screens (under 768px); desktop or tablet landscape recommended
 - Accounting module shows summaries only; no double-entry journal implementation
-- No role-based access control (all authenticated users have full access)
+- User roles are managed via SQL (no role management UI); a role change takes effect on next login
 - Product and material stock can go negative if orders exceed available stock; no minimum stock validation
 - BOMs cannot be edited; if material prices change, BOM totals do not auto-update
 - No PDF or CSV export
@@ -209,13 +216,14 @@ Lists are Client Components fetching from a shared `/api/lists/[entity]` endpoin
 - [x] Pagination on list pages
 - [x] Product and material image upload via Supabase Storage
 - [x] Row Level Security (RLS) policies
+- [x] Role-based access control (admin, manager, staff)
+- [x] Audit log of data changes with activity viewer
 - [x] Reports and transaction summaries
 - [ ] RFQ to Purchase Order to Goods Receipt to Bill to Paid flow
 - [ ] Cancel feature for Production Orders and Sales Orders
 - [ ] PDF and CSV export
 - [ ] Search and filter on regular list pages
 - [ ] Low-stock notifications
-- [ ] Role-based access control
 
 ---
 
