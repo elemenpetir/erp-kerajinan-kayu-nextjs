@@ -2,10 +2,12 @@
 
 import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/navigation';
-import { ShoppingBag } from 'lucide-react';
+import { Search, ShoppingBag } from 'lucide-react';
 import { useList } from '@/hooks/useList';
 import { docCode } from '@/lib/utils/format';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import { Card, CardContent } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import EmptyState from '@/components/ui/EmptyState';
@@ -20,8 +22,9 @@ export default function SalesOrdersPage() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const page = parseInt(searchParams.get('page') || '1', 10);
+  const q = (searchParams.get('q') || '').trim();
 
-  const { data, error, isLoading, mutate } = useList('sales-orders', { page });
+  const { data, error, isLoading, mutate } = useList('sales-orders', { page, q });
 
   if (isLoading && !data) {
     return (
@@ -63,12 +66,48 @@ export default function SalesOrdersPage() {
     router.refresh();
   }
 
+  function applyFilters(newParams) {
+    const params = new URLSearchParams(searchParams.toString());
+    Object.entries(newParams).forEach(([k, v]) => {
+      if (v) params.set(k, v);
+      else params.delete(k);
+    });
+    params.delete('page');
+    const newUrl = `${window.location.pathname}?${params.toString()}`;
+    window.history.pushState(null, '', newUrl);
+    router.refresh();
+    mutate();
+  }
+
   return (
     <div className="space-y-4">
       <div>
         <h1 className="text-lg font-semibold">Sales Orders</h1>
         <p className="text-sm text-muted-foreground">Terbentuk dari quotation yang dikonfirmasi.</p>
       </div>
+      <form
+        key={q}
+        onSubmit={(e) => {
+          e.preventDefault();
+          const fd = new FormData(e.currentTarget);
+          applyFilters({ q: fd.get('q') || '' });
+        }}
+        className="flex flex-wrap items-end gap-2"
+      >
+        <div className="grid gap-1">
+          <Label htmlFor="q">Cari</Label>
+          <Input id="q" name="q" defaultValue={q} placeholder="Cari customer..." className="h-8 w-64" />
+        </div>
+        <Button type="submit" variant="secondary" size="sm" aria-label="Cari">
+          <Search />
+          Cari
+        </Button>
+        {q && (
+          <Button variant="ghost" size="sm" onClick={() => applyFilters({ q: '' })}>
+            Reset
+          </Button>
+        )}
+      </form>
       <Card>
         <CardContent className="p-0">
           <Table>

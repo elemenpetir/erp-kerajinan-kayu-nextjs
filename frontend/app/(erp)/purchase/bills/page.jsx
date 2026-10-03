@@ -3,12 +3,14 @@
 import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { Plus, Receipt } from 'lucide-react';
+import { Plus, Receipt, Search } from 'lucide-react';
 import { useList } from '@/hooks/useList';
 import { useRole } from '@/hooks/useRole';
 import { can } from '@/lib/permissions';
 import { docCode } from '@/lib/utils/format';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import { Card, CardContent } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import EmptyState from '@/components/ui/EmptyState';
@@ -23,9 +25,10 @@ export default function BillsList() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const page = parseInt(searchParams.get('page') || '1', 10);
+  const q = (searchParams.get('q') || '').trim();
   const { role } = useRole();
 
-  const { data, error, isLoading, mutate } = useList('bills', { page });
+  const { data, error, isLoading, mutate } = useList('bills', { page, q });
 
   if (isLoading && !data) {
     return (
@@ -94,6 +97,29 @@ export default function BillsList() {
           </Button>
         )}
       </div>
+      <form
+        key={q}
+        onSubmit={(e) => {
+          e.preventDefault();
+          const fd = new FormData(e.currentTarget);
+          applyFilters({ q: fd.get('q') || '' });
+        }}
+        className="flex flex-wrap items-end gap-2"
+      >
+        <div className="grid gap-1">
+          <Label htmlFor="q">Cari</Label>
+          <Input id="q" name="q" defaultValue={q} placeholder="Cari referensi..." className="h-8 w-64" />
+        </div>
+        <Button type="submit" variant="secondary" size="sm" aria-label="Cari">
+          <Search />
+          Cari
+        </Button>
+        {q && (
+          <Button variant="ghost" size="sm" onClick={() => applyFilters({ q: '' })}>
+            Reset
+          </Button>
+        )}
+      </form>
       <Card>
         <CardContent className="p-0">
           <Table>

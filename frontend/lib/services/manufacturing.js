@@ -1,62 +1,72 @@
-import { PAGE_SIZE, rangeOf } from './pagination';
+import { PAGE_SIZE, rangeOf, cleanQ } from './pagination';
 
 export { PAGE_SIZE };
 
-export async function getCategoriesPage(supabase, { page = 1, pageSize = PAGE_SIZE } = {}) {
+export async function getCategoriesPage(supabase, { page = 1, pageSize = PAGE_SIZE, q = '' } = {}) {
   const { safePage, from, to } = rangeOf(page, pageSize);
-  const { data, count, error } = await supabase
+  let query = supabase
     .from('kategori')
     .select('id,nama,created_at', { count: 'exact' })
-    .order('nama', { ascending: true })
-    .range(from, to);
+    .order('nama', { ascending: true });
+  const needle = cleanQ(q);
+  if (needle) query = query.ilike('nama', `%${needle}%`);
+  const { data, count, error } = await query.range(from, to);
   if (error) throw new Error(error.message);
   return { items: data || [], count: count || 0, page: safePage, pageSize };
 }
 
-export async function getProductionOrdersPage(supabase, { page = 1, pageSize = PAGE_SIZE } = {}) {
+export async function getProductionOrdersPage(supabase, { page = 1, pageSize = PAGE_SIZE, q = '' } = {}) {
   const { safePage, from, to } = rangeOf(page, pageSize);
-  const { data, count, error } = await supabase
+  const needle = cleanQ(q);
+  let query = supabase
     .from('order_produksi')
-    .select('id,kode,jumlah_produk,status,created_at,produk:produk_id(nama)', { count: 'exact' })
+    .select(`id,kode,jumlah_produk,status,created_at,produk:produk_id${needle ? '!inner' : ''}(nama)`, { count: 'exact' })
     .order('created_at', { ascending: false })
-    .order('id', { ascending: false })
-    .range(from, to);
+    .order('id', { ascending: false });
+  if (needle) query = query.ilike('produk.nama', `%${needle}%`);
+  const { data, count, error } = await query.range(from, to);
   if (error) throw new Error(error.message);
   return { items: data || [], count: count || 0, page: safePage, pageSize };
 }
 
-export async function getProductsPage(supabase, { page = 1, pageSize = PAGE_SIZE } = {}) {
+export async function getProductsPage(supabase, { page = 1, pageSize = PAGE_SIZE, q = '' } = {}) {
   const { safePage, from, to } = rangeOf(page, pageSize);
-  const { data, count, error } = await supabase
+  let query = supabase
     .from('produk')
     .select('id,kode,nama,harga_produksi,gambar_url,created_at', { count: 'exact' })
     .order('created_at', { ascending: false })
-    .order('id', { ascending: false })
-    .range(from, to);
+    .order('id', { ascending: false });
+  const needle = cleanQ(q);
+  if (needle) query = query.ilike('nama', `%${needle}%`);
+  const { data, count, error } = await query.range(from, to);
   if (error) throw new Error(error.message);
   return { items: data || [], count: count || 0, page: safePage, pageSize };
 }
 
-export async function getBomsPage(supabase, { page = 1, pageSize = PAGE_SIZE } = {}) {
+export async function getBomsPage(supabase, { page = 1, pageSize = PAGE_SIZE, q = '' } = {}) {
   const { safePage, from, to } = rangeOf(page, pageSize);
-  const { data, count, error } = await supabase
+  const needle = cleanQ(q);
+  let query = supabase
     .from('bom')
-    .select('id,kode,produk_id,total_biaya_produk,total_biaya_bahan,created_at,produk:produk_id(nama)', { count: 'exact' })
+    .select(`id,kode,produk_id,total_biaya_produk,total_biaya_bahan,created_at,produk:produk_id${needle ? '!inner' : ''}(nama)`, { count: 'exact' })
     .order('created_at', { ascending: false })
-    .order('id', { ascending: false })
-    .range(from, to);
+    .order('id', { ascending: false });
+  if (needle) query = query.ilike('produk.nama', `%${needle}%`);
+  const { data, count, error } = await query.range(from, to);
   if (error) throw new Error(error.message);
   return { items: data || [], count: count || 0, page: safePage, pageSize };
 }
 
-export async function getMaterialsPage(supabase, { page = 1, pageSize = PAGE_SIZE } = {}) {
+export async function getMaterialsPage(supabase, { page = 1, pageSize = PAGE_SIZE, q = '' } = {}) {
   const { safePage, from, to } = rangeOf(page, pageSize);
-  const { data, count, error } = await supabase
+  let query = supabase
     .from('bahan')
     .select('id,kode,nama,biaya,harga,internal_referensi,gambar_url,created_at', { count: 'exact' })
     .order('created_at', { ascending: false })
-    .order('id', { ascending: false })
-    .range(from, to);
+    .order('id', { ascending: false });
+  const needle = cleanQ(q);
+  if (needle) query = query.or(`nama.ilike.%${needle}%,internal_referensi.ilike.%${needle}%`);
+  const { data, count, error } = await query.range(from, to);
   if (error) throw new Error(error.message);
   return { items: data || [], count: count || 0, page: safePage, pageSize };
 }

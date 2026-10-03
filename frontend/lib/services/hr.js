@@ -1,16 +1,20 @@
-export const PAGE_SIZE = 20;
+import { PAGE_SIZE, cleanQ } from './pagination';
 
-export async function getDepartmentsPage(supabase, { page = 1, pageSize = PAGE_SIZE } = {}) {
+export { PAGE_SIZE };
+
+export async function getDepartmentsPage(supabase, { page = 1, pageSize = PAGE_SIZE, q = '' } = {}) {
   const safePage = Number.isFinite(+page) && +page > 0 ? Math.floor(+page) : 1;
   const from = (safePage - 1) * pageSize;
   const to = from + pageSize - 1;
 
-  const { data, count, error } = await supabase
+  let query = supabase
     .from('departemen')
     .select('id,kode,nama_departemen,manager,created_at', { count: 'exact' })
     .order('created_at', { ascending: false })
-    .order('id', { ascending: false })
-    .range(from, to);
+    .order('id', { ascending: false });
+  const needle = cleanQ(q);
+  if (needle) query = query.or(`nama_departemen.ilike.%${needle}%,manager.ilike.%${needle}%`);
+  const { data, count, error } = await query.range(from, to);
 
   if (error) throw new Error(error.message);
   return { items: data || [], count: count || 0, page: safePage, pageSize };
@@ -25,17 +29,19 @@ export async function getEmployeeOptions(supabase) {
   return data || [];
 }
 
-export async function getEmployeesPage(supabase, { page = 1, pageSize = PAGE_SIZE } = {}) {
+export async function getEmployeesPage(supabase, { page = 1, pageSize = PAGE_SIZE, q = '' } = {}) {
   const safePage = Number.isFinite(+page) && +page > 0 ? Math.floor(+page) : 1;
   const from = (safePage - 1) * pageSize;
   const to = from + pageSize - 1;
 
-  const { data, count, error } = await supabase
+  let query = supabase
     .from('karyawan')
     .select('id,kode,nama,posisi,telp,email,created_at', { count: 'exact' })
     .order('created_at', { ascending: false })
-    .order('id', { ascending: false })
-    .range(from, to);
+    .order('id', { ascending: false });
+  const needle = cleanQ(q);
+  if (needle) query = query.or(`nama.ilike.%${needle}%,posisi.ilike.%${needle}%,email.ilike.%${needle}%`);
+  const { data, count, error } = await query.range(from, to);
   if (error) throw new Error(error.message);
   return { items: data || [], count: count || 0, page: safePage, pageSize };
 }

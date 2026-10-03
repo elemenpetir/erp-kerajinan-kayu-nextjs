@@ -5,8 +5,10 @@ import { useRouter } from 'next/navigation';
 import { useList } from '@/hooks/useList';
 import { useRole } from '@/hooks/useRole';
 import { can } from '@/lib/permissions';
-import { Layers } from 'lucide-react';
+import { Layers, Search } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import { Card, CardContent } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import EmptyState from '@/components/ui/EmptyState';
@@ -21,9 +23,10 @@ export default function CategoriesPage() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const page = parseInt(searchParams.get('page') || '1', 10);
+  const q = (searchParams.get('q') || '').trim();
   const { role } = useRole();
 
-  const { data, error, isLoading, mutate } = useList('categories', { page });
+  const { data, error, isLoading, mutate } = useList('categories', { page, q });
 
   if (isLoading && !data) {
     return (
@@ -65,6 +68,19 @@ export default function CategoriesPage() {
     router.refresh();
   }
 
+  function applyFilters(newParams) {
+    const params = new URLSearchParams(searchParams.toString());
+    Object.entries(newParams).forEach(([k, v]) => {
+      if (v) params.set(k, v);
+      else params.delete(k);
+    });
+    params.delete('page');
+    const newUrl = `${window.location.pathname}?${params.toString()}`;
+    window.history.pushState(null, '', newUrl);
+    router.refresh();
+    mutate();
+  }
+
   return (
     <div className="space-y-4">
       <div>
@@ -72,6 +88,29 @@ export default function CategoriesPage() {
         <p className="text-sm text-muted-foreground">Kelompok produk untuk katalog dan laporan.</p>
       </div>
       {can(role, 'create', 'categories') && <CategoryForm onSuccess={() => mutate()} />}
+      <form
+        key={q}
+        onSubmit={(e) => {
+          e.preventDefault();
+          const fd = new FormData(e.currentTarget);
+          applyFilters({ q: fd.get('q') || '' });
+        }}
+        className="flex flex-wrap items-end gap-2"
+      >
+        <div className="grid gap-1">
+          <Label htmlFor="q">Cari</Label>
+          <Input id="q" name="q" defaultValue={q} placeholder="Cari nama kategori..." className="h-8 w-64" />
+        </div>
+        <Button type="submit" variant="secondary" size="sm" aria-label="Cari">
+          <Search />
+          Cari
+        </Button>
+        {q && (
+          <Button variant="ghost" size="sm" onClick={() => applyFilters({ q: '' })}>
+            Reset
+          </Button>
+        )}
+      </form>
       <Card>
         <CardContent className="p-0">
           <Table>

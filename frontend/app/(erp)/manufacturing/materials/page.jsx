@@ -2,8 +2,11 @@
 
 import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/navigation';
+import { Search } from 'lucide-react';
 import { useList } from '@/hooks/useList';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import Pagination from '../../../../components/ui/Pagination';
 import MaterialViews from './_components/MaterialViews';
 
@@ -13,8 +16,9 @@ export default function MaterialsPage() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const page = parseInt(searchParams.get('page') || '1', 10);
+  const q = (searchParams.get('q') || '').trim();
 
-  const { data, error, isLoading, mutate } = useList('materials', { page });
+  const { data, error, isLoading, mutate } = useList('materials', { page, q });
 
   if (isLoading && !data) {
     return (
@@ -56,12 +60,48 @@ export default function MaterialsPage() {
     router.refresh();
   }
 
+  function applyFilters(newParams) {
+    const params = new URLSearchParams(searchParams.toString());
+    Object.entries(newParams).forEach(([k, v]) => {
+      if (v) params.set(k, v);
+      else params.delete(k);
+    });
+    params.delete('page');
+    const newUrl = `${window.location.pathname}?${params.toString()}`;
+    window.history.pushState(null, '', newUrl);
+    router.refresh();
+    mutate();
+  }
+
   return (
     <div className="space-y-4">
       <div>
         <h1 className="text-lg font-semibold">Bahan</h1>
         <p className="text-sm text-muted-foreground">Kelola bahan baku beserta stoknya.</p>
       </div>
+      <form
+        key={q}
+        onSubmit={(e) => {
+          e.preventDefault();
+          const fd = new FormData(e.currentTarget);
+          applyFilters({ q: fd.get('q') || '' });
+        }}
+        className="flex flex-wrap items-end gap-2"
+      >
+        <div className="grid gap-1">
+          <Label htmlFor="q">Cari</Label>
+          <Input id="q" name="q" defaultValue={q} placeholder="Cari nama / referensi..." className="h-8 w-64" />
+        </div>
+        <Button type="submit" variant="secondary" size="sm" aria-label="Cari">
+          <Search />
+          Cari
+        </Button>
+        {q && (
+          <Button variant="ghost" size="sm" onClick={() => applyFilters({ q: '' })}>
+            Reset
+          </Button>
+        )}
+      </form>
       <MaterialViews items={items} onMutate={() => mutate()} />
       <Pagination page={safePage} pageSize={PAGE_SIZE} count={count} basePath="/manufacturing/materials" onPageChange={goToPage} />
     </div>

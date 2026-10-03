@@ -49,6 +49,7 @@ Lihat `docs/PRD.md` dan `docs/ERD.md` untuk konteks produk.
 
 ## Frontend — arsitektur list
 - Semua list halaman = Client Component + SWR (`useList`) → `/api/lists/[entity]`: customers, quotations, sales-orders, vendors, departments, employees, boms, materials, categories, production-orders, customer-invoices, vendor-bills, bills, products, sales-report, stock-report, audit-log.
+- Search `q` di 13 list (kolom nama/kode/referensi per entity; quotations/sales-orders termasuk `customer_snapshot->>nama`); sanitizer `cleanQ()` di `lib/services/pagination.js`. Accounting (nama bersarang + total tak terfilter) dan laporan tanpa filter dikecualikan.
 - Detail/form tetap Server Components + Server Actions (`revalidatePath` / `router.refresh`).
 - RBAC: `admin` penuh; `manager` read-only; `staff` operasional tanpa baca finansial + tanpa hapus master.
   Role di JWT `app_metadata` (set via Admin API/SQL, cth. demo user → admin); helper SQL `app_role()`.
