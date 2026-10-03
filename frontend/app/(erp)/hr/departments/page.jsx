@@ -2,13 +2,13 @@
 
 import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/navigation';
-import { Building2, Search } from 'lucide-react';
+import { Building2 } from 'lucide-react';
 import { useList } from '@/hooks/useList';
 import { useRole } from '@/hooks/useRole';
 import { can } from '@/lib/permissions';
 import { docCode } from '@/lib/utils/format';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+import SearchForm from '@/components/ui/SearchForm';
 import { Card, CardContent } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import EmptyState from '@/components/ui/EmptyState';
@@ -24,7 +24,7 @@ export default function DepartmentsPage() {
   const q = (searchParams.get('q') || '').trim();
   const { role } = useRole();
 
-  const { data, error, isLoading, mutate } = useList('departments', { page, q });
+  const { data, error, isLoading, isValidating, mutate } = useList('departments', { page, q });
 
   if (isLoading && !data) {
     return (
@@ -93,27 +93,8 @@ export default function DepartmentsPage() {
           )}
         </CardContent>
       </Card>
-      <form
-        key={q}
-        onSubmit={(e) => {
-          e.preventDefault();
-          const fd = new FormData(e.currentTarget);
-          applyFilters({ q: fd.get('q') || '' });
-        }}
-        className="flex flex-wrap items-end gap-2"
-      >
-        <Input id="q" name="q" aria-label="Cari" defaultValue={q} placeholder="Cari departemen / manager..." className="h-8 w-64" />
-        <Button type="submit" variant="secondary" size="sm" aria-label="Cari">
-          <Search />
-          Cari
-        </Button>
-        {q && (
-          <Button variant="ghost" size="sm" onClick={() => applyFilters({ q: '' })}>
-            Reset
-          </Button>
-        )}
-      </form>
-      <Card>
+      <SearchForm q={q} onSearch={applyFilters} placeholder="Cari departemen / manager..." busy={isValidating} />
+      <Card className={isValidating ? 'opacity-60 transition-opacity' : undefined}>
         <CardContent className="p-0">
           <Table>
             <TableHeader>

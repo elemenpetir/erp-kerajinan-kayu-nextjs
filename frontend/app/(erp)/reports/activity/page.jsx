@@ -2,12 +2,12 @@
 
 import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/navigation';
-import { History, Search } from 'lucide-react';
+import { History } from 'lucide-react';
 import { useList } from '@/hooks/useList';
 import { shortId } from '@/lib/utils/format';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+import SearchForm from '@/components/ui/SearchForm';
 import { Card, CardContent } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import EmptyState from '@/components/ui/EmptyState';
@@ -37,7 +37,7 @@ export default function ActivityReportPage() {
   const page = parseInt(searchParams.get('page') || '1', 10);
   const q = (searchParams.get('q') || '').trim();
 
-  const { data, error, isLoading, mutate } = useList('audit-log', { page, q });
+  const { data, error, isLoading, isValidating, mutate } = useList('audit-log', { page, q });
 
   if (isLoading && !data) {
     return (
@@ -98,27 +98,8 @@ export default function ActivityReportPage() {
         <h1 className="text-lg font-semibold">Aktivitas</h1>
         <p className="text-sm text-muted-foreground">Jejak tambah, ubah, dan hapus data di semua modul.</p>
       </div>
-      <form
-        key={q}
-        onSubmit={(e) => {
-          e.preventDefault();
-          const fd = new FormData(e.currentTarget);
-          applyFilters({ q: fd.get('q') || '' });
-        }}
-        className="flex flex-wrap items-end gap-2"
-      >
-        <Input id="q" name="q" aria-label="Cari" defaultValue={q} placeholder="Cari aktor / entitas / aksi..." className="h-8 w-64" />
-        <Button type="submit" variant="secondary" size="sm" aria-label="Cari">
-          <Search />
-          Cari
-        </Button>
-        {q && (
-          <Button variant="ghost" size="sm" onClick={() => applyFilters({ q: '' })}>
-            Reset
-          </Button>
-        )}
-      </form>
-      <Card>
+      <SearchForm q={q} onSearch={applyFilters} placeholder="Cari aktor / entitas / aksi..." busy={isValidating} />
+      <Card className={isValidating ? 'opacity-60 transition-opacity' : undefined}>
         <CardContent className="p-0">
           <Table>
             <TableHeader>

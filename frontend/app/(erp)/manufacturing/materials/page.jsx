@@ -15,7 +15,7 @@ export default function MaterialsPage() {
   const page = parseInt(searchParams.get('page') || '1', 10);
   const q = (searchParams.get('q') || '').trim();
 
-  const { data, error, isLoading, mutate } = useList('materials', { page, q });
+  const { data, error, isLoading, isValidating, mutate } = useList('materials', { page, q });
 
   if (isLoading && !data) {
     return (
@@ -76,7 +76,7 @@ export default function MaterialsPage() {
         <h1 className="text-lg font-semibold">Bahan</h1>
         <p className="text-sm text-muted-foreground">Kelola bahan baku beserta stoknya.</p>
       </div>
-      <MaterialViews items={items} onMutate={() => mutate()} q={q} onSearch={applyFilters} />
+      <MaterialViews items={items} onMutate={() => mutate()} q={q} onSearch={applyFilters} busy={isValidating} />
       <Pagination page={safePage} pageSize={PAGE_SIZE} count={count} basePath="/manufacturing/materials" onPageChange={goToPage} />
     </div>
   );

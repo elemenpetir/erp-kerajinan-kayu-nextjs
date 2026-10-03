@@ -17,7 +17,7 @@ export default function ProductsPage() {
   const page = parseInt(searchParams.get('page') || '1', 10);
   const q = (searchParams.get('q') || '').trim();
 
-  const { data, error, isLoading, mutate } = useList('products', { page, q });
+  const { data, error, isLoading, isValidating, mutate } = useList('products', { page, q });
 
   if (isLoading && !data) {
     return (
@@ -79,7 +79,7 @@ export default function ProductsPage() {
         <h1 className="text-lg font-semibold">Produk</h1>
         <p className="text-sm text-muted-foreground">Kelola produk kerajinan kayu beserta stoknya.</p>
       </div>
-      <ProductViews items={items} onMutate={() => mutate()} q={q} onSearch={applyFilters} />
+      <ProductViews items={items} onMutate={() => mutate()} q={q} onSearch={applyFilters} busy={isValidating} />
       <Pagination
         page={safePage}
         pageSize={PAGE_SIZE}
