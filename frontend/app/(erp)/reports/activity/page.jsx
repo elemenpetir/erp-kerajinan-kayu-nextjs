@@ -8,6 +8,7 @@ import { shortId } from '@/lib/utils/format';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import SearchForm from '@/components/ui/SearchForm';
+import ExportButtons from '@/components/ui/ExportButtons';
 import { Card, CardContent } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import EmptyState from '@/components/ui/EmptyState';
@@ -98,7 +99,24 @@ export default function ActivityReportPage() {
         <h1 className="text-lg font-semibold">Aktivitas</h1>
         <p className="text-sm text-muted-foreground">Jejak tambah, ubah, dan hapus data di semua modul.</p>
       </div>
-      <SearchForm q={q} onSearch={applyFilters} placeholder="Cari aktor / entitas / aksi..." busy={isValidating} />
+      <div className="flex flex-wrap items-end justify-between gap-2">
+        <SearchForm q={q} onSearch={applyFilters} placeholder="Cari aktor / entitas / aksi..." busy={isValidating} />
+        <ExportButtons
+          entity="audit-log"
+          q={q}
+          filename="activity"
+          formats={['csv', 'pdf']}
+          pdfTitle="Laporan Aktivitas"
+          pdfSubtitle="Jejak tambah, ubah, dan hapus data di semua modul"
+          columns={[
+            { header: 'Waktu', get: (r) => (r.created_at ? new Date(r.created_at).toLocaleString('id-ID') : '-') },
+            { header: 'Aktor', get: (r) => r.actor_email || 'sistem' },
+            { header: 'Aksi', get: (r) => r.action || '-' },
+            { header: 'Entitas', get: (r) => r.entity || '-' },
+            { header: 'ID', get: (r) => r.entity_id || '-' },
+          ]}
+        />
+      </div>
       <Card className={isValidating ? 'opacity-60 transition-opacity' : undefined}>
         <CardContent className="p-0">
           <Table>

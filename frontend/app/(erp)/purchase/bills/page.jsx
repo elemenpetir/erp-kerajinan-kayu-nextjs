@@ -10,6 +10,7 @@ import { can } from '@/lib/permissions';
 import { docCode } from '@/lib/utils/format';
 import { Button } from '@/components/ui/button';
 import SearchForm from '@/components/ui/SearchForm';
+import ExportButtons from '@/components/ui/ExportButtons';
 import { Card, CardContent } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import EmptyState from '@/components/ui/EmptyState';
@@ -96,7 +97,21 @@ export default function BillsList() {
           </Button>
         )}
       </div>
-      <SearchForm q={q} onSearch={applyFilters} placeholder="Cari referensi..." busy={isValidating} />
+      <div className="flex flex-wrap items-end justify-between gap-2">
+        <SearchForm q={q} onSearch={applyFilters} placeholder="Cari referensi..." busy={isValidating} />
+        <ExportButtons
+          entity="bills"
+          q={q}
+          filename="bills"
+          columns={[
+            { header: 'Kode', get: (r) => docCode('BILL', r.kode, r.id) },
+            { header: 'Referensi', get: (r) => r.referensi_vendor || '-' },
+            { header: 'Deadline', get: (r) => r.deadline_order || '-' },
+            { header: 'Total', get: (r) => r.total_biaya ?? 0 },
+            { header: 'Status', get: (r) => r.status || '-' },
+          ]}
+        />
+      </div>
       <Card className={isValidating ? 'opacity-60 transition-opacity' : undefined}>
         <CardContent className="p-0">
           <Table>

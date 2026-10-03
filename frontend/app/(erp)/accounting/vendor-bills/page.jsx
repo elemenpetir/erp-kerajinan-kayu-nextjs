@@ -8,6 +8,7 @@ import { useRole } from '@/hooks/useRole';
 import { can } from '@/lib/permissions';
 import { formatRupiah } from '@/lib/utils/format';
 import { Button } from '@/components/ui/button';
+import ExportButtons from '@/components/ui/ExportButtons';
 import { Card, CardContent } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow, TableFooter } from '@/components/ui/table';
 import EmptyState from '@/components/ui/EmptyState';
@@ -84,9 +85,24 @@ export default function VendorBillsPage() {
 
   return (
     <div className="space-y-4">
-      <div>
-        <h1 className="text-lg font-semibold">Vendor Bills</h1>
-        <p className="text-sm text-muted-foreground">Ringkasan tagihan vendor yang sudah dibayar.</p>
+      <div className="flex items-start justify-between gap-2">
+        <div>
+          <h1 className="text-lg font-semibold">Vendor Bills</h1>
+          <p className="text-sm text-muted-foreground">Ringkasan tagihan vendor yang sudah dibayar.</p>
+        </div>
+        <ExportButtons
+          entity="vendor-bills"
+          filename="vendor-bills"
+          columns={[
+            { header: 'Nomor', get: (r, i) => `BILL-${String(i + 1).padStart(3, '0')}` },
+            { header: 'Referensi', get: (r) => r.bills?.referensi_vendor || '-' },
+            { header: 'Vendor', get: (r) => r.vendor_nama || '-' },
+            { header: 'Jumlah', get: (r) => r.jumlah_pembayaran ?? 0 },
+            { header: 'Tanggal', get: (r) => r.payment_date || '-' },
+            { header: 'Status', get: (r) => r.bills?.status || '-' },
+          ]}
+          footer={({ extra }) => ['', '', 'Total keseluruhan', extra?.grandTotal ?? 0, '', '']}
+        />
       </div>
       <Card>
         <CardContent className="p-0">

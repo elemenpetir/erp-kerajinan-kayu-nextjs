@@ -10,6 +10,7 @@ import { docCode } from '@/lib/utils/format';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import PrintButton from '@/components/ui/PrintButton';
+import ExportButtons from '@/components/ui/ExportButtons';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
@@ -131,6 +132,19 @@ function StockReportContent() {
             {produkCount} produk · {bahanCount} bahan · {kritis} menipis/habis
           </p>
         </div>
+        <ExportButtons
+          rows={items}
+          filename="laporan-stok"
+          formats={['csv', 'pdf']}
+          columns={[
+            { header: 'Kode', get: (r) => docCode(prefix, r.kode, r.id) },
+            { header: 'Nama', get: (r) => r.nama || '-' },
+            { header: 'Stok', get: (r) => r._stok ?? 0 },
+            { header: 'Status', get: (r) => stokLabel(r._stok, ambang) },
+          ]}
+          pdfTitle="Laporan Stok"
+          pdfSubtitle={`Stok ${tab === 'produk' ? 'Produk' : 'Bahan'} · ${produkCount} produk · ${bahanCount} bahan · ${kritis} menipis/habis`}
+        />
         <PrintButton />
       </div>
       <div className="no-print flex flex-wrap items-center gap-2">

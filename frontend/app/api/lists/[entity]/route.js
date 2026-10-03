@@ -85,6 +85,7 @@ export async function GET(req, { params }) {
 
     const { searchParams } = new URL(req.url);
     const page = parseInt(searchParams.get('page') || '1', 10);
+    const pageSize = Math.min(parseInt(searchParams.get('limit') || '20', 10) || 20, 2000);
     const from = searchParams.get('from') || '';
     const to = searchParams.get('to') || '';
     const q = (searchParams.get('q') || '').trim();
@@ -92,7 +93,7 @@ export async function GET(req, { params }) {
     const status = searchParams.get('status') || '';
 
     const supabase = await createClient();
-    const result = await listFn(supabase, { page, from, to, q, tab, status });
+    const result = await listFn(supabase, { page, pageSize, from, to, q, tab, status });
 
     const enrichFn = ENRICH[entity];
     if (enrichFn) {

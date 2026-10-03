@@ -8,6 +8,7 @@ import { can } from '@/lib/permissions';
 import { Layers } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import SearchForm from '@/components/ui/SearchForm';
+import ExportButtons from '@/components/ui/ExportButtons';
 import { Card, CardContent } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import EmptyState from '@/components/ui/EmptyState';
@@ -87,7 +88,15 @@ export default function CategoriesPage() {
         <p className="text-sm text-muted-foreground">Kelompok produk untuk katalog dan laporan.</p>
       </div>
       {can(role, 'create', 'categories') && <CategoryForm onSuccess={() => mutate()} />}
-      <SearchForm q={q} onSearch={applyFilters} placeholder="Cari nama kategori..." busy={isValidating} />
+      <div className="flex flex-wrap items-end justify-between gap-2">
+        <SearchForm q={q} onSearch={applyFilters} placeholder="Cari nama kategori..." busy={isValidating} />
+        <ExportButtons
+          entity="categories"
+          q={q}
+          filename="categories"
+          columns={[{ header: 'Nama', get: (r) => r.nama || '-' }]}
+        />
+      </div>
       <Card className={isValidating ? 'opacity-60 transition-opacity' : undefined}>
         <CardContent className="p-0">
           <Table>

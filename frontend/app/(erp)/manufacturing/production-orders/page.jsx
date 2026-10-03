@@ -10,6 +10,7 @@ import { can } from '@/lib/permissions';
 import { docCode } from '@/lib/utils/format';
 import { Button } from '@/components/ui/button';
 import SearchForm from '@/components/ui/SearchForm';
+import ExportButtons from '@/components/ui/ExportButtons';
 import { Card, CardContent } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import EmptyState from '@/components/ui/EmptyState';
@@ -108,7 +109,21 @@ export default function ProductionOrdersPage() {
           </Button>
         )}
       </div>
-      <SearchForm q={q} onSearch={applyFilters} placeholder="Cari nama produk..." busy={isValidating} />
+      <div className="flex flex-wrap items-end justify-between gap-2">
+        <SearchForm q={q} onSearch={applyFilters} placeholder="Cari nama produk..." busy={isValidating} />
+        <ExportButtons
+          entity="production-orders"
+          q={q}
+          filename="production-orders"
+          columns={[
+            { header: 'Kode', get: (r) => docCode('ORP', r.kode, r.id) },
+            { header: 'Produk', get: (r) => r.produk?.nama || '-' },
+            { header: 'Jumlah', get: (r) => r.jumlah_produk ?? 0 },
+            { header: 'Status', get: (r) => r.status || '-' },
+            { header: 'Tanggal', get: (r) => (r.created_at ? new Date(r.created_at).toLocaleDateString('id-ID') : '-') },
+          ]}
+        />
+      </div>
       <Card className={isValidating ? 'opacity-60 transition-opacity' : undefined}>
         <CardContent className="p-0">
           <Table>

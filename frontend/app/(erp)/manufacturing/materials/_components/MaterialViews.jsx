@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { docCode } from '@/lib/utils/format';
 import { Button } from '@/components/ui/button';
 import SearchForm from '@/components/ui/SearchForm';
+import ExportButtons from '@/components/ui/ExportButtons';
 import { Card, CardContent } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import EmptyState from '@/components/ui/EmptyState';
@@ -144,6 +145,19 @@ export default function MaterialViews({ items, onMutate = null, q = '', onSearch
           {onSearch && (
             <SearchForm q={q} onSearch={onSearch} placeholder="Cari nama / referensi..." busy={busy} compact />
           )}
+          <ExportButtons
+            entity="materials"
+            q={q}
+            filename="materials"
+            columns={[
+              { header: 'Kode', get: (r) => docCode('BHN', r.kode, r.id) },
+              { header: 'Nama', get: (r) => r.nama || '-' },
+              { header: 'Biaya', get: (r) => r.biaya ?? 0 },
+              { header: 'Harga', get: (r) => r.harga ?? 0 },
+              { header: 'Referensi', get: (r) => r.internal_referensi || '-' },
+              { header: 'Stok', get: (r) => r._stok ?? 0 },
+            ]}
+          />
           <ViewToggle value={view} onChange={setView} />
           {can(role, 'create', 'materials') && (
             <Button asChild>

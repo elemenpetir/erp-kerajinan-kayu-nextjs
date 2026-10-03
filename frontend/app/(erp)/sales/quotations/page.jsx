@@ -10,6 +10,7 @@ import { can } from '@/lib/permissions';
 import { docCode } from '@/lib/utils/format';
 import { Button } from '@/components/ui/button';
 import SearchForm from '@/components/ui/SearchForm';
+import ExportButtons from '@/components/ui/ExportButtons';
 import { Card, CardContent } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import EmptyState from '@/components/ui/EmptyState';
@@ -108,7 +109,21 @@ export default function QuotationsPage() {
           </Button>
         )}
       </div>
-      <SearchForm q={q} onSearch={applyFilters} placeholder="Cari customer..." busy={isValidating} />
+      <div className="flex flex-wrap items-end justify-between gap-2">
+        <SearchForm q={q} onSearch={applyFilters} placeholder="Cari customer..." busy={isValidating} />
+        <ExportButtons
+          entity="quotations"
+          q={q}
+          filename="quotations"
+          columns={[
+            { header: 'Kode', get: (r) => docCode('QUO', r.kode, r.id) },
+            { header: 'Customer', get: (r) => r.customer_snapshot?.nama || '-' },
+            { header: 'Terms', get: (r) => r.payment_terms || '-' },
+            { header: 'Total', get: (r) => r.total_biaya ?? 0 },
+            { header: 'Status', get: (r) => r.status || '-' },
+          ]}
+        />
+      </div>
       <Card className={isValidating ? 'opacity-60 transition-opacity' : undefined}>
         <CardContent className="p-0">
           <Table>

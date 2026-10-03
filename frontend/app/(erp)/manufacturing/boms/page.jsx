@@ -10,6 +10,7 @@ import { can } from '@/lib/permissions';
 import { docCode } from '@/lib/utils/format';
 import { Button } from '@/components/ui/button';
 import SearchForm from '@/components/ui/SearchForm';
+import ExportButtons from '@/components/ui/ExportButtons';
 import { Card, CardContent } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import EmptyState from '@/components/ui/EmptyState';
@@ -105,7 +106,20 @@ export default function BomsPage() {
           </Button>
         )}
       </div>
-      <SearchForm q={q} onSearch={applyFilters} placeholder="Cari nama produk..." busy={isValidating} />
+      <div className="flex flex-wrap items-end justify-between gap-2">
+        <SearchForm q={q} onSearch={applyFilters} placeholder="Cari nama produk..." busy={isValidating} />
+        <ExportButtons
+          entity="boms"
+          q={q}
+          filename="boms"
+          columns={[
+            { header: 'Kode', get: (r) => docCode('BOM', r.kode, r.id) },
+            { header: 'Produk', get: (r) => r.produk?.nama || '-' },
+            { header: 'Total Biaya Produk', get: (r) => r.total_biaya_produk ?? 0 },
+            { header: 'Total Biaya Bahan', get: (r) => r.total_biaya_bahan ?? 0 },
+          ]}
+        />
+      </div>
       <Card className={isValidating ? 'opacity-60 transition-opacity' : undefined}>
         <CardContent className="p-0">
           <Table>

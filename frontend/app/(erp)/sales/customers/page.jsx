@@ -10,6 +10,7 @@ import { can } from '@/lib/permissions';
 import { docCode } from '@/lib/utils/format';
 import { Button } from '@/components/ui/button';
 import SearchForm from '@/components/ui/SearchForm';
+import ExportButtons from '@/components/ui/ExportButtons';
 import { Card, CardContent } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import EmptyState from '@/components/ui/EmptyState';
@@ -107,7 +108,21 @@ export default function CustomersList() {
           </Button>
         )}
       </div>
-      <SearchForm q={q} onSearch={applyFilters} placeholder="Cari nama / perusahaan / email..." busy={isValidating} />
+      <div className="flex flex-wrap items-end justify-between gap-2">
+        <SearchForm q={q} onSearch={applyFilters} placeholder="Cari nama / perusahaan / email..." busy={isValidating} />
+        <ExportButtons
+          entity="customers"
+          q={q}
+          filename="customers"
+          columns={[
+            { header: 'Kode', get: (r) => docCode('CUST', r.kode, r.id) },
+            { header: 'Nama', get: (r) => r.nama || '-' },
+            { header: 'Perusahaan', get: (r) => r.nama_perusahaan || '-' },
+            { header: 'Telp', get: (r) => r.telp || '-' },
+            { header: 'Email', get: (r) => r.email || '-' },
+          ]}
+        />
+      </div>
       <Card className={isValidating ? 'opacity-60 transition-opacity' : undefined}>
         <CardContent className="p-0">
           <Table>

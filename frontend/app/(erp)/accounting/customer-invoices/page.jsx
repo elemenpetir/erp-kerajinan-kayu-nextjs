@@ -8,6 +8,7 @@ import { useRole } from '@/hooks/useRole';
 import { can } from '@/lib/permissions';
 import { formatRupiah } from '@/lib/utils/format';
 import { Button } from '@/components/ui/button';
+import ExportButtons from '@/components/ui/ExportButtons';
 import { Card, CardContent } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow, TableFooter } from '@/components/ui/table';
 import EmptyState from '@/components/ui/EmptyState';
@@ -84,9 +85,23 @@ export default function CustomerInvoicesPage() {
 
   return (
     <div className="space-y-4">
-      <div>
-        <h1 className="text-lg font-semibold">Customer Invoices</h1>
-        <p className="text-sm text-muted-foreground">Ringkasan invoice dari sales order yang sudah terbayar penuh.</p>
+      <div className="flex items-start justify-between gap-2">
+        <div>
+          <h1 className="text-lg font-semibold">Customer Invoices</h1>
+          <p className="text-sm text-muted-foreground">Ringkasan invoice dari sales order yang sudah terbayar penuh.</p>
+        </div>
+        <ExportButtons
+          entity="customer-invoices"
+          filename="customer-invoices"
+          columns={[
+            { header: 'Nomor', get: (r, i) => `INV-${String(i + 1).padStart(3, '0')}` },
+            { header: 'Customer', get: (r) => r.sales_order?.customer_snapshot?.nama || '-' },
+            { header: 'Jumlah', get: (r) => r.jumlah_pembayaran ?? 0 },
+            { header: 'Tanggal', get: (r) => r.payment_date || '-' },
+            { header: 'Status', get: (r) => r.sales_order?.status || '-' },
+          ]}
+          footer={({ extra }) => ['', 'Total keseluruhan', extra?.grandTotal ?? 0, '', '']}
+        />
       </div>
       <Card>
         <CardContent className="p-0">

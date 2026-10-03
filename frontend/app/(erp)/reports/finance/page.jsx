@@ -5,6 +5,7 @@ import { getCustomerInvoicesTotal, getVendorBillsTotal } from '../../../../lib/s
 import { docCode, formatRupiah } from '../../../../lib/utils/format';
 import { Button } from '@/components/ui/button';
 import PrintButton from '@/components/ui/PrintButton';
+import ExportButtons from '@/components/ui/ExportButtons';
 import StatusBadge from '@/components/ui/StatusBadge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
@@ -115,7 +116,24 @@ export default async function FinanceReportPage() {
       </div>
       <Card>
         <CardHeader>
-          <CardTitle className="text-base">Rincian Piutang · {piutangRows.length} baris</CardTitle>
+          <div className="flex items-center justify-between gap-2">
+            <CardTitle className="text-base">Rincian Piutang · {piutangRows.length} baris</CardTitle>
+            <ExportButtons
+              rows={piutangRows}
+              filename="rincian-piutang"
+              formats={['csv', 'pdf']}
+              columns={[
+                { header: 'Tanggal', get: (o) => (o.created_at ? new Date(o.created_at).toLocaleDateString('id-ID') : '-') },
+                { header: 'Nomor', get: (o) => docCode('SO', o.kode, o.id) },
+                { header: 'Customer', get: (o) => o.customer_snapshot?.nama || '-' },
+                { header: 'Total', get: (o) => o.total_biaya ?? 0 },
+                { header: 'Status', get: (o) => o.status || '-' },
+              ]}
+              pdfTitle="Rincian Piutang"
+              pdfSubtitle={`Piutang ${formatRupiah(piutang)} · kas bersih ${formatRupiah(bersih)}`}
+              footer={() => ['', '', 'Total', piutang, '']}
+            />
+          </div>
         </CardHeader>
         <CardContent className="p-0">
           <Table>
@@ -153,7 +171,23 @@ export default async function FinanceReportPage() {
       </Card>
       <Card>
         <CardHeader>
-          <CardTitle className="text-base">Rincian Utang · {utangRows.length} baris</CardTitle>
+          <div className="flex items-center justify-between gap-2">
+            <CardTitle className="text-base">Rincian Utang · {utangRows.length} baris</CardTitle>
+            <ExportButtons
+              rows={utangRows}
+              filename="rincian-utang"
+              formats={['csv', 'pdf']}
+              columns={[
+                { header: 'Referensi', get: (b) => b.referensi_vendor || docCode('BLL', b.kode, b.id) },
+                { header: 'Deadline', get: (b) => (b.deadline_order ? new Date(b.deadline_order).toLocaleDateString('id-ID') : '-') },
+                { header: 'Total', get: (b) => b.total_biaya ?? 0 },
+                { header: 'Status', get: (b) => b.status || '-' },
+              ]}
+              pdfTitle="Rincian Utang"
+              pdfSubtitle={`Utang ${formatRupiah(utang)} · kas bersih ${formatRupiah(bersih)}`}
+              footer={() => ['', 'Total', utang, '']}
+            />
+          </div>
         </CardHeader>
         <CardContent className="p-0">
           <Table>

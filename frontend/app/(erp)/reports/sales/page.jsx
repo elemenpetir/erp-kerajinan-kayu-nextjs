@@ -10,6 +10,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import PrintButton from '@/components/ui/PrintButton';
+import ExportButtons from '@/components/ui/ExportButtons';
 import StatusBadge from '@/components/ui/StatusBadge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
@@ -97,6 +98,21 @@ export default function SalesReportPage() {
             {rows.length} transaksi{from || to ? ` · ${from || '…'} – ${to || '…'}` : ' · semua periode'}
           </p>
         </div>
+        <ExportButtons
+          rows={rows}
+          filename="laporan-penjualan"
+          formats={['csv', 'pdf']}
+          columns={[
+            { header: 'Tanggal', get: (o) => (o.created_at ? new Date(o.created_at).toLocaleDateString('id-ID') : '-') },
+            { header: 'Nomor', get: (o) => docCode('SO', o.kode, o.id) },
+            { header: 'Customer', get: (o) => o.customer_snapshot?.nama || '-' },
+            { header: 'Total', get: (o) => o.total_biaya ?? 0 },
+            { header: 'Status', get: (o) => o.status || '-' },
+          ]}
+          pdfTitle="Laporan Penjualan"
+          pdfSubtitle={`${rows.length} transaksi · omzet ${formatRupiah(omzet)}`}
+          footer={() => ['', '', 'Total omzet', omzet, '']}
+        />
         <PrintButton />
       </div>
       <form

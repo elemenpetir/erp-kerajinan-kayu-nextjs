@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { docCode } from '@/lib/utils/format';
 import { Button } from '@/components/ui/button';
 import SearchForm from '@/components/ui/SearchForm';
+import ExportButtons from '@/components/ui/ExportButtons';
 import { Card, CardContent } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import EmptyState from '@/components/ui/EmptyState';
@@ -146,6 +147,18 @@ export default function ProductViews({ items, onMutate = null, q = '', onSearch 
           {onSearch && (
             <SearchForm q={q} onSearch={onSearch} placeholder="Cari nama produk..." busy={busy} compact />
           )}
+          <ExportButtons
+            entity="products"
+            q={q}
+            filename="products"
+            columns={[
+              { header: 'Kode', get: (r) => docCode('PRD', r.kode, r.id) },
+              { header: 'Nama', get: (r) => r.nama || '-' },
+              { header: 'Harga Produksi', get: (r) => r.harga_produksi ?? 0 },
+              { header: 'Biaya Produksi', get: (r) => r._biaya ?? 0 },
+              { header: 'Stok', get: (r) => r._stok ?? 0 },
+            ]}
+          />
           <ViewToggle value={view} onChange={setView} />
           {can(role, 'create', 'products') && (
             <Button asChild>
