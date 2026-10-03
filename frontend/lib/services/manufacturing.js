@@ -144,5 +144,6 @@ export async function getStockReport(supabase, { tab = 'produk', status = 'semua
     produkCount: produkRows.length,
     bahanCount: bahanRows.length,
     kritis: [...produkRows.filter((r) => r._stok <= 5), ...bahanRows.filter((r) => r._stok <= 10)].length,
+    habis: [...produkRows, ...bahanRows].filter((r) => r._stok <= 0).length,
   };
 }

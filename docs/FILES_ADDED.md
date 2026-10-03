@@ -39,7 +39,7 @@ Lihat `docs/PRD.md` dan `docs/ERD.md` untuk konteks produk.
 
 ## Frontend — UI (shadcn klasik + turunan)
 - Dasar shadcn: `button`, `card`, `input`, `label`, `table`, `badge`, `avatar`, `breadcrumb`, `dropdown-menu`, `alert-dialog`, `tabs`, `skeleton`, `sonner`, `NativeSelect`.
-- Komponen sendiri: `RowActions.jsx` (menu ⋯, satu-satunya row action di semua list), `ActionButton.jsx`, `StatusBadge.jsx`, `PrintButton.jsx` (client, sembunyikan via `.no-print`), `ViewToggle.jsx`, `Pagination.jsx`, `TableSkeleton.jsx`, `EmptyState.jsx`, `DefinitionList.jsx`, `FilePicker.jsx`, `SearchForm.jsx` (search + spinner busy + Reset), `ExportButtons.jsx` (CSV semua list, PDF laporan; mode entity-fetch atau rows langsung).
+- Komponen sendiri: `RowActions.jsx` (menu ⋯, satu-satunya row action di semua list), `ActionButton.jsx`, `StatusBadge.jsx`, `PrintButton.jsx` (client, sembunyikan via `.no-print`), `ViewToggle.jsx`, `Pagination.jsx`, `TableSkeleton.jsx`, `EmptyState.jsx`, `DefinitionList.jsx`, `FilePicker.jsx`, `SearchForm.jsx` (search + spinner busy + Reset), `ExportButtons.jsx` (CSV semua list, PDF laporan; mode entity-fetch atau rows langsung), `StockBell.jsx` (badge kritis + toast habis, polling 60 dtk).
 - Ekspor: `lib/exportCsv.js` (tanpa dep; `;`, BOM, escape kutip), `lib/exportPdf.js` (`jspdf` + `jspdf-autotable`, dynamic import saat klik); `/api/lists` terima `limit` → `pageSize` (cap 2000) untuk full filtered set.
 
 ## Frontend — rute (`app/(erp)/`, URL English plural)

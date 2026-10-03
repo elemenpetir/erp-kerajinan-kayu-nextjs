@@ -6,6 +6,7 @@ import Link from 'next/link'
 import { LogOut, Menu } from 'lucide-react'
 import { supabase } from '../lib/supabase/client'
 import { Button } from './ui/button'
+import StockBell from './StockBell'
 import { Avatar, AvatarFallback } from './ui/avatar'
 import {
   Breadcrumb,
@@ -49,6 +50,7 @@ const SEGMENT_LABELS = {
   stock: 'Stok',
   sales: 'Penjualan',
   finance: 'Keuangan',
+  activity: 'Aktivitas',
 }
 
 // Rute yang benar-benar ada (punya page.jsx). Segmen intermediate
@@ -74,6 +76,7 @@ const ROUTABLE_PREFIXES = [
   '/reports/stock',
   '/reports/sales',
   '/reports/finance',
+  '/reports/activity',
 ];
 
 function isRoutable(href) {
@@ -134,7 +137,9 @@ export default function Header({ onMobileToggle }) {
           </BreadcrumbList>
         </Breadcrumb>
       </div>
-      <DropdownMenu>
+      <div className="flex items-center gap-1">
+        <StockBell />
+        <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="outline" size="sm" className="min-w-0">
             <Avatar className="h-5 w-5">
@@ -153,7 +158,8 @@ export default function Header({ onMobileToggle }) {
             Keluar
           </DropdownMenuItem>
         </DropdownMenuContent>
-      </DropdownMenu>
+        </DropdownMenu>
+      </div>
     </header>
   )
 }

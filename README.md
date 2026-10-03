@@ -205,7 +205,6 @@ Lists are Client Components fetching from a shared `/api/lists/[entity]` endpoin
 - Product and material stock can go negative if orders exceed available stock; no minimum stock validation
 - BOMs cannot be edited; if material prices change, BOM totals do not auto-update
 - No search on the two accounting summary pages (names live in related records and the grand total is unfiltered)
-- No low-stock notifications
 
 ---
 
@@ -221,7 +220,7 @@ Lists are Client Components fetching from a shared `/api/lists/[entity]` endpoin
 - [x] Cancel feature for Production Orders and Sales Orders (non-terminal only; terminal states need reversal flow)
 - [x] PDF and CSV export (CSV on lists, PDF on reports)
 - [x] Search and filter on regular list pages
-- [ ] Low-stock notifications
+- [x] Low-stock notifications (header badge + once-per-login toast when empty)
 
 ---
 
