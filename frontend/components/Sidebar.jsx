@@ -101,12 +101,12 @@ export default function Sidebar({ open, onClose }) {
     navSections.reduce((acc, section) => ({ ...acc, [section.title]: false }), {}),
   );
 
-  // Auto-expand section berisi halaman aktif (toggle manual tetap bisa)
+  // Pindah halaman → hanya seksi aktif yang terbuka (toggle manual tetap bisa)
   useEffect(() => {
     if (!activeHref) return;
     const active = navSections.find((s) => s.items.some((item) => item.href === activeHref));
     if (active) {
-      setOpenSections((prev) => (prev[active.title] ? prev : { ...prev, [active.title]: true }));
+      setOpenSections({ [active.title]: true });
     }
   }, [pathname]); // eslint-disable-line react-hooks/exhaustive-deps
 
