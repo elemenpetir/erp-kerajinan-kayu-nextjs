@@ -2,11 +2,8 @@
 
 import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/navigation';
-import { Search } from 'lucide-react';
 import { useList } from '@/hooks/useList';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import Pagination from '../../../../components/ui/Pagination';
 import MaterialViews from './_components/MaterialViews';
 
@@ -79,30 +76,7 @@ export default function MaterialsPage() {
         <h1 className="text-lg font-semibold">Bahan</h1>
         <p className="text-sm text-muted-foreground">Kelola bahan baku beserta stoknya.</p>
       </div>
-      <form
-        key={q}
-        onSubmit={(e) => {
-          e.preventDefault();
-          const fd = new FormData(e.currentTarget);
-          applyFilters({ q: fd.get('q') || '' });
-        }}
-        className="flex flex-wrap items-end gap-2"
-      >
-        <div className="grid gap-1">
-          <Label htmlFor="q">Cari</Label>
-          <Input id="q" name="q" defaultValue={q} placeholder="Cari nama / referensi..." className="h-8 w-64" />
-        </div>
-        <Button type="submit" variant="secondary" size="sm" aria-label="Cari">
-          <Search />
-          Cari
-        </Button>
-        {q && (
-          <Button variant="ghost" size="sm" onClick={() => applyFilters({ q: '' })}>
-            Reset
-          </Button>
-        )}
-      </form>
-      <MaterialViews items={items} onMutate={() => mutate()} />
+      <MaterialViews items={items} onMutate={() => mutate()} q={q} onSearch={applyFilters} />
       <Pagination page={safePage} pageSize={PAGE_SIZE} count={count} basePath="/manufacturing/materials" onPageChange={goToPage} />
     </div>
   );

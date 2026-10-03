@@ -3,10 +3,8 @@
 import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/navigation';
 import { useList } from '@/hooks/useList';
-import { Plus, Package, Search } from 'lucide-react';
+import { Plus, Package } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { Card, CardContent } from '@/components/ui/card';
 import Pagination from '../../../../components/ui/Pagination';
 import ProductViews from './_components/ProductViews';
@@ -81,30 +79,7 @@ export default function ProductsPage() {
         <h1 className="text-lg font-semibold">Produk</h1>
         <p className="text-sm text-muted-foreground">Kelola produk kerajinan kayu beserta stoknya.</p>
       </div>
-      <form
-        key={q}
-        onSubmit={(e) => {
-          e.preventDefault();
-          const fd = new FormData(e.currentTarget);
-          applyFilters({ q: fd.get('q') || '' });
-        }}
-        className="flex flex-wrap items-end gap-2"
-      >
-        <div className="grid gap-1">
-          <Label htmlFor="q">Cari</Label>
-          <Input id="q" name="q" defaultValue={q} placeholder="Cari nama produk..." className="h-8 w-64" />
-        </div>
-        <Button type="submit" variant="secondary" size="sm" aria-label="Cari">
-          <Search />
-          Cari
-        </Button>
-        {q && (
-          <Button variant="ghost" size="sm" onClick={() => applyFilters({ q: '' })}>
-            Reset
-          </Button>
-        )}
-      </form>
-      <ProductViews items={items} onMutate={() => mutate()} />
+      <ProductViews items={items} onMutate={() => mutate()} q={q} onSearch={applyFilters} />
       <Pagination
         page={safePage}
         pageSize={PAGE_SIZE}

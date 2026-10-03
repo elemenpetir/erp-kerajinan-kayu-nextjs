@@ -8,7 +8,6 @@ import { can } from '@/lib/permissions';
 import { Layers, Search } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { Card, CardContent } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import EmptyState from '@/components/ui/EmptyState';
@@ -97,10 +96,7 @@ export default function CategoriesPage() {
         }}
         className="flex flex-wrap items-end gap-2"
       >
-        <div className="grid gap-1">
-          <Label htmlFor="q">Cari</Label>
-          <Input id="q" name="q" defaultValue={q} placeholder="Cari nama kategori..." className="h-8 w-64" />
-        </div>
+        <Input id="q" name="q" aria-label="Cari" defaultValue={q} placeholder="Cari nama kategori..." className="h-8 w-64" />
         <Button type="submit" variant="secondary" size="sm" aria-label="Cari">
           <Search />
           Cari

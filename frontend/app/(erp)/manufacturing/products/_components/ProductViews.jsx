@@ -1,9 +1,10 @@
 'use client';
 
-import { Package, Plus } from 'lucide-react';
+import { Package, Plus, Search } from 'lucide-react';
 import Link from 'next/link';
 import { docCode } from '@/lib/utils/format';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import { Card, CardContent } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import EmptyState from '@/components/ui/EmptyState';
@@ -132,7 +133,7 @@ function ProductGrid({ items }) {
   );
 }
 
-export default function ProductViews({ items, onMutate = null }) {
+export default function ProductViews({ items, onMutate = null, q = '', onSearch = null }) {
   const { role } = useRole();
   const [view, setView] = usePersistedView('view:products', 'list');
   return (
@@ -142,6 +143,27 @@ export default function ProductViews({ items, onMutate = null }) {
           {items.length} produk di halaman ini
         </p>
         <div className="flex items-center gap-2">
+          {onSearch && (
+            <form
+              key={q}
+              onSubmit={(e) => {
+                e.preventDefault();
+                const fd = new FormData(e.currentTarget);
+                onSearch({ q: fd.get('q') || '' });
+              }}
+              className="flex items-center gap-2"
+            >
+              <Input id="q" name="q" aria-label="Cari" defaultValue={q} placeholder="Cari nama produk..." className="h-8 w-44" />
+              <Button type="submit" variant="secondary" size="sm" aria-label="Cari">
+                <Search />
+              </Button>
+              {q && (
+                <Button variant="ghost" size="sm" onClick={() => onSearch({ q: '' })}>
+                  Reset
+                </Button>
+              )}
+            </form>
+          )}
           <ViewToggle value={view} onChange={setView} />
           {can(role, 'create', 'products') && (
             <Button asChild>
