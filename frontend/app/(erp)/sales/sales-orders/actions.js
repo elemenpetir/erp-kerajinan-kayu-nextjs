@@ -24,3 +24,24 @@ export async function markDelivered(id) {
   if (!data || data.length === 0) throw new Error('Sudah Terkirim atau order tidak ditemukan');
   revalidatePath(PATH);
 }
+
+// Batalkan SO yang masih To Invoice dan belum Terkirim. Invoice + Fully Invoice
+// selalu ko-atomik via RPC sehingga To Invoice berarti belum ada pembayaran.
+export async function cancelSalesOrder(id, fromStatus, deliveryStatus) {
+  if (fromStatus !== 'To Invoice') {
+    throw new Error('Hanya order To Invoice yang bisa dibatalkan');
+  }
+  if (deliveryStatus === 'Terkirim') {
+    throw new Error('Order yang sudah Terkirim tidak bisa dibatalkan (gunakan alur retur)');
+  }
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from('sales_order')
+    .update({ status: 'Batal' })
+    .eq('id', id)
+    .eq('status', 'To Invoice')
+    .select('id');
+  if (error) throw new Error(error.message);
+  if (!data || data.length === 0) throw new Error('Status sudah berubah, muat ulang halaman');
+  revalidatePath(PATH);
+}

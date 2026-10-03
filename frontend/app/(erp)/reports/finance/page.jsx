@@ -45,6 +45,7 @@ export default async function FinanceReportPage() {
       .from('sales_order')
       .select('id,kode,customer_snapshot,total_biaya,status,created_at')
       .neq('status', 'Fully Invoice')
+      .neq('status', 'Batal')
       .order('created_at', { ascending: false })
       .order('id', { ascending: false }),
     supabase

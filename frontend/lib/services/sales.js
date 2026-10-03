@@ -34,7 +34,7 @@ export async function getSalesOrdersPage(supabase, { page = 1, pageSize = PAGE_S
   const { safePage, from, to } = rangeOf(page, pageSize);
   let query = supabase
     .from('sales_order')
-    .select('id,kode,customer_snapshot,payment_terms,total_biaya,status,created_at', { count: 'exact' })
+    .select('id,kode,customer_snapshot,payment_terms,total_biaya,status,status_delivery,created_at', { count: 'exact' })
     .order('created_at', { ascending: false })
     .order('id', { ascending: false });
   const needle = cleanQ(q);

@@ -4,7 +4,7 @@ import { useEffect, useState, use } from "react";
 import { ArrowLeft, Check, Printer } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "../../../../../lib/supabase/client";
-import { createInvoice, markDelivered } from "../actions";
+import { createInvoice, markDelivered, cancelSalesOrder } from "../actions";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow, TableFooter } from "@/components/ui/table";
@@ -43,6 +43,11 @@ export default function SalesOrderDetail({ params }) {
   async function handleMarkDelivered() {
     await markDelivered(id);
     toast.success("Pengiriman ditandai Terkirim");
+    fetchData();
+  }
+
+  async function handleCancelOrder() {
+    await cancelSalesOrder(id, order.status, order.status_delivery);
     fetchData();
   }
 
@@ -100,6 +105,16 @@ export default function SalesOrderDetail({ params }) {
                 confirmTitle="Buat invoice?"
                 confirmText="Buat invoice untuk Sales Order ini?"
                 label="Buat Invoice"
+              />
+            )}
+            {order.status === "To Invoice" && order.status_delivery !== "Terkirim" && (
+              <ActionButton
+                run={handleCancelOrder}
+                confirmTitle="Batalkan order?"
+                confirmText="Batalkan sales order ini? Order Batal kekal sebagai arsip."
+                successText="Order dibatalkan."
+                label="Batalkan"
+                variant="destructive"
               />
             )}
             <Button variant="outline" size="sm" onClick={() => window.print()}>

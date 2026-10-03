@@ -4,8 +4,9 @@ import { useEffect, useState, use } from "react";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "../../../../../lib/supabase/client";
-import { advanceProductionOrder } from "../actions";
+import { advanceProductionOrder, cancelProductionOrder } from "../actions";
 import { Button } from "@/components/ui/button";
+import ActionButton from "@/components/ui/ActionButton";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -56,6 +57,11 @@ export default function OrderProduksiDetail({ params }) {
     }
   }
 
+  async function handleCancelOrder() {
+    await cancelProductionOrder(id, order.status);
+    fetchOrder();
+  }
+
   if (loading) {
     return (
       <div className="space-y-4">
@@ -73,6 +79,7 @@ export default function OrderProduksiDetail({ params }) {
 
   const currentIndex = statusFlow.indexOf(order.status);
   const canAdvance = currentIndex >= 0 && currentIndex < statusFlow.length - 1;
+  const canCancel = order && ["Draft", "Konfirmasi", "Dalam Proses"].includes(order.status);
 
   return (
     <div className="space-y-4">
@@ -117,10 +124,20 @@ export default function OrderProduksiDetail({ params }) {
               </span>
             ))}
           </div>
-          <div className="mt-4">
+          <div className="mt-4 flex flex-wrap gap-2">
             <Button onClick={advanceStatus} disabled={!canAdvance || updating}>
               {updating ? "Memproses..." : canAdvance ? `Ubah ke ${statusFlow[currentIndex + 1]}` : "Selesai"}
             </Button>
+            {canCancel && (
+              <ActionButton
+                run={handleCancelOrder}
+                confirmTitle="Batalkan order?"
+                confirmText="Batalkan order produksi ini? Order Batal kekal sebagai arsip."
+                successText="Order dibatalkan."
+                label="Batalkan"
+                variant="destructive"
+              />
+            )}
           </div>
         </CardContent>
       </Card>

@@ -14,7 +14,7 @@ import EmptyState from '@/components/ui/EmptyState';
 import StatusBadge from '@/components/ui/StatusBadge';
 import Pagination from '../../../../components/ui/Pagination';
 import RowActions from '@/components/ui/RowActions';
-import { createInvoice } from './actions';
+import { createInvoice, cancelSalesOrder } from './actions';
 
 const PAGE_SIZE = 20;
 
@@ -138,6 +138,17 @@ export default function SalesOrdersPage() {
                                 confirmTitle: 'Buat invoice?',
                                 confirmText: 'Buat invoice untuk Sales Order ini?',
                                 successText: 'Invoice berhasil dibuat.',
+                              },
+                            ]
+                          : []),
+                        ...(o.status === 'To Invoice' && o.status_delivery !== 'Terkirim'
+                          ? [
+                              {
+                                label: 'Batalkan',
+                                run: cancelSalesOrder.bind(null, o.id, o.status, o.status_delivery),
+                                confirmTitle: 'Batalkan order?',
+                                confirmText: 'Batalkan sales order ini? Order Batal kekal sebagai arsip.',
+                                variant: 'destructive',
                               },
                             ]
                           : []),

@@ -17,6 +17,24 @@ export async function deleteProductionOrder(id) {
   revalidatePath(PATH);
 }
 
+// Batalkan order Draft/Konfirmasi/Dalam Proses. Selesai tidak bisa dibatalkan
+// (stok sudah masuk — reversal butuh batch tersendiri). Order Batal kekal sebagai arsip.
+export async function cancelProductionOrder(id, fromStatus) {
+  if (!['Draft', 'Konfirmasi', 'Dalam Proses'].includes(fromStatus)) {
+    throw new Error('Hanya order Draft, Konfirmasi, atau Dalam Proses yang bisa dibatalkan');
+  }
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from('order_produksi')
+    .update({ status: 'Batal' })
+    .eq('id', id)
+    .eq('status', fromStatus)
+    .select('id');
+  if (error) throw new Error(error.message);
+  if (!data || data.length === 0) throw new Error('Status sudah berubah, muat ulang halaman');
+  revalidatePath(PATH);
+}
+
 // Optimistic concurrency: advance exactly one step from `fromStatus`.
 // Concurrent tabs/cliks affecting 0 rows get a clear error instead of skipping states.
 export async function advanceProductionOrder(id, fromStatus) {

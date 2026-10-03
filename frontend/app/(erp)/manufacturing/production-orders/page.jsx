@@ -17,7 +17,7 @@ import EmptyState from '@/components/ui/EmptyState';
 import StatusBadge from '@/components/ui/StatusBadge';
 import Pagination from '../../../../components/ui/Pagination';
 import RowActions from '@/components/ui/RowActions';
-import { deleteProductionOrder } from './actions';
+import { deleteProductionOrder, cancelProductionOrder } from './actions';
 
 const PAGE_SIZE = 20;
 
@@ -161,6 +161,17 @@ export default function ProductionOrdersPage() {
                                 run: deleteProductionOrder.bind(null, order.id),
                                 confirmTitle: 'Hapus order?',
                                 confirmText: 'Hapus order produksi ini? Hanya order Draft yang bisa dihapus.',
+                                variant: 'destructive',
+                              },
+                            ]
+                          : []),
+                        ...(['Draft', 'Konfirmasi', 'Dalam Proses'].includes(order.status)
+                          ? [
+                              {
+                                label: 'Batalkan',
+                                run: cancelProductionOrder.bind(null, order.id, order.status),
+                                confirmTitle: 'Batalkan order?',
+                                confirmText: 'Batalkan order produksi ini? Order Batal kekal sebagai arsip.',
                                 variant: 'destructive',
                               },
                             ]

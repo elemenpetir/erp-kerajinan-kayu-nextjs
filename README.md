@@ -199,7 +199,6 @@ Lists are Client Components fetching from a shared `/api/lists/[entity]` endpoin
 
 ## Known Limitations
 
-- No cancel flow for Production Orders or Sales Orders
 - Tables are not optimized for mobile screens (under 768px); desktop or tablet landscape recommended
 - Accounting module shows summaries only; no double-entry journal implementation
 - User roles are managed via SQL (no role management UI); a role change takes effect on next login
@@ -219,7 +218,7 @@ Lists are Client Components fetching from a shared `/api/lists/[entity]` endpoin
 - [x] Audit log of data changes with activity viewer
 - [x] Reports and transaction summaries
 - [ ] RFQ to Purchase Order to Goods Receipt to Bill to Paid flow
-- [ ] Cancel feature for Production Orders and Sales Orders
+- [x] Cancel feature for Production Orders and Sales Orders (non-terminal only; terminal states need reversal flow)
 - [x] PDF and CSV export (CSV on lists, PDF on reports)
 - [x] Search and filter on regular list pages
 - [ ] Low-stock notifications

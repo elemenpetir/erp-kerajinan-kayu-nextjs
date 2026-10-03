@@ -17,8 +17,9 @@ Lihat `docs/PRD.md` dan `docs/ERD.md` untuk konteks produk.
 - `011_storage_images.sql` — bucket Storage `produk-images` / `bahan-images` + policy upload.
 - `012_audit_log.sql` — tabel `audit_log` + trigger `log_audit()` (SECURITY DEFINER) di 19 tabel bisnis; RLS SELECT-only. Aktor dari JWT (null = service role/seed).
 - `013_rbac.sql` — RBAC 3 role (`app_role()` dari JWT **app_metadata**): ganti `authenticated_all` → `rbac_select/insert/update/delete_admin/delete_staff` di 19 tabel; guard manager di 3 RPC; syarat `!= manager` di policy tulis Storage.
+- `014_order_cancel_status.sql` — tambah `'Batal'` ke CHECK `order_produksi.status` (cancel flow).
 
-> Migrasi `002–013` dijalankan manual sekali via Supabase SQL Editor (tidak ikut deploy).
+> Migrasi `002–014` dijalankan manual sekali via Supabase SQL Editor (tidak ikut deploy).
 
 ## Scripts — root
 - `scripts/seed_supabase.js` — wipe & reseed dummy data (16 produk, 15 bahan, 12 order produksi, 8 bills, 7 quotation, 5 sales order, 5 karyawan). Baca env dari `frontend/.env.local`, map `NEXT_PUBLIC_SUPABASE_URL` → `SUPABASE_URL`.
@@ -46,6 +47,8 @@ Lihat `docs/PRD.md` dan `docs/ERD.md` untuk konteks produk.
 - `purchase/{vendors,bills}`, `sales/{customers,quotations,sales-orders}`, `accounting/{customer-invoices,vendor-bills}`, `hr/{departments,employees}` — pola sama.
 - `reports/{stock,sales,finance}` — laporan dengan filter + Print.
 - `reports/activity` — viewer jejak audit (`audit_log`): Waktu/Aktor/Aksi/Entitas + `<details>` field berubah.
+- Cancel flow: `cancelProductionOrder` (Draft/Konfirmasi/Dalam Proses → Batal) + `cancelSalesOrder`
+  (To Invoice + belum Terkirim → Batal); aksi Batalkan di list + detail; finance exclude Batal dari piutang.
 - `(erp)/layout.jsx` — sudah membungkus children dengan `<AppShell>` (shell tunggal).
 
 ## Frontend — arsitektur list
