@@ -137,7 +137,7 @@ export default function Header({ onMobileToggle }) {
           </BreadcrumbList>
         </Breadcrumb>
       </div>
-      <div className="flex items-center gap-1">
+      <div className="flex items-center gap-3">
         <StockBell />
         <DropdownMenu>
         <DropdownMenuTrigger asChild>
