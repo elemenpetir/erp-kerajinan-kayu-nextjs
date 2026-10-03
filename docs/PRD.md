@@ -120,7 +120,7 @@ node scripts/seed_supabase.js
 - [x] Migrations diterapkan di Supabase.
 - [x] Seed script dijalankan; tiap tabel memiliki 2–3 record. (diperluas: 16 produk, 15 bahan, dst.)
 - [x] Frontend `.env.local` terisi dan `npm run dev` berjalan.
-- [ ] Deploy ke Vercel berhasil dan URL publik tersedia.
+- [x] Deploy ke Vercel berhasil dan URL publik tersedia: https://erp-kerajinan-kayu-nextjs.vercel.app/
 - [x] Manual E2E: jalankan demo flows untuk Manufaktur, Purchase, Sales, Employees.
 
 ---
