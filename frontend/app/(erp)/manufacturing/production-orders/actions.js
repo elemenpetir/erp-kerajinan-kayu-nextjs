@@ -2,6 +2,7 @@
 
 import { revalidatePath } from 'next/cache';
 import { createClient } from '../../../../lib/supabase/server';
+import { getMaterialStockMap } from '../../../../lib/services/manufacturing';
 
 const PATH = '/manufacturing/production-orders';
 
@@ -41,6 +42,32 @@ export async function advanceProductionOrder(id, fromStatus) {
   const idx = FLOW.indexOf(fromStatus);
   if (idx < 0 || idx >= FLOW.length - 1) throw new Error('Status tidak bisa dimajukan');
   const supabase = await createClient();
+
+  // Validasi stok bahan: masuk Dalam Proses mulai memakan components × jumlah.
+  // Transisi lain tak menambah kurang (Selesai memakai hitungan yang sama).
+  if (fromStatus === 'Konfirmasi') {
+    const { data: order, error: orderError } = await supabase
+      .from('order_produksi')
+      .select('jumlah_produk,components')
+      .eq('id', id)
+      .single();
+    if (orderError || !order) throw new Error(orderError?.message || 'Order tidak ditemukan');
+    const comps = (order.components || []).filter((c) => c?.bahan_id);
+    if (comps.length > 0) {
+      const ids = comps.map((c) => c.bahan_id);
+      const stokMap = await getMaterialStockMap(supabase, ids);
+      const { data: bahans } = await supabase.from('bahan').select('id,nama').in('id', ids);
+      const namaMap = Object.fromEntries((bahans || []).map((b) => [b.id, b.nama]));
+      for (const c of comps) {
+        const need = Number(c.jumlah || 0) * Number(order.jumlah_produk || 1);
+        const sisa = Number(stokMap[c.bahan_id] ?? 0);
+        if (sisa < need) {
+          throw new Error(`Stok bahan ${namaMap[c.bahan_id] || 'tak dikenal'} tidak cukup (sisa ${sisa}, butuh ${need})`);
+        }
+      }
+    }
+  }
+
   const { data, error } = await supabase
     .from('order_produksi')
     .update({ status: FLOW[idx + 1] })

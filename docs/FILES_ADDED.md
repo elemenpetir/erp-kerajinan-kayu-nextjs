@@ -18,8 +18,9 @@ Lihat `docs/PRD.md` dan `docs/ERD.md` untuk konteks produk.
 - `012_audit_log.sql` — tabel `audit_log` + trigger `log_audit()` (SECURITY DEFINER) di 19 tabel bisnis; RLS SELECT-only. Aktor dari JWT (null = service role/seed).
 - `013_rbac.sql` — RBAC 3 role (`app_role()` dari JWT **app_metadata**): ganti `authenticated_all` → `rbac_select/insert/update/delete_admin/delete_staff` di 19 tabel; guard manager di 3 RPC; syarat `!= manager` di policy tulis Storage.
 - `014_order_cancel_status.sql` — tambah `'Batal'` ke CHECK `order_produksi.status` (cancel flow).
+- `015_stock_guards.sql` — `confirm_quotation` tolak item melebihi stok produk (`v_stok_produk`); guard bahan di action advance (Konfirmasi→Dalam Proses).
 
-> Migrasi `002–014` dijalankan manual sekali via Supabase SQL Editor (tidak ikut deploy).
+> Migrasi `002–015` dijalankan manual sekali via Supabase SQL Editor (tidak ikut deploy).
 
 ## Scripts — root
 - `scripts/seed_supabase.js` — wipe & reseed dummy data (16 produk, 15 bahan, 12 order produksi, 8 bills, 7 quotation, 5 sales order, 5 karyawan). Baca env dari `frontend/.env.local`, map `NEXT_PUBLIC_SUPABASE_URL` → `SUPABASE_URL`.

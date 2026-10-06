@@ -202,7 +202,6 @@ Lists are Client Components fetching from a shared `/api/lists/[entity]` endpoin
 - Tables are not optimized for mobile screens (under 768px); desktop or tablet landscape recommended
 - Accounting module shows summaries only; no double-entry journal implementation
 - User roles are managed via SQL (no role management UI); a role change takes effect on next login
-- Product and material stock can go negative if orders exceed available stock; no minimum stock validation
 - BOMs cannot be edited; if material prices change, BOM totals do not auto-update
 - No search on the two accounting summary pages (names live in related records and the grand total is unfiltered)
 
