@@ -143,7 +143,7 @@ export default function Header({ onMobileToggle }) {
         <DropdownMenuTrigger asChild>
           <Button variant="outline" size="sm" className="min-w-0">
             <Avatar className="h-5 w-5">
-              <AvatarFallback className="bg-primary text-[11px] font-semibold leading-none text-primary-foreground">
+              <AvatarFallback className="bg-primary text-[11px] font-semibold leading-none text-primary-foreground translate-x-px">
                 {(email || '?').charAt(0).toUpperCase()}
               </AvatarFallback>
             </Avatar>
