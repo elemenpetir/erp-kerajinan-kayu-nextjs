@@ -48,6 +48,9 @@ Lihat `docs/PRD.md` dan `docs/ERD.md` untuk konteks produk.
 - `purchase/{vendors,bills}`, `sales/{customers,quotations,sales-orders}`, `accounting/{customer-invoices,vendor-bills}`, `hr/{departments,employees}` — pola sama.
 - `reports/{stock,sales,finance}` — laporan dengan filter + Print.
 - `reports/activity` — viewer jejak audit (`audit_log`): Waktu/Aktor/Aksi/Entitas + `<details>` field berubah.
+- `settings/roles` — kelola role admin/manager/staff (admin-only): tabel user + dropdown role;
+  API `/api/admin/users` (service key server-only, gate admin, tolak demosi diri + admin-terakhir,
+  audit eksplisit); sidebar seksi Pengaturan; proxy redirect non-admin.
 - Cancel flow: `cancelProductionOrder` (Draft/Konfirmasi/Dalam Proses → Batal) + `cancelSalesOrder`
   (To Invoice + belum Terkirim → Batal); aksi Batalkan di list + detail; finance exclude Batal dari piutang.
 - `(erp)/layout.jsx` — sudah membungkus children dengan `<AppShell>` (shell tunggal).

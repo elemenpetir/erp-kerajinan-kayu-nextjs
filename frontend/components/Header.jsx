@@ -51,6 +51,8 @@ const SEGMENT_LABELS = {
   sales: 'Penjualan',
   finance: 'Keuangan',
   activity: 'Aktivitas',
+  settings: 'Pengaturan',
+  roles: 'Peran',
 }
 
 // Rute yang benar-benar ada (punya page.jsx). Segmen intermediate
@@ -77,6 +79,7 @@ const ROUTABLE_PREFIXES = [
   '/reports/sales',
   '/reports/finance',
   '/reports/activity',
+  '/settings/roles',
 ];
 
 function isRoutable(href) {

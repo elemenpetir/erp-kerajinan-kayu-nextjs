@@ -10,6 +10,7 @@ import {
   Factory,
   FileText,
   Handshake,
+  Settings,
   ShoppingCart,
   Users,
   X,
@@ -73,6 +74,12 @@ const navSections = [
       { label: "Aktivitas", href: "/reports/activity" },
     ],
   },
+  {
+    title: "Pengaturan",
+    icon: Settings,
+    adminOnly: true,
+    items: [{ label: "Peran Pengguna", href: "/settings/roles" }],
+  },
 ];
 
 function isActive(href, pathname) {
@@ -115,8 +122,10 @@ export default function Sidebar({ open, onClose }) {
   };
 
   const { role } = useRole();
-  // Staff tak melihat modul finansial (enforcement riil tetap di RLS + proxy).
+  // Staff tak melihat modul finansial; Pengaturan hanya untuk admin
+  // (enforcement riil tetap di RLS + proxy).
   const visibleSections = navSections
+    .filter((s) => !s.adminOnly || role === 'admin')
     .map((s) => ({
       ...s,
       items: s.items.filter(

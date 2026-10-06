@@ -110,7 +110,7 @@ export default async function proxy(request) {
   }
 
   // RBAC UX gate (enforcement riil di RLS): staff tanpa laporan keuangan,
-  // manager tanpa form */new (9 halaman).
+  // manager tanpa form */new (9 halaman), non-admin tanpa pengaturan.
   if (user) {
     if (role === 'staff' && path === '/reports/finance') {
       const home = request.nextUrl.clone();
@@ -118,6 +118,11 @@ export default async function proxy(request) {
       return NextResponse.redirect(home);
     }
     if (role === 'manager' && path.endsWith('/new')) {
+      const home = request.nextUrl.clone();
+      home.pathname = '/';
+      return NextResponse.redirect(home);
+    }
+    if (role !== 'admin' && path.startsWith('/settings')) {
       const home = request.nextUrl.clone();
       home.pathname = '/';
       return NextResponse.redirect(home);
