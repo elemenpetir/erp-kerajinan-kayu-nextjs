@@ -6,14 +6,14 @@ function Toaster({ ...props }) {
   return (
     <Sonner
       theme="light"
-      richColors
       closeButton
       className="toaster group"
       toastOptions={{
         classNames: {
-          description: 'group-[.toast]:text-muted-foreground',
-          actionButton: 'group-[.toast]:bg-primary group-[.toast]:text-primary-foreground',
-          cancelButton: 'group-[.toast]:bg-muted group-[.toast]:text-muted-foreground',
+          toast: 'bg-zinc-950 text-white border-zinc-800',
+          description: 'text-zinc-400',
+          actionButton: 'bg-white text-zinc-950',
+          cancelButton: 'bg-zinc-800 text-zinc-400',
         },
       }}
       {...props}
