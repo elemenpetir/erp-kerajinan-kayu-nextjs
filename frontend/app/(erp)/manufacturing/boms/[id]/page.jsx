@@ -1,6 +1,7 @@
 'use client'
 import { Def } from '@/components/ui/DefinitionList';
 import { useEffect, useState, use } from 'react'
+import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react'
 import { supabase } from '../../../../../lib/supabase/client'
 import { Button } from '@/components/ui/button'
@@ -8,10 +9,13 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { Skeleton } from '@/components/ui/skeleton'
 import ActionButton from '@/components/ui/ActionButton'
+import { useRole } from '@/hooks/useRole';
+import { can } from '@/lib/permissions';
 
 
 export default function BomDetail({ params }) {
   const { id } = use(params)
+  const { role } = useRole();
   const [bom, setBom] = useState(null)
   const [loading, setLoading] = useState(true)
 
@@ -56,9 +60,9 @@ export default function BomDetail({ params }) {
     <div className="space-y-4">
       <div className="flex items-center gap-2">
         <Button variant="ghost" size="icon" asChild>
-          <a href="/manufacturing/boms" aria-label="Kembali">
+          <Link href="/manufacturing/boms" aria-label="Kembali">
             <ArrowLeft />
-          </a>
+          </Link>
         </Button>
         <div>
           <h1 className="text-lg font-semibold">BOM untuk: {bom.produk?.nama || 'Produk tidak diketahui'}</h1>
@@ -108,6 +112,11 @@ export default function BomDetail({ params }) {
         </CardContent>
       </Card>
       <div className="flex gap-2">
+        {can(role, 'create', 'boms') && (
+          <Button variant="outline" size="sm" asChild>
+            <Link href={`/manufacturing/boms/${id}/edit`}>Ubah</Link>
+          </Button>
+        )}
         <ActionButton
           run={handleDelete}
           confirmTitle="Hapus BOM?"

@@ -45,6 +45,7 @@ Lihat `docs/PRD.md` dan `docs/ERD.md` untuk konteks produk.
 
 ## Frontend — rute (`app/(erp)/`, URL English plural)
 - `manufacturing/{products,materials,boms,categories,production-orders}` — `page.jsx` + `[id]` + `new/` + `_components/` + `actions.js`.
+- `manufacturing/boms/_components/BomForm.jsx` — form BOM bersama (buat + ubah, produk dikunci saat ubah); rute `[id]/edit`.
 - `purchase/{vendors,bills}`, `sales/{customers,quotations,sales-orders}`, `accounting/{customer-invoices,vendor-bills}`, `hr/{departments,employees}` — pola sama.
 - `reports/{stock,sales,finance}` — laporan dengan filter + Print.
 - `reports/activity` — viewer jejak audit (`audit_log`): Waktu/Aktor/Aksi/Entitas + `<details>` field berubah.

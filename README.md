@@ -202,7 +202,7 @@ Lists are Client Components fetching from a shared `/api/lists/[entity]` endpoin
 - Tables are not optimized for mobile screens (under 768px); desktop or tablet landscape recommended
 - Accounting module shows summaries only; no double-entry journal implementation
 - Role changes take effect on next login
-- BOMs cannot be edited; if material prices change, BOM totals do not auto-update
+- BOM edits apply to new production orders only; existing orders keep their component snapshot
 - No search on the two accounting summary pages (names live in related records and the grand total is unfiltered)
 
 ---
